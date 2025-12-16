@@ -4,8 +4,8 @@
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5238],
-  "postCreateCommand": "cd services/tracker-api && dotnet restore contact-tracker.sln",
-  "postAttachCommand": "dotnet watch run --project services/tracker-api/tracker-api.csproj",
+  "postCreateCommand": "cd services && dotnet restore contact-tracker.sln",
+  "postAttachCommand": "cd services/tracker-api && dotnet watch run",
   "customizations": {
     "vscode": {
       "extensions": [
