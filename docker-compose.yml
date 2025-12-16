@@ -30,16 +30,40 @@ services:
       - '${DOTNET_PORT}:${DOTNET_PORT}'
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      ASPNETCORE_URLS: 'http://0.0.0.0:${DOTNET_PORT}'
       ConnectionStrings__DefaultConnection: 'Host=postgres;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}'
       DOTNET_USE_POLLING_FILE_WATCHER: 'true'
     volumes:
-      - ./services/tracker-api:/app
+      - .:/workspace # Mount entire monorepo
+      - /workspace/services/tracker-api/bin # Exclude bin
+      - /workspace/services/tracker-api/obj # Exclude obj
     networks:
       - app-network
     depends_on:
       postgres:
         condition: service_healthy
+    command: sleep infinity
+
+  tracker-ui:
+    build:
+      context: .
+      dockerfile: ui/tracker-ui/Dockerfile.dev
+    container_name: tracker-ui
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      NEXT_PUBLIC_API_URL: 'http://tracker-api:${DOTNET_PORT}'
+      WATCHPACK_POLLING: 'true' # Enable polling for WSL file watching
+    volumes:
+      - .:/workspace # Mount entire monorepo
+      - /workspace/node_modules
+      - /workspace/ui/tracker-ui/.next
+      - /workspace/ui/tracker-ui/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - tracker-api
     command: sleep infinity
 
 networks:

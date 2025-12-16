@@ -60,3 +60,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# Next.js
+.next
+out
+test-output

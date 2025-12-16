@@ -1,0 +1,21 @@
+{
+  "name": "Tracker API (.NET)",
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "tracker-api",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [5238],
+  "postCreateCommand": "cd services/tracker-api && dotnet restore contact-tracker.sln",
+  "postAttachCommand": "dotnet watch run --project services/tracker-api/tracker-api.csproj",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "github.vscode-github-actions",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "runServices": ["postgres", "tracker-api"]
+}

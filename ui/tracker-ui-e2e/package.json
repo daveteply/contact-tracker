@@ -1,0 +1,10 @@
+{
+  "name": "@contact-tracker/tracker-ui-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@contact-tracker/tracker-ui"
+    ]
+  }
+}

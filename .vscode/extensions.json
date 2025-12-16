@@ -4,6 +4,9 @@
     "esbenp.prettier-vscode",
     "streetsidesoftware.code-spell-checker",
     "ms-azuretools.vscode-containers",
-    "ms-vscode-remote.remote-containers"
+    "ms-vscode-remote.remote-containers",
+    "dbaeumer.vscode-eslint",
+    "ms-playwright.playwright",
+    "firsttris.vscode-jest-runner"
   ]
 }

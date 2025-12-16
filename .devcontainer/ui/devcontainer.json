@@ -1,0 +1,25 @@
+{
+  "name": "Tracker UI (Next.js)",
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "tracker-ui",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [3000, 5238],
+  "postAttachCommand": "/bin/sh -c \"docker compose exec tracker-api dotnet watch run --project services/tracker-api/tracker-api.csproj & npm run dev --prefix ui/tracker-ui\"",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions",
+        "nrwl.angular-console"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "runServices": ["postgres", "tracker-api", "tracker-ui"]
+}
