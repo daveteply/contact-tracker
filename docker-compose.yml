@@ -3,7 +3,6 @@ services:
     image: postgres:16-alpine
     container_name: postgres_db
     env_file: .env
-
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -33,9 +32,9 @@ services:
       ConnectionStrings__DefaultConnection: 'Host=postgres;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}'
       DOTNET_USE_POLLING_FILE_WATCHER: 'true'
     volumes:
-      - .:/workspace # Mount entire monorepo
-      - /workspace/services/tracker-api/bin # Exclude bin
-      - /workspace/services/tracker-api/obj # Exclude obj
+      - .:/workspace
+      - tracker-api-bin:/workspace/services/tracker-api/bin
+      - tracker-api-obj:/workspace/services/tracker-api/obj
     networks:
       - app-network
     depends_on:
@@ -53,12 +52,12 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       NEXT_PUBLIC_API_URL: 'http://tracker-api:${DOTNET_PORT}'
-      WATCHPACK_POLLING: 'true' # Enable polling for WSL file watching
+      WATCHPACK_POLLING: 'true'
     volumes:
-      - .:/workspace # Mount entire monorepo
-      - /workspace/node_modules
-      - /workspace/ui/tracker-ui/.next
-      - /workspace/ui/tracker-ui/node_modules
+      - .:/workspace
+      - node-modules-root:/workspace/node_modules
+      - tracker-ui-next:/workspace/ui/tracker-ui/.next
+      - tracker-ui-node-modules:/workspace/ui/tracker-ui/node_modules
     networks:
       - app-network
     depends_on:
@@ -68,3 +67,10 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  tracker-api-bin:
+  tracker-api-obj:
+  node-modules-root:
+  tracker-ui-next:
+  tracker-ui-node-modules:
