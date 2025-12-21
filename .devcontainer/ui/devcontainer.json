@@ -4,7 +4,8 @@
   "service": "tracker-ui",
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5238],
-  "postAttachCommand": "/bin/sh -c \"docker compose exec tracker-api dotnet watch run --project services/tracker-api/tracker-api.csproj & npm run dev --prefix ui/tracker-ui\"",
+  "postCreateCommand": "npm install",
+  "postAttachCommand": "npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "customizations": {
     "vscode": {
       "extensions": [

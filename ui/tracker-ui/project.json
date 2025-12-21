@@ -1,0 +1,7 @@
+{
+  "name": "tracker-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "ui/tracker-ui",
+  "projectType": "application",
+  "tags": []
+}
