@@ -5,7 +5,6 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5238],
   "postCreateCommand": "npm install",
-  "postAttachCommand": "npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "customizations": {
     "vscode": {
       "extensions": [

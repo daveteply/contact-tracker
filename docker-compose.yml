@@ -24,6 +24,7 @@ services:
       context: ./services/tracker-api
       dockerfile: Dockerfile.dev
     container_name: tracker-api
+    working_dir: /workspace/services/tracker-api
     ports:
       - '${DOTNET_PORT}:${DOTNET_PORT}'
     environment:
@@ -40,7 +41,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: sleep infinity
+    command: dotnet watch run --urls http://0.0.0.0:${DOTNET_PORT}
 
   tracker-ui:
     build:
@@ -62,7 +63,8 @@ services:
       - app-network
     depends_on:
       - tracker-api
-    command: sleep infinity
+    working_dir: /workspace/ui/tracker-ui
+    command: npx nx dev tracker-ui -- --hostname 0.0.0.0
 
 networks:
   app-network:
