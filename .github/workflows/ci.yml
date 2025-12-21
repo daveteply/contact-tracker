@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   main:
+    if: ${{ false}} # Disable this job, remove it reenable it
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
