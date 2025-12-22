@@ -41,7 +41,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: dotnet watch run --urls http://0.0.0.0:${DOTNET_PORT}
+    command: dotnet watch run --hot-reload --urls http://0.0.0.0:${DOTNET_PORT}
 
   tracker-ui:
     build:
