@@ -11,16 +11,30 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "ms-dotnettools.csharp",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
         "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
         "github.vscode-github-actions",
-        "nrwl.angular-console"
+        "nrwl.angular-console",
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
+        }
       }
     }
   },

@@ -7,13 +7,16 @@ ARG USER_GID=$USER_UID
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update \
-    && apt-get install -y sudo git \
+    && apt-get install -y sudo git zsh \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
+
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/deluan/zsh-in-docker/master/zsh-in-docker.sh)" -- -t agnoster
 
 WORKDIR /workspace
 RUN chown -R $USERNAME:$USERNAME /workspace
 
 USER $USERNAME
 EXPOSE 5238
+
 CMD ["sleep", "infinity"]

@@ -6,6 +6,10 @@
   "forwardPorts": [5238],
   "postCreateCommand": "cd services && dotnet restore contact-tracker.sln",
   "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -13,8 +17,23 @@
         "ms-azuretools.vscode-docker",
         "eamodio.gitlens",
         "github.vscode-github-actions",
-        "esbenp.prettier-vscode"
-      ]
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
+        }
+      }
     }
   },
   "runServices": ["postgres", "tracker-api"]
