@@ -4,7 +4,7 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-RUN apt-get update && apt-get install -y sudo git zsh \
+RUN apt-get update && apt-get install -y sudo git \
     && rm -rf /var/lib/apt/lists/* \
     && userdel -r node \
     && groupadd --gid $USER_GID $USERNAME \
@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y sudo git zsh \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN npm install -g npm@latest nx typescript
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/deluan/zsh-in-docker/master/zsh-in-docker.sh)" -- -t agnoster
 
 WORKDIR /workspace
 RUN chown -R $USERNAME:$USERNAME /workspace

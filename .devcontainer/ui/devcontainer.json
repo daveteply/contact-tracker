@@ -8,6 +8,16 @@
   "postStartCommand": "cd /workspace/ui/tracker-ui && npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "remoteUser": "vscode",
   "overrideCommand": true,
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {},
+    "ghcr.io/devcontainers/features/common-utils": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "configureZshAsDefaultShell": true
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
