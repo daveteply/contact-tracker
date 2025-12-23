@@ -5,6 +5,9 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5238],
   "postCreateCommand": "npm install",
+  "postStartCommand": "cd /workspace/ui/tracker-ui && npx nx dev tracker-ui -- --hostname 0.0.0.0",
+  "remoteUser": "vscode",
+  "overrideCommand": true,
   "customizations": {
     "vscode": {
       "extensions": [

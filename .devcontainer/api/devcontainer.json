@@ -5,6 +5,7 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [5238],
   "postCreateCommand": "cd services && dotnet restore contact-tracker.sln",
+  "remoteUser": "vscode",
   "customizations": {
     "vscode": {
       "extensions": [
