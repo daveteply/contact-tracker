@@ -15,6 +15,11 @@ WORKDIR /workspace
 RUN chown -R $USERNAME:$USERNAME /workspace
 
 USER $USERNAME
+
+RUN dotnet tool install --global dotnet-ef --version 8.*
+ENV PATH="$PATH:/home/$USERNAME/.dotnet/tools"
+ENV DOTNET_CLI_HOME=/home/$USERNAME
+
 EXPOSE 5238
 
 CMD ["sleep", "infinity"]
