@@ -7,8 +7,13 @@
     <RootNamespace>tracker_api</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <HotReloadEnabled>true</HotReloadEnabled>
+    <WatchEnable>true</WatchEnable>
+  </PropertyGroup>
+
   <ItemGroup>
-<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
