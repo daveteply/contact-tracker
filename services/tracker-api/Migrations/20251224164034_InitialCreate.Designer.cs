@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace tracker_api.Migrations
 {
-    [DbContext(typeof(ContractTrackerDbContext))]
+    [DbContext(typeof(ContactTrackerDbContext))]
     [Migration("20251224164034_InitialCreate")]
     partial class InitialCreate
     {

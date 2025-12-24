@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-public class ContractTrackerDbContext : DbContext
+public class ContactTrackerDbContext : DbContext
 {
-    public ContractTrackerDbContext(DbContextOptions<ContractTrackerDbContext> options)
+    public ContactTrackerDbContext(DbContextOptions<ContactTrackerDbContext> options)
         : base(options)
     {
     }

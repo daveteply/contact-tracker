@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace tracker_api.Migrations
 {
-    [DbContext(typeof(ContractTrackerDbContext))]
+    [DbContext(typeof(ContactTrackerDbContext))]
     partial class ContractTrackerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
