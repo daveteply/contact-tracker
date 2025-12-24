@@ -7,7 +7,7 @@ public class ContractTrackerDbContext : DbContext
     {
     }
 
-    public DbSet<Contact> Contracts { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
 }
 
 public class Contact
@@ -18,5 +18,5 @@ public class Contact
     public string? Title { get; set; }
     public string Email { get; set; } = null!;
     public string? PhoneNumber { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
