@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: postgres_db
+    container_name: postgres
     env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -19,6 +19,26 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'True'
+    ports:
+      - '${PGADMIN_PORT}:80'
+    volumes:
+      # delete the pgadmin Docker volume if changes are needed
+      - pgadmin_data:/var/lib/pgadmin
+      - ./database/pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
   tracker-api:
     build:
       context: ./services/tracker-api
@@ -26,7 +46,7 @@ services:
       args:
         USER_UID: 1000
         USER_GID: 1000
-    container_name: tracker-api
+    container_name: dotnet-api
     working_dir: /workspace/services/tracker-api
     ports:
       - '${DOTNET_PORT}:${DOTNET_PORT}'
@@ -75,3 +95,4 @@ networks:
 
 volumes:
   postgres-data:
+  pgadmin_data:

@@ -42,5 +42,5 @@
       }
     }
   },
-  "runServices": ["postgres", "tracker-api"]
+  "runServices": ["postgres", "pgadmin", "tracker-api"]
 }
