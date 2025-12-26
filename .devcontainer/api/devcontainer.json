@@ -1,11 +1,13 @@
 {
   "name": "Tracker API (.NET)",
-  "dockerComposeFile": "../../docker-compose.yml",
+  "dockerComposeFile": [
+    "../../docker-compose.yml",
+    "docker-compose.devcontainer.yml"
+  ],
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5238],
   "postCreateCommand": "cd services && dotnet restore contact-tracker.sln",
-  "postStartCommand": "cd services/tracker-api && dotnet watch run --hot-reload --urls http://0.0.0.0:5238",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
