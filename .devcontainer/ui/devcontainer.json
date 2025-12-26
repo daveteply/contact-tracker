@@ -1,13 +1,15 @@
 {
   "name": "Tracker UI (Next.js)",
-  "dockerComposeFile": "../../docker-compose.yml",
+  "dockerComposeFile": [
+    "../../docker-compose.yml",
+    "docker-compose.devcontainer.yml"
+  ],
   "service": "tracker-ui",
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5238],
   "postCreateCommand": "npm install",
   "postStartCommand": "cd /workspace/ui/tracker-ui && npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "remoteUser": "vscode",
-  "overrideCommand": true,
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {},
@@ -21,7 +23,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-dotnettools.csharp",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",

@@ -70,7 +70,7 @@ services:
       postgres:
         condition: service_healthy
     user: '1000:1000'
-    command: dotnet watch run --hot-reload --urls http://0.0.0.0:${DOTNET_PORT}
+    command: sleep infinity
 
   tracker-ui:
     build:
@@ -94,7 +94,6 @@ services:
       - tracker-api
     working_dir: /workspace/ui/tracker-ui
     user: '1000:1000'
-    command: npx nx dev tracker-ui -- --hostname 0.0.0.0
 
 networks:
   app-network:
