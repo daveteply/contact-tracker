@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using tracker_api;
 
 var builder = WebApplication.CreateBuilder(args);
 
