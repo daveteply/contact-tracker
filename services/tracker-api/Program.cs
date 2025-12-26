@@ -16,6 +16,19 @@ app.MapGet("/contacts", async (ContactTrackerDbContext db) =>
 {
     return await db.Contacts.ToListAsync();
 });
+app.MapGet("/contacts/{id}", async (int id, ContactTrackerDbContext db) =>
+{
+    return await db.Contacts.FindAsync(id)
+        is Contact contact ? Results.Ok(contact) : Results.NotFound();
+});
+
+app.MapPost("/contacts", async (Contact contact, ContactTrackerDbContext db) =>
+{
+    db.Contacts.Add(contact);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/contacts/{contact.Id}", contact);
+});
 
 app.Run();
 
