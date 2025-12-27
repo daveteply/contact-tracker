@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using tracker_api;
+using tracker_api.Services;
+using tracker_api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,14 @@ builder.Services.AddDbContext<ContactTrackerDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
+// Register services
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+
 var app = builder.Build();
 app.UseHttpsRedirection();
+
+// Map endpoint groups
+app.MapCompanyEndpoints();
 
 app.MapGet("/contacts", async (ContactTrackerDbContext db) =>
 {

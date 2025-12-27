@@ -1,3 +1,0 @@
-services:
-  tracker-api:
-    command: bash -c "cd /workspace/services && dotnet restore contact-tracker.sln && cd tracker-api && dotnet watch run --hot-reload --urls http://0.0.0.0:5238"

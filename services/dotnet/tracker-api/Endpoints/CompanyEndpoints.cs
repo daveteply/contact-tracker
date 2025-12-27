@@ -1,0 +1,130 @@
+using tracker_api.Services;
+using tracker_api.Common;
+
+namespace tracker_api.Endpoints;
+
+public static class CompanyEndpoints
+{
+    public static void MapCompanyEndpoints(this WebApplication app)
+    {
+        var group = app.MapGroup("/api/companies")
+            .WithName("Companies");
+
+        group.MapGet("/", GetAllCompanies)
+            .WithName("GetAllCompanies")
+            .WithDescription("Get all companies");
+
+        group.MapGet("/{id}", GetCompanyById)
+            .WithName("GetCompanyById")
+            .WithDescription("Get a company by ID");
+
+        group.MapPost("/", CreateCompany)
+            .WithName("CreateCompany")
+            .WithDescription("Create a new company");
+
+        group.MapPut("/{id}", UpdateCompany)
+            .WithName("UpdateCompany")
+            .WithDescription("Update an existing company");
+
+        group.MapDelete("/{id}", DeleteCompany)
+            .WithName("DeleteCompany")
+            .WithDescription("Delete a company");
+    }
+
+    private static async Task<IResult> GetAllCompanies(ICompanyService service)
+    {
+        try
+        {
+            var companies = await service.GetAllCompaniesAsync();
+            var result = ApiResult<List<Company>>.SuccessResult(companies, "Companies retrieved successfully");
+            return Results.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> GetCompanyById(long id, ICompanyService service)
+    {
+        try
+        {
+            var company = await service.GetCompanyByIdAsync(id);
+            var result = ApiResult<Company>.SuccessResult(company, "Company retrieved successfully");
+            return Results.Ok(result);
+        }
+        catch (ResourceNotFoundException ex)
+        {
+            return Results.NotFound(ApiResult<Company>.FailureResult(ex.UserFriendlyMessage!));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> CreateCompany(Company company, ICompanyService service)
+    {
+        try
+        {
+            var createdCompany = await service.CreateCompanyAsync(company);
+            var result = ApiResult<Company>.SuccessResult(createdCompany, "Company created successfully");
+            return Results.Created($"/api/companies/{createdCompany.Id}", result);
+        }
+        catch (ValidationException ex)
+        {
+            return Results.BadRequest(ApiResult<Company>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> UpdateCompany(long id, Company company, ICompanyService service)
+    {
+        try
+        {
+            var updatedCompany = await service.UpdateCompanyAsync(id, company);
+            var result = ApiResult<Company>.SuccessResult(updatedCompany, "Company updated successfully");
+            return Results.Ok(result);
+        }
+        catch (ResourceNotFoundException ex)
+        {
+            return Results.NotFound(ApiResult<Company>.FailureResult(ex.UserFriendlyMessage!));
+        }
+        catch (ValidationException ex)
+        {
+            return Results.BadRequest(ApiResult<Company>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> DeleteCompany(long id, ICompanyService service)
+    {
+        try
+        {
+            await service.DeleteCompanyAsync(id);
+            return Results.NoContent();
+        }
+        catch (ResourceNotFoundException ex)
+        {
+            return Results.NotFound(ApiResult<Company>.FailureResult(ex.UserFriendlyMessage!));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static IResult HandleException(Exception ex)
+    {
+        var result = ApiResult<Company>.FailureResult(
+            "An unexpected error occurred",
+            ex.Message);
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
+    }
+}

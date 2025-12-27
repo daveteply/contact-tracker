@@ -7,7 +7,7 @@
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5238],
-  "postCreateCommand": "cd services && dotnet restore contact-tracker.sln",
+  "postCreateCommand": "cd services/dotnet && dotnet restore contact-tracker.sln",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
