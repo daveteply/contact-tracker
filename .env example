@@ -1,0 +1,22 @@
+# PostgreSQL Configuration
+
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+POSTGRES_PORT=
+POSTGRES_SSL_MODE=disable|allow|prefer|require|verify-ca|verify-full
+
+DOTNET_PORT=
+ASPNETCORE_ENVIRONMENT=Development|Staging|Production
+
+# delete the pgadmin Docker volume if changes are needed
+
+PGADMIN_PORT=
+PGADMIN_DEFAULT_EMAIL=
+PGADMIN_DEFAULT_PASSWORD=
+
+# For access to dotnet api
+
+NEXT_PUBLIC_API_BASE_URL=
+
+NODE_ENV=development|testing|staging|production
