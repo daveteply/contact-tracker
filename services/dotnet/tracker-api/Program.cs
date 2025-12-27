@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using tracker_api;
 using tracker_api.Services;
 using tracker_api.Endpoints;
 
@@ -14,51 +13,15 @@ builder.Services.AddDbContext<ContactTrackerDbContext>(
 
 // Register services
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Map endpoint groups
 app.MapCompanyEndpoints();
-
-app.MapGet("/contacts", async (ContactTrackerDbContext db) =>
-{
-    return await db.Contacts.ToListAsync();
-});
-app.MapGet("/contacts/{id}", async (int id, ContactTrackerDbContext db) =>
-{
-    return await db.Contacts.FindAsync(id)
-        is Contact contact ? Results.Ok(contact) : Results.NotFound();
-});
-
-app.MapPost("/contacts", async (Contact contact, ContactTrackerDbContext db) =>
-{
-    db.Contacts.Add(contact);
-    await db.SaveChangesAsync();
-
-    return Results.Created($"/contacts/{contact.Id}", contact);
-});
+app.MapContactEndpoints();
 
 app.Run();
 
-// var summaries = new[]
-// {
-//     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching",
-// };
-// app.MapGet("/weatherforecast", () =>
-// {
-//     var forecast = Enumerable.Range(1, 5).Select(index =>
-//         new WeatherForecast
-//         (
-//             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-//             Random.Shared.Next(-20, 55),
-//             summaries[Random.Shared.Next(summaries.Length)]
-//         ))
-//         .ToArray();
-//     return forecast;
-// })
-// .WithName("GetWeatherForecast");
-// record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-// {
-//     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-// }
+public partial class Program { }
