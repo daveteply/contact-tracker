@@ -17,6 +17,6 @@ PGADMIN_DEFAULT_PASSWORD=
 
 # For access to dotnet api
 
-NEXT_PUBLIC_API_BASE_URL=
+DOTNET_API_BASE_URL=
 
 NODE_ENV=development|testing|staging|production
