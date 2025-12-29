@@ -9,8 +9,8 @@ public enum RoleLevel
 
 public class Role : BaseEntity
 {
-    public long CompanyId { get; set; }
-    public required Company Company { get; set; }
+    public long? CompanyId { get; set; }
+    public Company? Company { get; set; }
 
     public required string Title { get; set; }
     public string? JobPostingUrl { get; set; }

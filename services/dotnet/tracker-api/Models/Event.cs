@@ -13,8 +13,8 @@ public enum DirectionType
 
 public class Event : BaseEntity
 {
-    public long CompanyId { get; set; }
-    public required Company Company { get; set; }
+    public long? CompanyId { get; set; }
+    public Company? Company { get; set; }
 
     public long? ContactId { get; set; }
     public Contact? Contact { get; set; }

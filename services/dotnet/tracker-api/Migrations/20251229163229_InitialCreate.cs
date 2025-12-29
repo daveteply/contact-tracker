@@ -9,70 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     /// <inheritdoc />
-    public partial class ExpandSchama : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Contacts",
-                type: "text",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "text");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Contacts",
-                type: "timestamp with time zone",
-                nullable: false,
-                defaultValueSql: "now() at time zone 'utc'",
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
-
-            migrationBuilder.AlterColumn<long>(
-                name: "Id",
-                table: "Contacts",
-                type: "bigint",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "integer")
-                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            migrationBuilder.AddColumn<long>(
-                name: "CompanyId",
-                table: "Contacts",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsPrimaryRecruiter",
-                table: "Contacts",
-                type: "boolean",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "LinkedInUrl",
-                table: "Contacts",
-                type: "text",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Notes",
-                table: "Contacts",
-                type: "text",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "Contacts",
-                type: "timestamp with time zone",
-                nullable: false,
-                defaultValueSql: "now() at time zone 'utc'");
-
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
@@ -107,12 +48,40 @@ namespace tracker_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contacts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CompanyId = table.Column<long>(type: "bigint", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    LinkedInUrl = table.Column<string>(type: "text", nullable: true),
+                    IsPrimaryRecruiter = table.Column<bool>(type: "boolean", nullable: true),
+                    Notes = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contacts_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CompanyId = table.Column<long>(type: "bigint", nullable: false),
+                    CompanyId = table.Column<long>(type: "bigint", nullable: true),
                     Title = table.Column<string>(type: "text", nullable: false),
                     JobPostingUrl = table.Column<string>(type: "text", nullable: true),
                     Location = table.Column<string>(type: "text", nullable: true),
@@ -127,8 +96,7 @@ namespace tracker_api.Migrations
                         name: "FK_Roles_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -137,7 +105,7 @@ namespace tracker_api.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CompanyId = table.Column<long>(type: "bigint", nullable: false),
+                    CompanyId = table.Column<long>(type: "bigint", nullable: true),
                     ContactId = table.Column<long>(type: "bigint", nullable: true),
                     RoleId = table.Column<long>(type: "bigint", nullable: true),
                     EventTypeId = table.Column<int>(type: "integer", nullable: false),
@@ -202,6 +170,16 @@ namespace tracker_api.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Companies",
+                columns: new[] { "Id", "Industry", "Name", "Notes", "SizeRange", "Website" },
+                values: new object[] { -1L, null, "Test Company", null, null, null });
+
+            migrationBuilder.InsertData(
+                table: "Contacts",
+                columns: new[] { "Id", "CompanyId", "Email", "FirstName", "IsPrimaryRecruiter", "LastName", "LinkedInUrl", "Notes", "PhoneNumber", "Title" },
+                values: new object[] { -1L, null, null, "Dave", null, "Test", null, null, null, null });
+
+            migrationBuilder.InsertData(
                 table: "EventTypes",
                 columns: new[] { "Id", "Category", "IsSystemDefined", "Name" },
                 values: new object[,]
@@ -214,6 +192,11 @@ namespace tracker_api.Migrations
                     { 6, "Outcome", true, "Rejected" },
                     { 7, "Outcome", true, "Offer Received" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "CompanyId", "JobPostingUrl", "Level", "Location", "Title" },
+                values: new object[] { -1L, -1L, null, "EngineeringManager", null, "Test Role" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_CompanyId",
@@ -254,28 +237,19 @@ namespace tracker_api.Migrations
                 name: "IX_Roles_CompanyId",
                 table: "Roles",
                 column: "CompanyId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Contacts_Companies_CompanyId",
-                table: "Contacts",
-                column: "CompanyId",
-                principalTable: "Companies",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Contacts_Companies_CompanyId",
-                table: "Contacts");
-
             migrationBuilder.DropTable(
                 name: "Reminders");
 
             migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "EventTypes");
@@ -285,59 +259,6 @@ namespace tracker_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Companies");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Contacts_CompanyId",
-                table: "Contacts");
-
-            migrationBuilder.DropColumn(
-                name: "CompanyId",
-                table: "Contacts");
-
-            migrationBuilder.DropColumn(
-                name: "IsPrimaryRecruiter",
-                table: "Contacts");
-
-            migrationBuilder.DropColumn(
-                name: "LinkedInUrl",
-                table: "Contacts");
-
-            migrationBuilder.DropColumn(
-                name: "Notes",
-                table: "Contacts");
-
-            migrationBuilder.DropColumn(
-                name: "UpdatedAt",
-                table: "Contacts");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Contacts",
-                type: "text",
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "text",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Contacts",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldDefaultValueSql: "now() at time zone 'utc'");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "Contacts",
-                type: "integer",
-                nullable: false,
-                oldClrType: typeof(long),
-                oldType: "bigint")
-                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         }
     }
 }

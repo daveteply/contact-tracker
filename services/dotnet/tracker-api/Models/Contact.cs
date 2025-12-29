@@ -4,7 +4,7 @@ namespace tracker_api;
 
 public class Contact : BaseEntity
 {
-    public long CompanyId { get; set; }
+    public long? CompanyId { get; set; }
     public Company? Company { get; set; }
 
     public required string FirstName { get; set; }
