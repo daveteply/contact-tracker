@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ContactTrackerDbContext>(
 // Register services
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
@@ -21,6 +22,7 @@ app.UseHttpsRedirection();
 // Map endpoint groups
 app.MapCompanyEndpoints();
 app.MapContactEndpoints();
+app.MapEventEndpoints();
 
 app.Run();
 
