@@ -20,18 +20,20 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 });
 
 // Register services
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IEventTypeService, EventTypeService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IContactService, ContactService>();
-builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Map endpoint groups
+app.MapEventEndpoints();
+app.MapEventTypeEndpoints();
 app.MapCompanyEndpoints();
 app.MapContactEndpoints();
-app.MapEventEndpoints();
 app.MapRoleEndpoints();
 
 app.Run();
