@@ -31,7 +31,7 @@
         "github.vscode-github-actions",
         "nrwl.angular-console",
         "esbenp.prettier-vscode",
-        "timonwong.shellcheck"
+        "streetsidesoftware.code-spell-checker",
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
