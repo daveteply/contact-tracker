@@ -15,36 +15,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseEnvironment("Testing");
+
         builder.ConfigureServices(services =>
         {
-            // Remove the existing DbContext registration
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<ContactTrackerDbContext>));
-
-            if (descriptor != null)
-            {
-                services.Remove(descriptor);
-            }
-
             // Add DbContext with in-memory database
             // Use the same database name for the entire factory lifetime
             services.AddDbContext<ContactTrackerDbContext>(options =>
             {
                 options.UseInMemoryDatabase(_databaseName);
             });
-
-            // Build the service provider
-            var sp = services.BuildServiceProvider();
-
-            // Create a scope to get the database context
-            using (var scope = sp.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<ContactTrackerDbContext>();
-
-                // Ensure the database is created
-                db.Database.EnsureCreated();
-            }
         });
     }
 

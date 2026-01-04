@@ -59,11 +59,11 @@ public class EventEndpointsTests : IClassFixture<CustomWebApplicationFactory>, I
         var result = await response.Content.ReadFromJsonAsync<ApiResult<Event>>();
         Assert.NotNull(result);
         Assert.True(result.Success);
-        Assert.Equal("Initial Outreach", result.Data.Summary);
-        Assert.Equal(eventType.Id, result.Data.EventTypeId);
+        Assert.Equal("Initial Outreach", result?.Data?.Summary);
+        Assert.Equal(eventType.Id, result?.Data?.EventTypeId);
 
         // Verify it exists in the DB
-        var dbEvent = await _context.Events.FindAsync(result.Data.Id);
+        var dbEvent = await _context.Events.FindAsync(result?.Data?.Id);
         Assert.NotNull(dbEvent);
     }
 
