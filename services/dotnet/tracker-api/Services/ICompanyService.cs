@@ -1,3 +1,5 @@
+using tracker_api.DTOs;
+
 namespace tracker_api.Services;
 
 public interface ICompanyService
@@ -5,22 +7,22 @@ public interface ICompanyService
     /// <summary>
     /// Get all companies
     /// </summary>
-    Task<List<Company>> GetAllCompaniesAsync();
+    Task<List<CompanyReadDto>> GetAllCompaniesAsync();
 
     /// <summary>
     /// Get company by ID
     /// </summary>
-    Task<Company> GetCompanyByIdAsync(long id);
+    Task<CompanyReadDto> GetCompanyByIdAsync(long id);
 
     /// <summary>
     /// Create a new company
     /// </summary>
-    Task<Company> CreateCompanyAsync(Company company);
+    Task<CompanyReadDto> CreateCompanyAsync(CompanyCreateDto dto);
 
     /// <summary>
     /// Update an existing company
     /// </summary>
-    Task<Company> UpdateCompanyAsync(long id, Company company);
+    Task<CompanyReadDto> UpdateCompanyAsync(long id, CompanyUpdateDto dto);
 
     /// <summary>
     /// Delete a company by ID
