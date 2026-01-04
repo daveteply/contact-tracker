@@ -30,7 +30,6 @@
         "eamodio.gitlens",
         "github.vscode-github-actions",
         "nrwl.angular-console",
-        "esbenp.prettier-vscode",
         "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
