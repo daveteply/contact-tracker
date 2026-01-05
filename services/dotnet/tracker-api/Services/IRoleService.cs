@@ -1,10 +1,12 @@
+using tracker_api.DTOs;
+
 namespace tracker_api.Services;
 
 public interface IRoleService
 {
-    Task<List<Role>> GetAllRolesAsync();
-    Task<Role> GetRoleByIdAsync(long id);
-    Task<Role> CreateRoleAsync(Role role);
-    Task<Role> UpdateRoleAsync(long id, Role role);
+    Task<List<RoleReadDto>> GetAllRolesAsync();
+    Task<RoleReadDto> GetRoleByIdAsync(long id);
+    Task<RoleReadDto> CreateRoleAsync(RoleCreateDto role);
+    Task<RoleReadDto> UpdateRoleAsync(long id, RoleUpdateDto role);
     Task DeleteRoleAsync(long id);
 }

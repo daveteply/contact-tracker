@@ -1,5 +1,6 @@
 using tracker_api.Services;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Endpoints;
 
@@ -34,7 +35,7 @@ public static class EventEndpoints
     private static async Task<IResult> GetAllEvents(IEventService service)
     {
         var events = await service.GetAllEventsAsync();
-        return Results.Ok(ApiResult<List<Event>>.SuccessResult(events));
+        return Results.Ok(ApiResult<List<EventReadDto>>.SuccessResult(events));
     }
 
     private static async Task<IResult> GetEventById(long id, IEventService service)
@@ -42,42 +43,42 @@ public static class EventEndpoints
         try
         {
             var @event = await service.GetEventByIdAsync(id);
-            return Results.Ok(ApiResult<Event>.SuccessResult(@event));
+            return Results.Ok(ApiResult<EventReadDto>.SuccessResult(@event));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Event>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
     }
 
-    private static async Task<IResult> CreateEvent(Event @event, IEventService service)
+    private static async Task<IResult> CreateEvent(EventCreateDto @event, IEventService service)
     {
         try
         {
             var createdEvent = await service.CreateEventAsync(@event);
             return Results.Created($"/api/events/{createdEvent.Id}",
-                ApiResult<Event>.SuccessResult(createdEvent));
+                ApiResult<EventReadDto>.SuccessResult(createdEvent));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Event>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
     }
 
-    private static async Task<IResult> UpdateEvent(long id, Event @event, IEventService service)
+    private static async Task<IResult> UpdateEvent(long id, EventUpdateDto @event, IEventService service)
     {
         try
         {
             var updated = await service.UpdateEventAsync(id, @event);
-            return Results.Ok(ApiResult<Event>.SuccessResult(updated));
+            return Results.Ok(ApiResult<EventReadDto>.SuccessResult(updated));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Event>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Event>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
     }
 

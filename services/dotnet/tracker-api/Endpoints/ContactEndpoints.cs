@@ -1,5 +1,6 @@
 ﻿using tracker_api.Services;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Endpoints;
 
@@ -36,7 +37,7 @@ public static class ContactEndpoints
         try
         {
             var contacts = await service.GetAllContactsAsync();
-            var result = ApiResult<List<Contact>>.SuccessResult(contacts, "Contacts retrieved successfully");
+            var result = ApiResult<List<ContactReadDto>>.SuccessResult(contacts, "Contacts retrieved successfully");
             return Results.Ok(result);
         }
         catch (Exception ex)
@@ -50,12 +51,12 @@ public static class ContactEndpoints
         try
         {
             var contact = await service.GetContactByIdAsync(id);
-            var result = ApiResult<Contact>.SuccessResult(contact, "Contact retrieved successfully");
+            var result = ApiResult<ContactReadDto>.SuccessResult(contact, "Contact retrieved successfully");
             return Results.Ok(result);
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Contact>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<ContactReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (Exception ex)
         {
@@ -63,17 +64,17 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> CreateContact(Contact contact, IContactService service)
+    private static async Task<IResult> CreateContact(ContactCreateDto contact, IContactService service)
     {
         try
         {
             var createdContact = await service.CreateContactAsync(contact);
-            var result = ApiResult<Contact>.SuccessResult(createdContact, "Contact created successfully");
+            var result = ApiResult<ContactReadDto>.SuccessResult(createdContact, "Contact created successfully");
             return Results.Created($"/api/contacts/{createdContact.Id}", result);
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Contact>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<ContactReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
         catch (Exception ex)
         {
@@ -81,21 +82,21 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> UpdateContact(long id, Contact contact, IContactService service)
+    private static async Task<IResult> UpdateContact(long id, ContactUpdateDto contact, IContactService service)
     {
         try
         {
             var updatedContact = await service.UpdateContactAsync(id, contact);
-            var result = ApiResult<Contact>.SuccessResult(updatedContact, "Contact updated successfully");
+            var result = ApiResult<ContactReadDto>.SuccessResult(updatedContact, "Contact updated successfully");
             return Results.Ok(result);
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Contact>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<ContactReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Contact>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<ContactReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
         catch (Exception ex)
         {

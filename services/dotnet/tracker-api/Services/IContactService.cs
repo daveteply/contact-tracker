@@ -1,4 +1,6 @@
-﻿namespace tracker_api.Services;
+﻿using tracker_api.DTOs;
+
+namespace tracker_api.Services;
 
 
 public interface IContactService
@@ -6,22 +8,22 @@ public interface IContactService
     /// <summary>
     /// Get all contacts
     /// </summary>
-    Task<List<Contact>> GetAllContactsAsync();
+    Task<List<ContactReadDto>> GetAllContactsAsync();
 
     /// <summary>
     /// Get contact by ID
     /// </summary>
-    Task<Contact> GetContactByIdAsync(long id);
+    Task<ContactReadDto> GetContactByIdAsync(long id);
 
     /// <summary>
     /// Create a new contact
     /// </summary>
-    Task<Contact> CreateContactAsync(Contact contact);
+    Task<ContactReadDto> CreateContactAsync(ContactCreateDto contact);
 
     /// <summary>
     /// Update an existing contact
     /// </summary>
-    Task<Contact> UpdateContactAsync(long id, Contact contact);
+    Task<ContactReadDto> UpdateContactAsync(long id, ContactUpdateDto contact);
 
     /// <summary>
     /// Delete a contact by ID

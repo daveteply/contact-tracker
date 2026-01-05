@@ -1,10 +1,12 @@
+using tracker_api.DTOs;
+
 namespace tracker_api.Services;
 
 public interface IEventService
 {
-    Task<List<Event>> GetAllEventsAsync();
-    Task<Event> GetEventByIdAsync(long id);
-    Task<Event> CreateEventAsync(Event @event);
-    Task<Event> UpdateEventAsync(long id, Event @event);
+    Task<List<EventReadDto>> GetAllEventsAsync();
+    Task<EventReadDto> GetEventByIdAsync(long id);
+    Task<EventReadDto> CreateEventAsync(EventCreateDto @event);
+    Task<EventReadDto> UpdateEventAsync(long id, EventUpdateDto @event);
     Task DeleteEventAsync(long id);
 }

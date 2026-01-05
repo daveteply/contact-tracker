@@ -1,5 +1,6 @@
 using tracker_api.Services;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Endpoints;
 
@@ -34,7 +35,7 @@ public static class RoleEndpoints
     private static async Task<IResult> GetAllRoles(IRoleService service)
     {
         var roles = await service.GetAllRolesAsync();
-        return Results.Ok(ApiResult<List<Role>>.SuccessResult(roles));
+        return Results.Ok(ApiResult<List<RoleReadDto>>.SuccessResult(roles));
     }
 
     private static async Task<IResult> GetRoleById(long id, IRoleService service)
@@ -42,41 +43,41 @@ public static class RoleEndpoints
         try
         {
             var role = await service.GetRoleByIdAsync(id);
-            return Results.Ok(ApiResult<Role>.SuccessResult(role));
+            return Results.Ok(ApiResult<RoleReadDto>.SuccessResult(role));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Role>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
     }
 
-    private static async Task<IResult> CreateRole(Role role, IRoleService service)
+    private static async Task<IResult> CreateRole(RoleCreateDto role, IRoleService service)
     {
         try
         {
             var createdRole = await service.CreateRoleAsync(role);
-            return Results.Created($"/api/roles/{createdRole.Id}", ApiResult<Role>.SuccessResult(createdRole));
+            return Results.Created($"/api/roles/{createdRole.Id}", ApiResult<RoleReadDto>.SuccessResult(createdRole));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Role>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
     }
 
-    private static async Task<IResult> UpdateRole(long id, Role role, IRoleService service)
+    private static async Task<IResult> UpdateRole(long id, RoleUpdateDto role, IRoleService service)
     {
         try
         {
             var updated = await service.UpdateRoleAsync(id, role);
-            return Results.Ok(ApiResult<Role>.SuccessResult(updated));
+            return Results.Ok(ApiResult<RoleReadDto>.SuccessResult(updated));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<Role>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<Role>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
     }
 

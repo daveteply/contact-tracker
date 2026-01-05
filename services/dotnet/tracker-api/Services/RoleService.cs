@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Services;
 
@@ -12,15 +13,17 @@ public class RoleService : IRoleService
         _context = context;
     }
 
-    public async Task<List<Role>> GetAllRolesAsync()
+    public async Task<List<RoleReadDto>> GetAllRolesAsync()
     {
-        return await _context.Roles
+        var roles = await _context.Roles
             .Include(r => r.Company)
             .AsNoTracking()
             .ToListAsync();
+
+        return roles.Select(MapToReadDto).ToList();
     }
 
-    public async Task<Role> GetRoleByIdAsync(long id)
+    public async Task<RoleReadDto> GetRoleByIdAsync(long id)
     {
         var role = await _context.Roles
             .Include(r => r.Company)
@@ -32,20 +35,29 @@ public class RoleService : IRoleService
             throw new ResourceNotFoundException(nameof(Role), id);
         }
 
-        return role;
+        return MapToReadDto(role);
     }
 
-    public async Task<Role> CreateRoleAsync(Role role)
+    public async Task<RoleReadDto> CreateRoleAsync(RoleCreateDto dto)
     {
-        ValidateRole(role);
+        ValidateRoleCreate(dto);
+
+        var role = new Role
+        {
+            CompanyId = dto.CompanyId,
+            Title = dto.Title,
+            JobPostingUrl = dto.JobPostingUrl,
+            Location = dto.Location,
+            Level = dto.Level
+        };
 
         _context.Roles.Add(role);
         await _context.SaveChangesAsync();
 
-        return role;
+        return MapToReadDto(role);
     }
 
-    public async Task<Role> UpdateRoleAsync(long id, Role role)
+    public async Task<RoleReadDto> UpdateRoleAsync(long id, RoleUpdateDto dto)
     {
         var existingRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == id);
 
@@ -54,18 +66,30 @@ public class RoleService : IRoleService
             throw new ResourceNotFoundException(nameof(Role), id);
         }
 
-        ValidateRole(role);
+        ValidateRoleUpdate(dto);
 
-        existingRole.Title = role.Title;
-        existingRole.JobPostingUrl = role.JobPostingUrl;
-        existingRole.Location = role.Location;
-        existingRole.Level = role.Level;
-        existingRole.CompanyId = role.CompanyId;
+        // Only update properties that are provided (not null)
+        if (dto.CompanyId.HasValue)
+            existingRole.CompanyId = dto.CompanyId;
+
+        if (dto.Title != null)
+            existingRole.Title = dto.Title;
+
+        if (dto.JobPostingUrl != null)
+            existingRole.JobPostingUrl = dto.JobPostingUrl;
+
+        if (dto.Location != null)
+            existingRole.Location = dto.Location;
+
+        if (dto.Level.HasValue)
+            existingRole.Level = dto.Level.Value;
+
         existingRole.UpdatedAt = DateTime.UtcNow;
 
+        _context.Roles.Update(existingRole);
         await _context.SaveChangesAsync();
 
-        return existingRole;
+        return MapToReadDto(existingRole);
     }
 
     public async Task DeleteRoleAsync(long id)
@@ -81,13 +105,42 @@ public class RoleService : IRoleService
         await _context.SaveChangesAsync();
     }
 
-    private void ValidateRole(Role role)
+    private static RoleReadDto MapToReadDto(Role role)
+    {
+        return new RoleReadDto(
+            role.Id,
+            role.CompanyId,
+            role.Title,
+            role.JobPostingUrl,
+            role.Location,
+            role.Level
+        );
+    }
+
+    private void ValidateRoleCreate(RoleCreateDto dto)
     {
         var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(role.Title))
+        if (string.IsNullOrWhiteSpace(dto.Title))
         {
             errors.Add("Role title is required");
+        }
+
+        if (errors.Count > 0)
+        {
+            throw new ValidationException("Role validation failed", errors);
+        }
+    }
+
+    private void ValidateRoleUpdate(RoleUpdateDto dto)
+    {
+        var errors = new List<string>();
+
+        // For update, Title can be null (meaning don't update it)
+        // But if it IS provided, it shouldn't be empty/whitespace
+        if (dto.Title != null && string.IsNullOrWhiteSpace(dto.Title))
+        {
+            errors.Add("Role title cannot be empty");
         }
 
         if (errors.Count > 0)
