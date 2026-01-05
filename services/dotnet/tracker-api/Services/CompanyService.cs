@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Services;
 
@@ -12,14 +13,16 @@ public class CompanyService : ICompanyService
         _context = context;
     }
 
-    public async Task<List<Company>> GetAllCompaniesAsync()
+    public async Task<List<CompanyReadDto>> GetAllCompaniesAsync()
     {
-        return await _context.Companies
+        var companies = await _context.Companies
             .AsNoTracking()
             .ToListAsync();
+
+        return companies.Select(MapToReadDto).ToList();
     }
 
-    public async Task<Company> GetCompanyByIdAsync(long id)
+    public async Task<CompanyReadDto> GetCompanyByIdAsync(long id)
     {
         var company = await _context.Companies
             .AsNoTracking()
@@ -30,20 +33,29 @@ public class CompanyService : ICompanyService
             throw new ResourceNotFoundException(nameof(Company), id);
         }
 
-        return company;
+        return MapToReadDto(company);
     }
 
-    public async Task<Company> CreateCompanyAsync(Company company)
+    public async Task<CompanyReadDto> CreateCompanyAsync(CompanyCreateDto dto)
     {
-        ValidateCompany(company);
+        ValidateCompanyCreate(dto);
+
+        var company = new Company
+        {
+            Name = dto.Name,
+            Website = dto.Website,
+            Industry = dto.Industry,
+            SizeRange = dto.SizeRange,
+            Notes = dto.Notes
+        };
 
         _context.Companies.Add(company);
         await _context.SaveChangesAsync();
 
-        return company;
+        return MapToReadDto(company);
     }
 
-    public async Task<Company> UpdateCompanyAsync(long id, Company company)
+    public async Task<CompanyReadDto> UpdateCompanyAsync(long id, CompanyUpdateDto dto)
     {
         var existingCompany = await _context.Companies
             .FirstOrDefaultAsync(c => c.Id == id);
@@ -53,20 +65,30 @@ public class CompanyService : ICompanyService
             throw new ResourceNotFoundException(nameof(Company), id);
         }
 
-        ValidateCompany(company);
+        ValidateCompanyUpdate(dto);
 
-        // Update properties
-        existingCompany.Name = company.Name;
-        existingCompany.Website = company.Website;
-        existingCompany.Industry = company.Industry;
-        existingCompany.SizeRange = company.SizeRange;
-        existingCompany.Notes = company.Notes;
+        // Only update properties that are provided (not null)
+        if (dto.Name != null)
+            existingCompany.Name = dto.Name;
+
+        if (dto.Website != null)
+            existingCompany.Website = dto.Website;
+
+        if (dto.Industry != null)
+            existingCompany.Industry = dto.Industry;
+
+        if (dto.SizeRange != null)
+            existingCompany.SizeRange = dto.SizeRange;
+
+        if (dto.Notes != null)
+            existingCompany.Notes = dto.Notes;
+
         existingCompany.UpdatedAt = DateTime.UtcNow;
 
         _context.Companies.Update(existingCompany);
         await _context.SaveChangesAsync();
 
-        return existingCompany;
+        return MapToReadDto(existingCompany);
     }
 
     public async Task DeleteCompanyAsync(long id)
@@ -83,13 +105,42 @@ public class CompanyService : ICompanyService
         await _context.SaveChangesAsync();
     }
 
-    private void ValidateCompany(Company company)
+    private static CompanyReadDto MapToReadDto(Company company)
+    {
+        return new CompanyReadDto(
+            company.Id,
+            company.Name,
+            company.Website,
+            company.Industry,
+            company.SizeRange,
+            company.Notes
+        );
+    }
+
+    private void ValidateCompanyCreate(CompanyCreateDto dto)
     {
         var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(company.Name))
+        if (string.IsNullOrWhiteSpace(dto.Name))
         {
             errors.Add("Company name is required");
+        }
+
+        if (errors.Count > 0)
+        {
+            throw new ValidationException("Company validation failed", errors);
+        }
+    }
+
+    private void ValidateCompanyUpdate(CompanyUpdateDto dto)
+    {
+        var errors = new List<string>();
+
+        // For update, Name can be null (meaning don't update it)
+        // But if it IS provided, it shouldn't be empty/whitespace
+        if (dto.Name != null && string.IsNullOrWhiteSpace(dto.Name))
+        {
+            errors.Add("Company name cannot be empty");
         }
 
         if (errors.Count > 0)
