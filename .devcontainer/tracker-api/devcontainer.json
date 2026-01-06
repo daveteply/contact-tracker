@@ -6,17 +6,28 @@
   ],
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
-  "forwardPorts": [5238],
-  "postCreateCommand": "cd services/dotnet && dotnet restore contact-tracker.sln",
+  "forwardPorts": [5000],
+  "postCreateCommand": "dotnet restore TrackerApi.slnx",
   "remoteUser": "vscode",
   "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    },
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
     "ghcr.io/devcontainers/features/common-utils": {
       "installZsh": true,
+      "configureZshAsDefaultShell": true,
       "installOhMyZsh": true,
       "installOhMyZshConfig": true,
-      "configureZshAsDefaultShell": true
+      "upgradePackages": true,
+      "installSsl": true,
+      "username": "vscode",
+      "userUid": "automatic",
+      "userGid": "automatic"
+    },
+    "ghcr.io/devcontainers-extra/features/nx-npm:1": {
+      "version": "latest"
     }
   },
   "customizations": {

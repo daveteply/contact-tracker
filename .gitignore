@@ -66,3 +66,8 @@ bld/
 **/.nx/
 out
 test-output
+
+# .NET
+**/bin/
+**/obj/
+/artifacts/

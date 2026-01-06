@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/apps/">
+    <Project Path="apps/tracker-api-tests/tracker-api-tests.csproj" />
+    <Project Path="apps/tracker-api/tracker-api.csproj" />
+  </Folder>
+</Solution>

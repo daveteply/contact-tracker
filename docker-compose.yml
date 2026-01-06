@@ -40,13 +40,13 @@ services:
 
   tracker-api:
     build:
-      context: ./services/dotnet/tracker-api
+      context: ./apps/tracker-api
       dockerfile: Dockerfile.dev
       args:
         USER_UID: 1000
         USER_GID: 1000
-    container_name: dotnet-api
-    working_dir: /workspace/services/dotnet/tracker-api
+    container_name: tracker-api
+    working_dir: /workspace/apps/tracker-api
     ports:
       - '${DOTNET_PORT}:${DOTNET_PORT}'
     environment:
