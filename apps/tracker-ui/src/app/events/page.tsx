@@ -1,6 +1,6 @@
 import { fetchEvents } from '@/lib/server/clients/events-client';
 import Link from 'next/link';
-import EventList from './components/event-list';
+import { EventList } from '@contact-tracker/ui-shared';
 
 export default async function Index() {
   const res = await fetchEvents();

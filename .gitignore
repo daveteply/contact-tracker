@@ -71,3 +71,7 @@ test-output
 **/bin/
 **/obj/
 /artifacts/
+
+# Next.js
+.next
+out

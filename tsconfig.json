@@ -4,10 +4,13 @@
   "files": [],
   "references": [
     {
-      "path": "./ui/tracker-ui-e2e"
+      "path": "./packages/ui-shared"
     },
     {
-      "path": "./ui/tracker-ui"
+      "path": "./apps/tracker-ui-e2e"
+    },
+    {
+      "path": "./apps/tracker-ui"
     }
   ]
 }

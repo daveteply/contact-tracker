@@ -4,8 +4,8 @@ export interface EventListProps {
 
 export default function EventList(props: EventListProps) {
   return (
-    <>
-      {props.eventList && props.eventList ? (
+    <div>
+      {props.eventList && props.eventList.length ? (
         <ul>
           {props.eventList.map((event: any) => (
             <li key={event.id}>
@@ -14,8 +14,8 @@ export default function EventList(props: EventListProps) {
           ))}
         </ul>
       ) : (
-        <p>No events found</p>
+        <p>No events found!</p>
       )}
-    </>
+    </div>
   );
 }
