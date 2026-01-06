@@ -46,7 +46,7 @@ services:
         USER_UID: 1000
         USER_GID: 1000
     container_name: tracker-api
-    working_dir: /workspace/apps/tracker-api
+    working_dir: /workspace
     ports:
       - '${DOTNET_PORT}:${DOTNET_PORT}'
     environment:

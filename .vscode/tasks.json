@@ -2,40 +2,22 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "build",
-        "${workspaceFolder}/TrackerApi.slnx",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary;ForceNoAlign"
-      ],
+      "label": "nx: serve-api",
+      "type": "shell",
+      "command": "npx nx serve tracker-api",
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "publish",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "publish",
-        "${workspaceFolder}/TrackerApi.slnx",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary;ForceNoAlign"
-      ],
+      "label": "nx: test-api",
+      "type": "shell",
+      "command": "npx nx test tracker-api-tests",
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "watch",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "watch",
-        "run",
-        "--project",
-        "${workspaceFolder}/TrackerApi.slnx"
-      ],
-      "problemMatcher": "$msCompile"
+      "label": "nx: build-all",
+      "type": "shell",
+      "command": "npx nx run-many -t build",
+      "group": { "kind": "build", "isDefault": true }
     }
   ]
 }
