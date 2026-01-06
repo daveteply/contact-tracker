@@ -7,7 +7,7 @@
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5000],
-  "postCreateCommand": "dotnet restore TrackerApi.slnx",
+  "postCreateCommand": "dotnet restore TrackerApi.slnx && echo '# Zsh configuration\nexport PATH=$PATH' > ~/.zshrc",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {

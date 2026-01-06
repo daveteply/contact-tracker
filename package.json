@@ -2,13 +2,17 @@
   "name": "@contact-tracker/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start:services": "docker-compose up -d postgres pgadmin",
+    "start:api": "docker-compose up tracker-api",
+    "start:ui": "docker-compose up tracker-ui",
+    "start:all": "docker-compose up"
+  },
   "private": true,
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@next/eslint-plugin-next": "^16.0.1",
     "@nx/devkit": "22.1.1",
-    "@nx/dotnet": "^22.1.1",
     "@nx/eslint": "22.1.1",
     "@nx/eslint-plugin": "22.1.1",
     "@nx/jest": "22.1.1",
@@ -51,7 +55,7 @@
   },
   "workspaces": [
     "packages/*",
-    "ui/*"
+    "apps/*"
   ],
   "dependencies": {
     "next": "~16.0.1",

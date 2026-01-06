@@ -7,8 +7,8 @@
   "service": "tracker-ui",
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5000],
-  "postCreateCommand": "npm install",
-  "postStartCommand": "cd /workspace/ui/tracker-ui && npx nx dev tracker-ui -- --hostname 0.0.0.0",
+  "postCreateCommand": "npm install && echo '# Zsh configuration\nexport PATH=$PATH' > ~/.zshrc",
+  "postStartCommand": "npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},

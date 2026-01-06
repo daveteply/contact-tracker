@@ -74,7 +74,7 @@ services:
   tracker-ui:
     build:
       context: .
-      dockerfile: ui/tracker-ui/Dockerfile.dev
+      dockerfile: apps/tracker-ui/Dockerfile.dev
       args:
         USER_UID: 1000
         USER_GID: 1000
@@ -91,7 +91,7 @@ services:
       - app-network
     depends_on:
       - tracker-api
-    working_dir: /workspace/ui/tracker-ui
+    working_dir: /workspace/apps/tracker-ui
     user: '1000:1000'
 
 networks:
