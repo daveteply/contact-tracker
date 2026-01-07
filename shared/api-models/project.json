@@ -1,0 +1,19 @@
+{
+  "name": "@contact-tracker/api-models",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "shared/api-models/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/shared/api-models",
+        "main": "shared/api-models/src/index.ts",
+        "tsConfig": "shared/api-models/tsconfig.lib.json",
+        "assets": [],
+        "spec": false
+      }
+    }
+  }
+}

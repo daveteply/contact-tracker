@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@contact-tracker/api-models": ["shared/api-models/src/index.ts"],
+      "@contact-tracker/ui-shared": ["packages/ui-shared/src/index.ts"]
+    },
     "composite": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,

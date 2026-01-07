@@ -29,12 +29,10 @@
   </ItemGroup>
 
   <Target Name="RestoreTypeGen" BeforeTargets="Build">
-    <!-- Automatically restores local tools if they are missing -->
     <Exec Command="dotnet tool restore" StandardOutputImportance="low" />
   </Target>
 
   <Target Name="GenerateTypeScript" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-    <!-- Automatically runs TypeGen after a successful build -->
     <Exec Command="dotnet typegen generate" />
   </Target>
 

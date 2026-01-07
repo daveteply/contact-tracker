@@ -1,4 +1,6 @@
 {
-  "outputPath": "src/app/models",
-  "fileNameConverters": ["PascalCaseToKebabCase"]
+  "outputPath": "../../shared/api-models/src/lib",
+  "fileNameConverters": ["PascalCaseToKebabCase"],
+  "csNullableTranslation": "optional",
+  "typeBlacklist": ["BaseEntity"]
 }
