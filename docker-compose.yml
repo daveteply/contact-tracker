@@ -82,7 +82,6 @@ services:
     ports:
       - '3000:3000'
     environment:
-      NODE_ENV: ${NODE_ENV}
       DOTNET_API_BASE_URL: ${DOTNET_API_BASE_URL}
       WATCHPACK_POLLING: 'true'
     volumes:
