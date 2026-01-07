@@ -38,7 +38,9 @@
         "eamodio.gitlens",
         "github.vscode-github-actions",
         "esbenp.prettier-vscode",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "firsttris.vscode-jest-runner",
+        "dbaeumer.vscode-eslint"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
