@@ -1,6 +1,7 @@
-﻿
+﻿using TypeGen.Core.TypeAnnotations;
 namespace tracker_api;
 
+[ExportTsInterface]
 public class Company : BaseEntity
 {
     public required string Name { get; set; }

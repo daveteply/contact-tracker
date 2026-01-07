@@ -1,12 +1,14 @@
-﻿
+﻿using TypeGen.Core.TypeAnnotations;
 namespace tracker_api;
 
+[ExportTsEnum]
 public enum RoleLevel
 {
     EngineeringManager,
     StaffEngineer
 }
 
+[ExportTsInterface]
 public class Role : BaseEntity
 {
     public long? CompanyId { get; set; }

@@ -1,16 +1,19 @@
-﻿
+﻿using TypeGen.Core.TypeAnnotations;
 namespace tracker_api;
 
+[ExportTsEnum]
 public enum SourceType
 {
     Email, LinkedIn, Website, Recruiter, Referral
 }
 
+[ExportTsEnum]
 public enum DirectionType
 {
     Inbound, Outbound
 }
 
+[ExportTsInterface]
 public class Event : BaseEntity
 {
     public long? CompanyId { get; set; }

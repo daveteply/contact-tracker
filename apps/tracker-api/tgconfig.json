@@ -1,0 +1,4 @@
+{
+  "outputPath": "src/app/models",
+  "fileNameConverters": ["PascalCaseToKebabCase"]
+}

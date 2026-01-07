@@ -21,10 +21,21 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.*" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.11.10" />
+    <PackageReference Include="TypeGen" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Watch Include="**\*.cs" Exclude="bin\**\*.cs;obj\**\*.cs;**\*.tmp" />
   </ItemGroup>
+
+  <Target Name="RestoreTypeGen" BeforeTargets="Build">
+    <!-- Automatically restores local tools if they are missing -->
+    <Exec Command="dotnet tool restore" StandardOutputImportance="low" />
+  </Target>
+
+  <Target Name="GenerateTypeScript" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <!-- Automatically runs TypeGen after a successful build -->
+    <Exec Command="dotnet typegen generate" />
+  </Target>
 
 </Project>

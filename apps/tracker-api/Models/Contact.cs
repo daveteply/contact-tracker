@@ -1,7 +1,7 @@
-﻿
-
+﻿using TypeGen.Core.TypeAnnotations;
 namespace tracker_api;
 
+[ExportTsInterface]
 public class Contact : BaseEntity
 {
     public long? CompanyId { get; set; }
