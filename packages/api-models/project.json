@@ -2,15 +2,15 @@
   "name": "@contact-tracker/api-models",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "apps/api-models/src",
+  "sourceRoot": "packages/api-models/src",
   "targets": {
     "build": {
       "executor": "@nx/js:swc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/api-models",
-        "main": "apps/api-models/src/index.ts",
-        "tsConfig": "apps/api-models/tsconfig.lib.json",
+        "outputPath": "dist/packages/api-models",
+        "main": "packages/api-models/src/index.ts",
+        "tsConfig": "packages/api-models/tsconfig.lib.json",
         "assets": [],
         "spec": false
       }

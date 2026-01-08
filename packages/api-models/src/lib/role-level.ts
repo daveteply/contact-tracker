@@ -3,7 +3,7 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-export enum DirectionType {
-    Inbound = 0,
-    Outbound = 1,
+export enum RoleLevel {
+  EngineeringManager = 0,
+  StaffEngineer = 1,
 }

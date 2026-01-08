@@ -1,5 +1,5 @@
 {
-  "outputPath": "../../apps/api-models/src/lib",
+  "outputPath": "../../packages/api-models/src/lib",
   "fileNameConverters": ["PascalCaseToKebabCase"],
   "csNullableTranslation": "optional",
   "typeBlacklist": ["BaseEntity"]
