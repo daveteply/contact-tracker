@@ -13,7 +13,7 @@
       "path": "./apps/tracker-ui"
     },
     {
-      "path": "./shared/api-models"
+      "path": "./apps/api-models"
     }
   ]
 }
