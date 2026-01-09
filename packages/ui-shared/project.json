@@ -3,6 +3,10 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/ui-shared/src",
+  "implicitDependencies": [
+    "@contact-tracker/api-models",
+    "@contact-tracker/validation"
+  ],
   "targets": {
     "build": {
       "executor": "@nx/js:swc",

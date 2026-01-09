@@ -1,12 +1,14 @@
 ﻿using TypeGen.Core.TypeAnnotations;
 namespace tracker_api;
 
+// TODO: update packages/validation/src/lib/enum-schema.ts if this changes
 [ExportTsEnum]
 public enum SourceType
 {
     Email, LinkedIn, Website, Recruiter, Referral
 }
 
+// TODO: update packages/validation/src/lib/enum-schema.ts if this changes
 [ExportTsEnum]
 public enum DirectionType
 {
