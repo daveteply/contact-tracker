@@ -1,3 +1,5 @@
+export * from './lib/api-result';
+
 export * from './lib/company';
 export * from './lib/company';
 export * from './lib/contact';
