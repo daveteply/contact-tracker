@@ -4,9 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/ui-shared"
-    },
-    {
       "path": "./apps/tracker-ui-e2e"
     },
     {
@@ -14,6 +11,12 @@
     },
     {
       "path": "./packages/api-models"
+    },
+    {
+      "path": "./packages/validation"
+    },
+    {
+      "path": "./packages/ui-shared"
     }
   ]
 }

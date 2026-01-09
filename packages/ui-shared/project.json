@@ -1,0 +1,19 @@
+{
+  "name": "@contact-tracker/ui-shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/ui-shared/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/ui-shared",
+        "main": "packages/ui-shared/src/index.ts",
+        "tsConfig": "packages/ui-shared/tsconfig.lib.json",
+        "assets": [],
+        "spec": false
+      }
+    }
+  }
+}

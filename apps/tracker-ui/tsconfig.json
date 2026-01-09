@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "jsx": "preserve",
     "noEmit": true,
     "emitDeclarationOnly": false,
@@ -19,7 +20,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
     "types": ["jest", "node"],
     "outDir": "dist",

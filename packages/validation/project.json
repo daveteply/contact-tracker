@@ -1,0 +1,19 @@
+{
+  "name": "@contact-tracker/validation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/validate/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/validation",
+        "main": "packages/validation/src/index.ts",
+        "tsConfig": "packages/validation/tsconfig.lib.json",
+        "assets": [],
+        "spec": false
+      }
+    }
+  }
+}

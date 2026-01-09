@@ -3,12 +3,12 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { IAuditableEntity } from './i-auditable-entity';
-import { Event } from './event';
+import { IAuditableEntity } from "./i-auditable-entity";
+import { Event } from "./event";
 
 export interface Reminder extends IAuditableEntity {
-  eventId: number;
-  event: Event;
-  remindAt: Date;
-  completedAt?: Date;
+    eventId: number;
+    event: Event;
+    remindAt: Date;
+    completedAt?: Date;
 }
