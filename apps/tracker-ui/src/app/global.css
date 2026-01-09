@@ -1,2 +1,4 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+@source "../../../../packages/ui-shared/src/**/*.{js,ts,jsx,tsx}";

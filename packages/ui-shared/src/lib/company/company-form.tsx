@@ -19,38 +19,44 @@ export function CompanyForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Company Name *</label>
-        <input {...register('name')} />
-        {errors.name && <span>{errors.name.message}</span>}
-      </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto"
+    >
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Company Name</legend>
+        <input className="input" {...register('name')} />
+        <p className="label">Required</p>
+        <div className="text-red-600">
+          {errors.name && <span>{errors.name.message}</span>}
+        </div>
+      </fieldset>
 
-      <div>
-        <label>Website</label>
-        <input {...register('website')} />
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Website</legend>
+        <input className="input" {...register('website')} />
         {errors.website && <span>{errors.website.message}</span>}
-      </div>
+      </fieldset>
 
-      <div>
-        <label>Industry</label>
-        <input {...register('industry')} />
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Industry</legend>
+        <input className="input" {...register('industry')} />
         {errors.industry && <span>{errors.industry.message}</span>}
-      </div>
+      </fieldset>
 
-      <div>
-        <label>Size Range</label>
-        <input {...register('sizeRange')} />
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Size Range</legend>
+        <input className="input" {...register('sizeRange')} />
         {errors.sizeRange && <span>{errors.sizeRange.message}</span>}
-      </div>
+      </fieldset>
 
-      <div>
-        <label>Notes</label>
-        <textarea {...register('notes')} />
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Notes</legend>
+        <textarea className="textarea" {...register('notes')} />
         {errors.notes && <span>{errors.notes.message}</span>}
-      </div>
+      </fieldset>
 
-      <button className="btn" type="submit">
+      <button className="btn mt-4" type="submit">
         Submit
       </button>
     </form>
