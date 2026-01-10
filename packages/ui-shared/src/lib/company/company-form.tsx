@@ -4,18 +4,34 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
 
-export function CompanyForm() {
+interface CompanyFormProps {
+  onSubmitAction: (
+    data: CompanyInput,
+  ) => Promise<{ success: boolean; message: string }>;
+}
+
+export function CompanyForm({ onSubmitAction }: CompanyFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CompanyInput>({
     resolver: zodResolver(CompanyInputSchema),
   });
 
-  const onSubmit = (data: CompanyInput) => {
-    console.log('Valid data:', data);
-    // Send to API
+  const onSubmit = async (data: CompanyInput) => {
+    try {
+      const result = await onSubmitAction(data);
+      if (result.success) {
+        // You could redirect here or reset the form
+        //alert('Company created successfully!');
+      } else {
+        //alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      // TODO log this
+      console.error('Submission failed', error);
+    }
   };
 
   return (
@@ -27,36 +43,44 @@ export function CompanyForm() {
         <legend className="fieldset-legend">Company Name</legend>
         <input className="input" {...register('name')} />
         <p className="label">Required</p>
-        <div className="text-red-600">
+        <p className="text-red-600">
           {errors.name && <span>{errors.name.message}</span>}
-        </div>
+        </p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Website</legend>
         <input className="input" {...register('website')} />
-        {errors.website && <span>{errors.website.message}</span>}
+        <p className="text-red-600">
+          {errors.website && <span>{errors.website.message}</span>}
+        </p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Industry</legend>
         <input className="input" {...register('industry')} />
-        {errors.industry && <span>{errors.industry.message}</span>}
+        <p className="text-red-600">
+          {errors.industry && <span>{errors.industry.message}</span>}
+        </p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Size Range</legend>
         <input className="input" {...register('sizeRange')} />
-        {errors.sizeRange && <span>{errors.sizeRange.message}</span>}
+        <p className="text-red-600">
+          {errors.sizeRange && <span>{errors.sizeRange.message}</span>}
+        </p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Notes</legend>
         <textarea className="textarea" {...register('notes')} />
-        {errors.notes && <span>{errors.notes.message}</span>}
+        <p className="text-red-600">
+          {errors.notes && <span>{errors.notes.message}</span>}
+        </p>
       </fieldset>
 
-      <button className="btn mt-4" type="submit">
+      <button className="btn mt-4" type="submit" disabled={isSubmitting}>
         Submit
       </button>
     </form>

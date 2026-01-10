@@ -7,7 +7,7 @@ export default async function Index() {
 
   return (
     <div>
-      <Link className="btn" href="company/new">
+      <Link className="btn" href="companies/new">
         Add New Company
       </Link>
       <CompanyList companyList={companies} />
