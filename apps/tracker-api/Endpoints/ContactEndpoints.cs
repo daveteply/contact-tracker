@@ -126,6 +126,6 @@ public static class ContactEndpoints
         var result = ApiResult<Contact>.FailureResult(
             "An unexpected error occurred",
             ex.Message);
-        return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        return Results.Json(result, statusCode: StatusCodes.Status500InternalServerError);
     }
 }
