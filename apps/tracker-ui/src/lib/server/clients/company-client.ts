@@ -24,7 +24,9 @@ export async function fetchCompanies(): Promise<CompanyReadDto[]> {
   return result.data || [];
 }
 
-export async function fetchCompanyById(id: string) {
+export async function fetchCompanyById(
+  id: number,
+): Promise<ApiResult<CompanyReadDto>> {
   const baseUrl = await getInternalApiBase();
   const res = await fetch(`${baseUrl}/api/companies/${id}`, {
     cache: 'no-store',
@@ -52,7 +54,7 @@ export async function createCompany(data: CompanyCreateDto) {
   return res.json();
 }
 
-export async function updateCompany(id: string, data: CompanyUpdateDto) {
+export async function updateCompany(id: number, data: CompanyUpdateDto) {
   const baseUrl = await getInternalApiBase();
   const res = await fetch(`${baseUrl}/api/companies/${id}`, {
     method: 'PUT',

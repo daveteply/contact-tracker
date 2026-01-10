@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
@@ -8,16 +9,31 @@ interface CompanyFormProps {
   onSubmitAction: (
     data: CompanyInput,
   ) => Promise<{ success: boolean; message: string }>;
+  initialData?: CompanyInput;
+  isEdit?: boolean;
 }
 
-export function CompanyForm({ onSubmitAction }: CompanyFormProps) {
+export function CompanyForm({
+  onSubmitAction,
+  initialData,
+  isEdit = false,
+}: CompanyFormProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CompanyInput>({
     resolver: zodResolver(CompanyInputSchema),
+    defaultValues: initialData,
   });
+
+  // Reset form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
 
   const onSubmit = async (data: CompanyInput) => {
     try {
@@ -81,7 +97,7 @@ export function CompanyForm({ onSubmitAction }: CompanyFormProps) {
       </fieldset>
 
       <button className="btn mt-4" type="submit" disabled={isSubmitting}>
-        Submit
+        {isEdit ? 'Update' : 'Create'}
       </button>
     </form>
   );

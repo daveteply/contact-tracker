@@ -1,13 +1,16 @@
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}/api/companies/${params.id}`, {
+
+    const { id } = await params;
+
+    const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
       cache: 'no-store',
     });
 
@@ -28,16 +31,18 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
+
+    const { id } = await params;
     const body = await request.json();
 
-    const response = await fetch(`${dotnetApiUrl}/api/companies/${params.id}`, {
+    const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -45,13 +50,8 @@ export async function PUT(
       body: JSON.stringify(body),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      return Response.json(errorData, { status: response.status });
-    }
-
-    const data = await response.json();
-    return Response.json(data);
+    const result = await response.json();
+    return Response.json(result, { status: response.status });
   } catch (error) {
     console.error('Error updating company:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });

@@ -3,7 +3,7 @@ import { fetchCompanies } from '@/lib/server/clients/company-client';
 import { CompanyList } from '@contact-tracker/ui-shared';
 import Link from 'next/link';
 
-export default async function Index() {
+export default async function CompanyListPage() {
   const companies = await fetchCompanies();
 
   return (

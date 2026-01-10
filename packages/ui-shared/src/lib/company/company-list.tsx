@@ -1,6 +1,7 @@
 'use client';
 
 import { CompanyReadDto } from '@contact-tracker/api-models';
+import Link from 'next/link';
 
 export interface CompanyListProps {
   companies: CompanyReadDto[];
@@ -46,7 +47,12 @@ export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
                   <li>{company.notes}</li>
                 </ul>
                 <div className="card-actions justify-center">
-                  <button className="btn btn-primary">Edit</button>
+                  <Link
+                    className="btn btn-primary"
+                    href={`/events/companies/${company.id}/edit`}
+                  >
+                    Edit
+                  </Link>
                   <button
                     className="btn"
                     onClick={async () => {
