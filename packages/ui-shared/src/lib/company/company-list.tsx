@@ -1,9 +1,9 @@
 'use client';
 
-import { Company } from '@contact-tracker/api-models';
+import { CompanyReadDto } from '@contact-tracker/api-models';
 
 export interface CompanyListProps {
-  companies: Company[];
+  companies: CompanyReadDto[];
   onDeleteAction: (id: number) => Promise<any>;
 }
 
@@ -12,7 +12,7 @@ export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
     <div className="mt-5 flex flex-wrap">
       {companies && companies.length ? (
         <>
-          {companies.map((company: Company) => (
+          {companies.map((company: CompanyReadDto) => (
             <div
               key={company.name}
               className="card bg-neutral text-neutral-content w-64 shadow-sm mb-3 mr-3"
@@ -50,9 +50,8 @@ export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
                   <button
                     className="btn"
                     onClick={async () => {
-                      // TODO: confirm
-                      //await onDeleteAction(company.id);
-                      await onDeleteAction(2);
+                      // TODO: add confirm
+                      await onDeleteAction(company.id);
                     }}
                   >
                     Delete

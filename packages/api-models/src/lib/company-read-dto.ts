@@ -3,12 +3,11 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { Event } from "./event";
-
-export interface EventType {
+export interface CompanyReadDto {
     id: number;
     name: string;
-    category: string;
-    isSystemDefined: boolean;
-    events: Event[];
+    website?: string;
+    industry?: string;
+    sizeRange?: string;
+    notes?: string;
 }

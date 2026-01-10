@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TypeGen.Core.TypeAnnotations;
 
 namespace tracker_api;
 
-[ExportTsInterface]
 public class EventType
 {
     [Key]

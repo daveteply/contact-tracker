@@ -15,7 +15,6 @@ public enum DirectionType
     Inbound, Outbound
 }
 
-[ExportTsInterface]
 public class Event : BaseEntity
 {
     public long? CompanyId { get; set; }

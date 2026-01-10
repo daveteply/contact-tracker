@@ -1,4 +1,4 @@
-import { ApiResult, Company } from '@contact-tracker/api-models';
+import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
 
 export async function GET(request: Request) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = (await response.json()) as ApiResult<Company[]>;
+    const result = (await response.json()) as ApiResult<CompanyReadDto[]>;
 
     if (!result.success) {
       return Response.json(

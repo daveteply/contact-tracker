@@ -9,7 +9,7 @@ public enum RoleLevel
     StaffEngineer
 }
 
-[ExportTsInterface]
+
 public class Role : BaseEntity
 {
     public long? CompanyId { get; set; }

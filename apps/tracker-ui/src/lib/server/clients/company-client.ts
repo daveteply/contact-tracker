@@ -1,8 +1,8 @@
-import { ApiResult, Company } from '@contact-tracker/api-models';
+import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
 import { getInternalApiBase } from '../api-base';
 import { CompanyInput } from '@contact-tracker/validation';
 
-export async function fetchCompanies(): Promise<Company[]> {
+export async function fetchCompanies(): Promise<CompanyReadDto[]> {
   const baseUrl = await getInternalApiBase();
   const res = await fetch(`${baseUrl}/api/companies`, {
     cache: 'no-store',
@@ -12,7 +12,7 @@ export async function fetchCompanies(): Promise<Company[]> {
     throw new Error('Failed to fetch companies');
   }
 
-  const result = (await res.json()) as ApiResult<Company[]>;
+  const result = (await res.json()) as ApiResult<CompanyReadDto[]>;
   if (!result.success) {
     throw new Error(result.message || 'Failed to fetch companies');
   }

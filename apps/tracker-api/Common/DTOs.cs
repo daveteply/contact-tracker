@@ -1,8 +1,11 @@
+using TypeGen.Core.TypeAnnotations;
+
 namespace tracker_api.DTOs;
 
 // -----------------------------
 // Company DTOs
 // -----------------------------
+[ExportTsInterface]
 public record CompanyReadDto(
     long Id,
     string Name,
@@ -12,6 +15,7 @@ public record CompanyReadDto(
     string? Notes
 );
 
+[ExportTsInterface]
 public record CompanyCreateDto(
     string Name,
     string? Website,
@@ -20,6 +24,7 @@ public record CompanyCreateDto(
     string? Notes
 );
 
+[ExportTsInterface]
 public record CompanyUpdateDto(
     string? Name,
     string? Website,
@@ -31,6 +36,7 @@ public record CompanyUpdateDto(
 // -----------------------------
 // Contact DTOs
 // -----------------------------
+[ExportTsInterface]
 public record ContactReadDto(
     long Id,
     long? CompanyId,
@@ -44,6 +50,7 @@ public record ContactReadDto(
     string? Notes
 );
 
+[ExportTsInterface]
 public record ContactCreateDto(
     long? CompanyId,
     string FirstName,
@@ -56,6 +63,7 @@ public record ContactCreateDto(
     string? Notes
 );
 
+[ExportTsInterface]
 public record ContactUpdateDto(
     long? CompanyId,
     string? FirstName,
@@ -71,6 +79,7 @@ public record ContactUpdateDto(
 // -----------------------------
 // Event DTOs
 // -----------------------------
+[ExportTsInterface]
 public record EventReadDto(
     long Id,
     long? CompanyId,
@@ -84,6 +93,7 @@ public record EventReadDto(
     DirectionType Direction
 );
 
+[ExportTsInterface]
 public record EventCreateDto(
     long? CompanyId,
     long? ContactId,
@@ -96,6 +106,7 @@ public record EventCreateDto(
     DirectionType Direction
 );
 
+[ExportTsInterface]
 public record EventUpdateDto(
     long? CompanyId,
     long? ContactId,
@@ -111,6 +122,7 @@ public record EventUpdateDto(
 // -----------------------------
 // EventType DTOs
 // -----------------------------
+[ExportTsInterface]
 public record EventTypeReadDto(
     int Id,
     string Name,
@@ -118,6 +130,7 @@ public record EventTypeReadDto(
     bool IsSystemDefined
 );
 
+[ExportTsInterface]
 public record EventTypeCreateDto(
     int Id,
     string Name,
@@ -125,6 +138,7 @@ public record EventTypeCreateDto(
     bool IsSystemDefined
 );
 
+[ExportTsInterface]
 public record EventTypeUpdateDto(
     string? Name,
     string? Category,
@@ -134,6 +148,7 @@ public record EventTypeUpdateDto(
 // -----------------------------
 // Reminder DTOs
 // -----------------------------
+[ExportTsInterface]
 public record ReminderReadDto(
     long Id,
     long EventId,
@@ -141,11 +156,13 @@ public record ReminderReadDto(
     DateTime? CompletedAt
 );
 
+[ExportTsInterface]
 public record ReminderCreateDto(
     long EventId,
     DateTime RemindAt
 );
 
+[ExportTsInterface]
 public record ReminderUpdateDto(
     DateTime? RemindAt,
     DateTime? CompletedAt
@@ -154,6 +171,7 @@ public record ReminderUpdateDto(
 // -----------------------------
 // Role DTOs
 // -----------------------------
+[ExportTsInterface]
 public record RoleReadDto(
     long Id,
     long? CompanyId,
@@ -163,6 +181,7 @@ public record RoleReadDto(
     RoleLevel Level
 );
 
+[ExportTsInterface]
 public record RoleCreateDto(
     long? CompanyId,
     string Title,
@@ -171,6 +190,7 @@ public record RoleCreateDto(
     RoleLevel Level
 );
 
+[ExportTsInterface]
 public record RoleUpdateDto(
     long? CompanyId,
     string? Title,
