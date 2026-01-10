@@ -1,6 +1,10 @@
-import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
+import {
+  ApiResult,
+  CompanyCreateDto,
+  CompanyReadDto,
+  CompanyUpdateDto,
+} from '@contact-tracker/api-models';
 import { getInternalApiBase } from '../api-base';
-import { CompanyInput } from '@contact-tracker/validation';
 
 export async function fetchCompanies(): Promise<CompanyReadDto[]> {
   const baseUrl = await getInternalApiBase();
@@ -33,7 +37,7 @@ export async function fetchCompanyById(id: string) {
   return res.json();
 }
 
-export async function createCompany(data: CompanyInput) {
+export async function createCompany(data: CompanyCreateDto) {
   const baseUrl = await getInternalApiBase();
   const res = await fetch(`${baseUrl}/api/companies`, {
     method: 'POST',
@@ -48,7 +52,7 @@ export async function createCompany(data: CompanyInput) {
   return res.json();
 }
 
-export async function updateCompany(id: string, data: unknown) {
+export async function updateCompany(id: string, data: CompanyUpdateDto) {
   const baseUrl = await getInternalApiBase();
   const res = await fetch(`${baseUrl}/api/companies/${id}`, {
     method: 'PUT',
