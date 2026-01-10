@@ -1,11 +1,11 @@
 'use server';
 
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
-import { createCompany } from '../clients/company-client';
+import { createCompany, deleteCompany } from '../clients/company-client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function saveCompany(data: CompanyInput) {
+export async function saveCompanyAction(data: CompanyInput) {
   const validated = CompanyInputSchema.safeParse(data);
 
   if (!validated.success) {
@@ -27,4 +27,22 @@ export async function saveCompany(data: CompanyInput) {
   }
 
   return { success: true, message: 'Company saved!' };
+}
+
+export async function deleteCompanyAction(id: number) {
+  let success = false;
+
+  try {
+    await deleteCompany(id);
+    success = true;
+  } catch (error) {
+    return { success: false, message: 'Database/API error occurred' };
+  }
+
+  if (success) {
+    revalidatePath('/events/companies');
+    redirect('/events/companies');
+  }
+
+  return { success: true, message: 'Company deleted!' };
 }

@@ -47,3 +47,31 @@ export async function createCompany(data: CompanyInput) {
 
   return res.json();
 }
+
+export async function updateCompany(id: string, data: unknown) {
+  const baseUrl = await getInternalApiBase();
+  const res = await fetch(`${baseUrl}/api/companies/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to update company');
+  }
+
+  return res.json();
+}
+
+export async function deleteCompany(id: number) {
+  const baseUrl = await getInternalApiBase();
+  const res = await fetch(`${baseUrl}/api/companies/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to delete company');
+  }
+
+  return res.status === 204 ? null : res.json();
+}

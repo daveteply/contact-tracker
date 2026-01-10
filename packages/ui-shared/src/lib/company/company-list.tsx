@@ -1,15 +1,18 @@
+'use client';
+
 import { Company } from '@contact-tracker/api-models';
 
 export interface CompanyListProps {
-  companyList: Company[];
+  companies: Company[];
+  onDeleteAction: (id: number) => Promise<any>;
 }
 
-export function CompanyList(props: CompanyListProps) {
+export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
   return (
     <div className="mt-5 flex flex-wrap">
-      {props.companyList && props.companyList.length ? (
+      {companies && companies.length ? (
         <>
-          {props.companyList.map((company: Company) => (
+          {companies.map((company: Company) => (
             <div
               key={company.name}
               className="card bg-neutral text-neutral-content w-64 shadow-sm mb-3 mr-3"
@@ -44,7 +47,16 @@ export function CompanyList(props: CompanyListProps) {
                 </ul>
                 <div className="card-actions justify-center">
                   <button className="btn btn-primary">Edit</button>
-                  <button className="btn">Delete</button>
+                  <button
+                    className="btn"
+                    onClick={async () => {
+                      // TODO: confirm
+                      //await onDeleteAction(company.id);
+                      await onDeleteAction(2);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
