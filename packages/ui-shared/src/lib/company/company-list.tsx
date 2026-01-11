@@ -2,6 +2,8 @@
 
 import { CompanyReadDto } from '@contact-tracker/api-models';
 import Link from 'next/link';
+import { useToast } from '../ToastContext';
+import { useRouter } from 'next/navigation';
 
 export interface CompanyListProps {
   companies: CompanyReadDto[];
@@ -9,13 +11,31 @@ export interface CompanyListProps {
 }
 
 export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
+  const router = useRouter();
+  const { showToast } = useToast();
+
+  function handleDelete(company: CompanyReadDto) {
+    return async () => {
+      // TODO: add confirm
+      const result = await onDeleteAction(company.id);
+
+      if (result.success) {
+        showToast('Company deleted successfully!', 'success');
+        router.push('/events/companies');
+      } else {
+        // TODO log this
+        showToast('Could not delete Company', 'error');
+      }
+    };
+  }
+
   return (
     <div className="mt-5 flex flex-wrap">
       {companies && companies.length ? (
         <>
           {companies.map((company: CompanyReadDto) => (
             <div
-              key={company.name}
+              key={company.id}
               className="card bg-neutral text-neutral-content w-64 shadow-sm mb-3 mr-3"
             >
               <div className="card-body">
@@ -53,13 +73,7 @@ export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
                   >
                     Edit
                   </Link>
-                  <button
-                    className="btn"
-                    onClick={async () => {
-                      // TODO: add confirm
-                      await onDeleteAction(company.id);
-                    }}
-                  >
+                  <button className="btn" onClick={handleDelete(company)}>
                     Delete
                   </button>
                 </div>

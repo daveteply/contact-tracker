@@ -62,26 +62,29 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
+  if (!dotnetApiUrl) {
+    throw new Error('DOTNET_API_BASE_URL environment variable is not set');
+  }
+
+  const { id } = await params;
+
   try {
-    const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
-    if (!dotnetApiUrl) {
-      throw new Error('DOTNET_API_BASE_URL environment variable is not set');
-    }
-
-    const { id } = await params;
-
     const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
       method: 'DELETE',
     });
 
     if (!response.ok) {
       return Response.json(
-        { error: 'Failed to delete company' },
+        { success: false, message: 'Failed to delete company' },
         { status: response.status },
       );
     }
 
-    return new Response(null, { status: 204 });
+    return Response.json(
+      { success: true, message: 'Company deleted!' },
+      { status: 200 },
+    );
   } catch (error) {
     console.error('Error deleting company:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });

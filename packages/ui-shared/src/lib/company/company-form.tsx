@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
+import { useToast } from '../ToastContext';
+import { useRouter } from 'next/navigation';
 
 interface CompanyFormProps {
   onSubmitAction: (
@@ -18,6 +20,9 @@ export function CompanyForm({
   initialData,
   isEdit = false,
 }: CompanyFormProps) {
+  const router = useRouter();
+  const { showToast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -39,10 +44,14 @@ export function CompanyForm({
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
-        // You could redirect here or reset the form
-        //alert('Company created successfully!');
+        showToast(
+          `Company ${isEdit ? 'updated' : 'created'} successfully!`,
+          'success',
+        );
+        router.push('/events/companies');
       } else {
-        //alert(`Error: ${result.message}`);
+        // TODO log this
+        showToast('Could not delete Company', 'error');
       }
     } catch (error) {
       // TODO log this

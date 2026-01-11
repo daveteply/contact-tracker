@@ -79,5 +79,5 @@ export async function deleteCompany(id: number) {
     throw new Error('Failed to delete company');
   }
 
-  return res.status === 204 ? null : res.json();
+  return res.json();
 }
