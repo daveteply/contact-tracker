@@ -1,4 +1,4 @@
-export * from './lib/ToastContext';
+export * from './lib/common/ToastContext';
 
 export * from './lib/company/company-form';
 export * from './lib/company/company-list';

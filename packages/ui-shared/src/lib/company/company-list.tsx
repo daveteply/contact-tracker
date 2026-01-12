@@ -2,7 +2,7 @@
 
 import { CompanyReadDto } from '@contact-tracker/api-models';
 import Link from 'next/link';
-import { useToast } from '../ToastContext';
+import { useToast } from '../common/ToastContext';
 import { useRouter } from 'next/navigation';
 
 export interface CompanyListProps {
