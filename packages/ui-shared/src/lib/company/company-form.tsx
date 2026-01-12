@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
-import { useToast } from '../common/ToastContext';
+import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 
 interface CompanyFormProps {
