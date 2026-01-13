@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { DirectionType, SourceType } from '@contact-tracker/api-models';
+import { CompanyReadDto, DirectionType, SourceType } from '@contact-tracker/api-models';
+import { CompanyTypeAhead } from '../common/type-ahead/company-type-ahead';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
@@ -35,9 +36,24 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
     }
   }, [initialData, reset]);
 
+  // Company
+  const [company, setCompany] = useState<CompanyReadDto | null>(null);
+  const handleCreateCompany = () => {
+    console.log('Create new company');
+  };
+
+  const handleEditCompany = (company: CompanyReadDto) => {
+    // Open modal or navigate to edit company page
+    console.log('Edit company:', company);
+  };
+
+  const handleViewCompany = (company: CompanyReadDto) => {
+    // Open modal or navigate to view company page
+    console.log('View company:', company);
+  };
+
   const onSubmit = async (data: EventFormValues) => {
     try {
-      console.log(1111, data);
       const result = await onSubmitAction(data as EventInput);
       if (result.success) {
         showToast(`Event ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
@@ -56,7 +72,16 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
-        <input className="input" {...register('companyId', { valueAsNumber: true })} value={96} />
+
+        <CompanyTypeAhead
+          value={company}
+          onChange={setCompany}
+          required
+          onCreate={handleCreateCompany}
+          onEdit={handleEditCompany}
+          onView={handleViewCompany}
+        />
+
         <p className="text-red-600">
           {errors.companyId && <span>{errors.companyId.message}</span>}
         </p>

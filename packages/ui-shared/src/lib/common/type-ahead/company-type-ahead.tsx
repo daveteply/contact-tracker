@@ -17,10 +17,7 @@ interface CompanyTypeAheadProps {
 
 export function CompanyTypeAhead(props: CompanyTypeAheadProps) {
   const handleSearch = async (query: string): Promise<CompanyReadDto[]> => {
-    // Replace with your actual API call
-    const response = await fetch(
-      `/api/companies/search?q=${encodeURIComponent(query)}`,
-    );
+    const response = await fetch(`/api/companies/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Search failed');
     return response.json();
   };
