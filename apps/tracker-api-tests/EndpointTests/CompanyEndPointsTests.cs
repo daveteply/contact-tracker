@@ -140,5 +140,52 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Fact]
+    public async Task SearchCompany_ReturnsCompany()
+    {
+        // Arrange
+        var company = new Company
+        {
+            Name = "Search the World",
+            Industry = "Software"
+        };
+
+        _context.Companies.Add(company);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/companies/search?q=earch");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result!.Data);
+    }
+
+        [Fact]
+    public async Task SearchCompany_ReturnsCompanies()
+    {
+        // Arrange
+        _context.Companies.Add(new Company { Name = "Search the World", Industry = "Software" });
+        _context.Companies.Add(new Company { Name = "Software R Us", Industry = "Software" });
+        _context.Companies.Add(new Company { Name = "Building the World", Industry = "Software" });
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/companies/search?q=world");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result!.Data);
+        Assert.Equal(2, result.Data.Count);
+    }
+
     public void Dispose() => _client?.Dispose();
 }

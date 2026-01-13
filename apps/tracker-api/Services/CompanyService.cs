@@ -105,6 +105,18 @@ public class CompanyService : ICompanyService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<CompanyReadDto>> SearchCompaniesAsync(string q)
+    {
+        var searchTerm = q.ToLower();
+
+        var companies = await _context.Companies
+            .AsNoTracking()
+            .Where(c => c.Name.ToLower().Contains(searchTerm))
+            .ToListAsync();
+
+            return companies.Select(MapToReadDto).ToList();
+    }
+
     private static CompanyReadDto MapToReadDto(Company company)
     {
         return new CompanyReadDto(

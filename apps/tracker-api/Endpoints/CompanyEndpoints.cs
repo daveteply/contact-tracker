@@ -30,6 +30,10 @@ public static class CompanyEndpoints
         group.MapDelete("/{id}", DeleteCompany)
             .WithName("DeleteCompany")
             .WithDescription("Delete a company");
+
+        group.MapGet("/search", SearchCompanies)
+            .WithName("SearchCompany")
+            .WithDescription("Search company by name");
     }
 
     private static async Task<IResult> GetAllCompanies(ICompanyService service)
@@ -121,6 +125,19 @@ public static class CompanyEndpoints
         }
     }
 
+    private static async Task<IResult> SearchCompanies(string q, ICompanyService service )
+    {
+        try
+        {
+            var companies = await service.SearchCompaniesAsync(q);
+            var result = ApiResult<List<CompanyReadDto>>.SuccessResult(companies, "Companies searched successfully");
+            return Results.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
     private static IResult HandleException(Exception ex)
     {
         var result = ApiResult<object>.FailureResult(

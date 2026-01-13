@@ -25,6 +25,12 @@ public interface ICompanyService
     Task<CompanyReadDto> UpdateCompanyAsync(long id, CompanyUpdateDto dto);
 
     /// <summary>
+    /// Search companies by name
+    /// </summary>
+    /// <param name="q">Name search string</param>
+    Task<List<CompanyReadDto>> SearchCompaniesAsync(string q);
+
+    /// <summary>
     /// Delete a company by ID
     /// </summary>
     Task DeleteCompanyAsync(long id);

@@ -37,17 +37,9 @@ public class ContactTrackerDbContext : DbContext
         }
 
         // Configure enum storage for PostgreSQL
-        modelBuilder.Entity<Event>()
-            .Property(e => e.Source)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<Event>()
-            .Property(e => e.Direction)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<Role>()
-            .Property(r => r.Level)
-            .HasConversion<string>();
+        modelBuilder.Entity<Event>().Property(e => e.Source).HasConversion<string>();
+        modelBuilder.Entity<Event>().Property(e => e.Direction).HasConversion<string>();
+        modelBuilder.Entity<Role>().Property(r => r.Level).HasConversion<string>();
 
         // Configure relationships explicitly (optional, but clearer)
         modelBuilder.Entity<Event>()
