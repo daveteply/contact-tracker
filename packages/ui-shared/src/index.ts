@@ -5,3 +5,7 @@ export * from './lib/company/company-list';
 
 export * from './lib/event/event-form';
 export * from './lib/event/event-list';
+
+export * from './lib/common/type-ahead/company-type-ahead';
+export * from './lib/common/type-ahead/contact-type-ahead';
+export * from './lib/common/type-ahead/role-type-ahead';

@@ -6,17 +6,28 @@ import {
 } from '@contact-tracker/api-models';
 import { getInternalApiBase } from '../api-base';
 
-export async function fetchCompanies(): Promise<CompanyReadDto[]> {
+async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResult<T>> {
   const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/companies`, {
-    cache: 'no-store',
+  const url = `${baseUrl}/api/companies${endpoint}`;
+
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch companies');
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status} ${response.statusText}`);
   }
 
-  const result = (await res.json()) as ApiResult<CompanyReadDto[]>;
+  return response.json();
+}
+
+export async function fetchCompanies(): Promise<CompanyReadDto[]> {
+  const result = await apiRequest<CompanyReadDto[]>('', { cache: 'no-store' });
+
   if (!result.success) {
     throw new Error(result.message || 'Failed to fetch companies');
   }
@@ -24,60 +35,26 @@ export async function fetchCompanies(): Promise<CompanyReadDto[]> {
   return result.data || [];
 }
 
-export async function fetchCompanyById(
-  id: number,
-): Promise<ApiResult<CompanyReadDto>> {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/companies/${id}`, {
-    cache: 'no-store',
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch company');
-  }
-
-  return res.json();
+export async function fetchCompanyById(id: number) {
+  return apiRequest<CompanyReadDto>(`/${id}`, { cache: 'no-store' });
 }
 
 export async function createCompany(data: CompanyCreateDto) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/companies`, {
+  return apiRequest<CompanyReadDto>('', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to create company');
-  }
-
-  return res.json();
 }
 
 export async function updateCompany(id: number, data: CompanyUpdateDto) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/companies/${id}`, {
+  return apiRequest<CompanyReadDto>(`/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to update company');
-  }
-
-  return res.json();
 }
 
 export async function deleteCompany(id: number) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/companies/${id}`, {
+  return apiRequest<void>(`/${id}`, {
     method: 'DELETE',
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to delete company');
-  }
-
-  return res.json();
 }

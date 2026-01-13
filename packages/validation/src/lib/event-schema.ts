@@ -6,7 +6,7 @@ export const EventInputSchema = z.object({
   contactId: z.number().optional(),
   roleId: z.number().optional(),
   eventTypeId: z.number(),
-  occurredAt: z.date().or(z.string().datetime()),
+  occurredAt: z.coerce.date(),
   summary: z.string().optional(),
   details: z.string().optional(),
   source: SourceTypeSchema,
@@ -16,3 +16,5 @@ export const EventInputSchema = z.object({
 export const EventUpdateSchema = EventInputSchema.partial();
 
 export type EventInput = z.infer<typeof EventInputSchema>;
+
+export type EventFormValues = z.input<typeof EventInputSchema>;

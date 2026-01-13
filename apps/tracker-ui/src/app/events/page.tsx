@@ -3,7 +3,7 @@ import { EventList } from '@contact-tracker/ui-shared';
 import { fetchEvents } from '@/lib/server/clients/events-client';
 
 export default async function Index() {
-  const res = await fetchEvents();
+  const events = await fetchEvents();
 
   return (
     <div>
@@ -12,7 +12,7 @@ export default async function Index() {
         Add New Event
       </Link>
 
-      <EventList eventList={res.data} />
+      <EventList eventList={events} />
     </div>
   );
 }

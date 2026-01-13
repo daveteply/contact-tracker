@@ -8,18 +8,12 @@ import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 
 interface CompanyFormProps {
-  onSubmitAction: (
-    data: CompanyInput,
-  ) => Promise<{ success: boolean; message: string }>;
+  onSubmitAction: (data: CompanyInput) => Promise<{ success: boolean; message: string }>;
   initialData?: CompanyInput;
   isEdit?: boolean;
 }
 
-export function CompanyForm({
-  onSubmitAction,
-  initialData,
-  isEdit = false,
-}: CompanyFormProps) {
+export function CompanyForm({ onSubmitAction, initialData, isEdit = false }: CompanyFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -44,14 +38,11 @@ export function CompanyForm({
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
-        showToast(
-          `Company ${isEdit ? 'updated' : 'created'} successfully!`,
-          'success',
-        );
+        showToast(`Company ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
         router.push('/events/companies');
       } else {
         // TODO log this
-        showToast('Could not delete Company', 'error');
+        showToast('Could not save Company', 'error');
       }
     } catch (error) {
       // TODO log this
@@ -60,33 +51,24 @@ export function CompanyForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company Name</legend>
         <input className="input" {...register('name')} />
         <p className="label">Required</p>
-        <p className="text-red-600">
-          {errors.name && <span>{errors.name.message}</span>}
-        </p>
+        <p className="text-red-600">{errors.name && <span>{errors.name.message}</span>}</p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Website</legend>
         <input className="input" {...register('website')} />
-        <p className="text-red-600">
-          {errors.website && <span>{errors.website.message}</span>}
-        </p>
+        <p className="text-red-600">{errors.website && <span>{errors.website.message}</span>}</p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Industry</legend>
         <input className="input" {...register('industry')} />
-        <p className="text-red-600">
-          {errors.industry && <span>{errors.industry.message}</span>}
-        </p>
+        <p className="text-red-600">{errors.industry && <span>{errors.industry.message}</span>}</p>
       </fieldset>
 
       <fieldset className="fieldset">
@@ -100,9 +82,7 @@ export function CompanyForm({
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Notes</legend>
         <textarea className="textarea" {...register('notes')} />
-        <p className="text-red-600">
-          {errors.notes && <span>{errors.notes.message}</span>}
-        </p>
+        <p className="text-red-600">{errors.notes && <span>{errors.notes.message}</span>}</p>
       </fieldset>
 
       <button className="btn mt-4" type="submit" disabled={isSubmitting}>
