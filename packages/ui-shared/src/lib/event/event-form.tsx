@@ -76,7 +76,6 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
         <CompanyTypeAhead
           value={company}
           onChange={setCompany}
-          required
           onCreate={handleCreateCompany}
           onEdit={handleEditCompany}
           onView={handleViewCompany}
