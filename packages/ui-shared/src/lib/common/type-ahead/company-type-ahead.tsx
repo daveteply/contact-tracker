@@ -1,6 +1,6 @@
 'use client';
 
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
 import { BaseTypeAhead } from './base-type-ahead';
 
 interface CompanyTypeAheadProps {
@@ -19,7 +19,15 @@ export function CompanyTypeAhead(props: CompanyTypeAheadProps) {
   const handleSearch = async (query: string): Promise<CompanyReadDto[]> => {
     const response = await fetch(`/api/companies/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Search failed');
-    return response.json();
+
+    const result: ApiResult<CompanyReadDto[]> = await response.json();
+
+    if (!result.success) {
+      console.error('API Errors:', result.errors);
+      throw new Error(result.message || 'Search failed');
+    }
+
+    return result.data ?? [];
   };
 
   return (
