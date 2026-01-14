@@ -67,10 +67,7 @@ export function CompanyList({ companies, onDeleteAction }: CompanyListProps) {
                   <li>{company.notes}</li>
                 </ul>
                 <div className="card-actions justify-center">
-                  <Link
-                    className="btn btn-primary"
-                    href={`/events/companies/${company.id}/edit`}
-                  >
+                  <Link className="btn btn-primary" href={`/events/companies/${company.id}/edit`}>
                     Edit
                   </Link>
                   <button className="btn" onClick={handleDelete(company)}>

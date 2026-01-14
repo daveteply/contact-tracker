@@ -9,10 +9,7 @@ export async function GET(request: Request) {
     });
 
     if (!response.ok) {
-      return Response.json(
-        { error: 'Failed to fetch contacts' },
-        { status: response.status },
-      );
+      return Response.json({ error: 'Failed to fetch contacts' }, { status: response.status });
     }
 
     const data = await response.json();

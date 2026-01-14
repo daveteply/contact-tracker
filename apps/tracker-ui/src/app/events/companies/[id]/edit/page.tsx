@@ -2,11 +2,7 @@ import { updateCompanyAction } from '@/lib/server/actions/company-actions';
 import { fetchCompanyById } from '@/lib/server/clients/company-client';
 import { CompanyForm } from '@contact-tracker/ui-shared';
 
-export default async function EditCompanyPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditCompanyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const companyId = parseInt(id);
   const response = await fetchCompanyById(companyId);
@@ -20,11 +16,7 @@ export default async function EditCompanyPage({
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Edit Company</h1>
-      <CompanyForm
-        onSubmitAction={boundUpdateAction}
-        initialData={response.data}
-        isEdit={true}
-      />
+      <CompanyForm onSubmitAction={boundUpdateAction} initialData={response.data} isEdit={true} />
     </div>
   );
 }

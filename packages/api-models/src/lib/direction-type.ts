@@ -4,6 +4,6 @@
  */
 
 export enum DirectionType {
-    Inbound = 0,
-    Outbound = 1,
+  Inbound = 0,
+  Outbound = 1,
 }

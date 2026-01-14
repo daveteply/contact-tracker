@@ -3,18 +3,18 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { SourceType } from "./source-type";
-import { DirectionType } from "./direction-type";
+import { SourceType } from './source-type';
+import { DirectionType } from './direction-type';
 
 export interface EventReadDto {
-    id: number;
-    companyId?: number;
-    contactId?: number;
-    roleId?: number;
-    eventTypeId: number;
-    occurredAt: Date;
-    summary?: string;
-    details?: string;
-    source: SourceType;
-    direction: DirectionType;
+  id: number;
+  companyId?: number;
+  contactId?: number;
+  roleId?: number;
+  eventTypeId: number;
+  occurredAt: Date;
+  summary?: string;
+  details?: string;
+  source: SourceType;
+  direction: DirectionType;
 }

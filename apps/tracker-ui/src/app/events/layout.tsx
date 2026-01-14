@@ -1,8 +1,4 @@
-export default function EventsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function EventsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <header className="bg-blue-600 text-white p-4 shadow-md">

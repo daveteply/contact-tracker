@@ -1,8 +1,4 @@
-import {
-  DirectionType,
-  RoleLevel,
-  SourceType,
-} from '@contact-tracker/api-models';
+import { DirectionType, RoleLevel, SourceType } from '@contact-tracker/api-models';
 import { z } from 'zod';
 
 export const DirectionTypeSchema = z.union([

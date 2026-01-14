@@ -1,7 +1,4 @@
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -12,10 +9,7 @@ export async function GET(
     });
 
     if (!response.ok) {
-      return Response.json(
-        { error: 'Contact not found' },
-        { status: response.status },
-      );
+      return Response.json({ error: 'Contact not found' }, { status: response.status });
     }
 
     const data = await response.json();
@@ -26,10 +20,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -58,10 +49,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -72,10 +60,7 @@ export async function DELETE(
     });
 
     if (!response.ok) {
-      return Response.json(
-        { error: 'Failed to delete contact' },
-        { status: response.status },
-      );
+      return Response.json({ error: 'Failed to delete contact' }, { status: response.status });
     }
 
     return new Response(null, { status: 204 });

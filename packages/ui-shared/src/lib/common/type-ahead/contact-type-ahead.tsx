@@ -18,9 +18,7 @@ interface ContactTypeAheadProps {
 export function ContactTypeAhead(props: ContactTypeAheadProps) {
   const handleSearch = async (query: string): Promise<ContactReadDto[]> => {
     // Backend handles first and/or last name matching
-    const response = await fetch(
-      `/api/contacts/search?q=${encodeURIComponent(query)}`,
-    );
+    const response = await fetch(`/api/contacts/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Search failed');
     return response.json();
   };

@@ -11,10 +11,7 @@ export async function GET(request: Request) {
     });
 
     if (!response.ok) {
-      return Response.json(
-        { error: 'Failed to fetch companies' },
-        { status: response.status },
-      );
+      return Response.json({ error: 'Failed to fetch companies' }, { status: response.status });
     }
 
     const result = (await response.json()) as ApiResult<CompanyReadDto[]>;

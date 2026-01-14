@@ -15,10 +15,7 @@
       "!{projectRoot}/**/bin/**/*",
       "!{projectRoot}/**/obj/**/*"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml",
-      "{workspaceRoot}/TrackerApi.slnx"
-    ]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml", "{workspaceRoot}/TrackerApi.slnx"]
   },
   "nxCloudId": null,
   "plugins": [

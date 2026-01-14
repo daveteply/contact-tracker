@@ -4,13 +4,13 @@
  */
 
 export interface ContactUpdateDto {
-    companyId?: number;
-    firstName?: string;
-    lastName?: string;
-    title?: string;
-    email?: string;
-    phoneNumber?: string;
-    linkedInUrl?: string;
-    isPrimaryRecruiter?: boolean;
-    notes?: string;
+  companyId?: number;
+  firstName?: string;
+  lastName?: string;
+  title?: string;
+  email?: string;
+  phoneNumber?: string;
+  linkedInUrl?: string;
+  isPrimaryRecruiter?: boolean;
+  notes?: string;
 }

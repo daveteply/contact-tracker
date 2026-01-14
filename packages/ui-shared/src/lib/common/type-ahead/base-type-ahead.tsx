@@ -51,10 +51,7 @@ export function BaseTypeAhead<T extends BaseEntity>({
     if (typeof window === 'undefined') return;
 
     function handleClickOutside(event: MouseEvent) {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         setFocused(false);
       }
@@ -121,12 +118,7 @@ export function BaseTypeAhead<T extends BaseEntity>({
                     className="btn btn-ghost btn-xs btn-circle"
                     title="View"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -149,12 +141,7 @@ export function BaseTypeAhead<T extends BaseEntity>({
                     className="btn btn-ghost btn-xs btn-circle"
                     title="Edit"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -171,12 +158,7 @@ export function BaseTypeAhead<T extends BaseEntity>({
                   title="Clear"
                   disabled={disabled}
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -225,25 +207,20 @@ export function BaseTypeAhead<T extends BaseEntity>({
             )}
 
             {/* No Results */}
-            {isOpen &&
-              !loading &&
-              query.trim().length > 0 &&
-              results.length === 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-base-100 border border-base-300 rounded-lg shadow-lg">
-                  <div className="px-4 py-2 text-base-content/60">
-                    No results found
-                  </div>
-                  {onCreate && (
-                    <button
-                      type="button"
-                      onClick={onCreate}
-                      className="w-full text-left px-4 py-2 hover:bg-base-200 text-primary font-medium"
-                    >
-                      + Create New
-                    </button>
-                  )}
-                </div>
-              )}
+            {isOpen && !loading && query.trim().length > 0 && results.length === 0 && (
+              <div className="absolute z-50 w-full mt-1 bg-base-100 border border-base-300 rounded-lg shadow-lg">
+                <div className="px-4 py-2 text-base-content/60">No results found</div>
+                {onCreate && (
+                  <button
+                    type="button"
+                    onClick={onCreate}
+                    className="w-full text-left px-4 py-2 hover:bg-base-200 text-primary font-medium"
+                  >
+                    + Create New
+                  </button>
+                )}
+              </div>
+            )}
           </>
         )}
 
@@ -255,12 +232,7 @@ export function BaseTypeAhead<T extends BaseEntity>({
             className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-ghost btn-sm btn-circle"
             title="Create New"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

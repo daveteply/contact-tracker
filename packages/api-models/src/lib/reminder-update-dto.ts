@@ -4,6 +4,6 @@
  */
 
 export interface ReminderUpdateDto {
-    remindAt?: Date;
-    completedAt?: Date;
+  remindAt?: Date;
+  completedAt?: Date;
 }

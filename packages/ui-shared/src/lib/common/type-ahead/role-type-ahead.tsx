@@ -18,9 +18,7 @@ interface RoleTypeAheadProps {
 export function RoleTypeAhead(props: RoleTypeAheadProps) {
   const handleSearch = async (query: string): Promise<RoleReadDto[]> => {
     // Replace with your actual API call
-    const response = await fetch(
-      `/api/roles/search?q=${encodeURIComponent(query)}`,
-    );
+    const response = await fetch(`/api/roles/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Search failed');
     return response.json();
   };

@@ -9,10 +9,7 @@ export async function GET(request: Request) {
     });
 
     if (!response.ok) {
-      return Response.json(
-        { error: 'Failed to fetch events' },
-        { status: response.status },
-      );
+      return Response.json({ error: 'Failed to fetch events' }, { status: response.status });
     }
     const data = await response.json();
     return Response.json(data);

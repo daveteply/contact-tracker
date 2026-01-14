@@ -4,10 +4,10 @@
  */
 
 export interface CompanyReadDto {
-    id: number;
-    name: string;
-    website?: string;
-    industry?: string;
-    sizeRange?: string;
-    notes?: string;
+  id: number;
+  name: string;
+  website?: string;
+  industry?: string;
+  sizeRange?: string;
+  notes?: string;
 }

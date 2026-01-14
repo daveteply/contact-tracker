@@ -1,9 +1,6 @@
 {
   "name": "Tracker UI (Next.js)",
-  "dockerComposeFile": [
-    "../../docker-compose.yml",
-    "docker-compose.devcontainer.yml"
-  ],
+  "dockerComposeFile": ["../../docker-compose.yml", "docker-compose.devcontainer.yml"],
   "service": "tracker-ui",
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5000],

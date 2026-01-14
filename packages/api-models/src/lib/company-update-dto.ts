@@ -4,9 +4,9 @@
  */
 
 export interface CompanyUpdateDto {
-    name?: string;
-    website?: string;
-    industry?: string;
-    sizeRange?: string;
-    notes?: string;
+  name?: string;
+  website?: string;
+  industry?: string;
+  sizeRange?: string;
+  notes?: string;
 }
