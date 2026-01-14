@@ -4,6 +4,6 @@
  */
 
 export interface ReminderCreateDto {
-  eventId: number;
-  remindAt: Date;
+    eventId: number;
+    remindAt: Date;
 }

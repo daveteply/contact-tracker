@@ -4,8 +4,8 @@
  */
 
 export interface EventTypeReadDto {
-  id: number;
-  name: string;
-  category: string;
-  isSystemDefined: boolean;
+    id: number;
+    name: string;
+    category: string;
+    isSystemDefined: boolean;
 }

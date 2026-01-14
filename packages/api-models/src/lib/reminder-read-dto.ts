@@ -4,8 +4,8 @@
  */
 
 export interface ReminderReadDto {
-  id: number;
-  eventId: number;
-  remindAt: Date;
-  completedAt?: Date;
+    id: number;
+    eventId: number;
+    remindAt: Date;
+    completedAt?: Date;
 }

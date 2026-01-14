@@ -4,7 +4,7 @@
  */
 
 export interface EventTypeUpdateDto {
-  name?: string;
-  category?: string;
-  isSystemDefined?: boolean;
+    name?: string;
+    category?: string;
+    isSystemDefined?: boolean;
 }

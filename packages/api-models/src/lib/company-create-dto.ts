@@ -4,9 +4,9 @@
  */
 
 export interface CompanyCreateDto {
-  name: string;
-  website?: string;
-  industry?: string;
-  sizeRange?: string;
-  notes?: string;
+    name: string;
+    website?: string;
+    industry?: string;
+    sizeRange?: string;
+    notes?: string;
 }
