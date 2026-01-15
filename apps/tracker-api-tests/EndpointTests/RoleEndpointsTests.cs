@@ -62,5 +62,51 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task SearchRole_ReturnsRole()
+    {
+        // Arrange
+        var role = new Role
+        {
+            Title = "Staff Software Engineer",
+        };
+
+        _context.Roles.Add(role);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/roles/search?q=So");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result!.Data);
+    }
+
+    [Fact]
+    public async Task SearchRole_ReturnsRolesFromList()
+    {
+        // Arrange
+        _context.Roles.Add(new Role { Title = "Staff Software Engineer", });
+        _context.Roles.Add(new Role { Title = "Tech Writer", });
+        _context.Roles.Add(new Role { Title = "Jr Software Engineer", });
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/roles/search?q=So");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result!.Data);
+        Assert.Equal(2, result.Data.Count);
+    }
+
     public void Dispose() => _client?.Dispose();
 }

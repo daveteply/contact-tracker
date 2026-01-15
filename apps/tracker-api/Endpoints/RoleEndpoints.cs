@@ -30,12 +30,23 @@ public static class RoleEndpoints
         group.MapDelete("/{id}", DeleteRole)
             .WithName("DeleteRole")
             .WithDescription("Delete a role");
+
+        group.MapGet("/search", SearchRoles)
+            .WithName("SearchRole")
+            .WithDescription("Search role by title");
     }
 
     private static async Task<IResult> GetAllRoles(IRoleService service)
     {
-        var roles = await service.GetAllRolesAsync();
-        return Results.Ok(ApiResult<List<RoleReadDto>>.SuccessResult(roles));
+        try
+        {
+            var roles = await service.GetAllRolesAsync();
+            return Results.Ok(ApiResult<List<RoleReadDto>>.SuccessResult(roles));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 
     private static async Task<IResult> GetRoleById(long id, IRoleService service)
@@ -43,11 +54,16 @@ public static class RoleEndpoints
         try
         {
             var role = await service.GetRoleByIdAsync(id);
+            var result = ApiResult<RoleReadDto>.SuccessResult(role, "Role retrieved successfully");
             return Results.Ok(ApiResult<RoleReadDto>.SuccessResult(role));
         }
         catch (ResourceNotFoundException ex)
         {
             return Results.NotFound(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
         }
     }
 
@@ -56,11 +72,16 @@ public static class RoleEndpoints
         try
         {
             var createdRole = await service.CreateRoleAsync(role);
+            var result = ApiResult<RoleReadDto>.SuccessResult(createdRole, "Role created successfully");
             return Results.Created($"/api/roles/{createdRole.Id}", ApiResult<RoleReadDto>.SuccessResult(createdRole));
         }
         catch (ValidationException ex)
         {
             return Results.BadRequest(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
         }
     }
 
@@ -68,8 +89,9 @@ public static class RoleEndpoints
     {
         try
         {
-            var updated = await service.UpdateRoleAsync(id, role);
-            return Results.Ok(ApiResult<RoleReadDto>.SuccessResult(updated));
+            var updatedRole = await service.UpdateRoleAsync(id, role);
+            var result = ApiResult<RoleReadDto>.SuccessResult(updatedRole, "Role updated successfully");
+            return Results.Ok(ApiResult<RoleReadDto>.SuccessResult(updatedRole));
         }
         catch (ResourceNotFoundException ex)
         {
@@ -78,6 +100,10 @@ public static class RoleEndpoints
         catch (ValidationException ex)
         {
             return Results.BadRequest(ApiResult<RoleReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
         }
     }
 
@@ -92,5 +118,31 @@ public static class RoleEndpoints
         {
             return Results.NotFound(ApiResult<Role>.FailureResult(ex.UserFriendlyMessage!));
         }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> SearchRoles(string q, IRoleService service)
+    {
+        try
+        {
+            var roles = await service.SearchRolesAsync(q);
+            var result = ApiResult<List<RoleReadDto>>.SuccessResult(roles, "Roles searched successfully");
+            return Results.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static IResult HandleException(Exception ex)
+    {
+        var result = ApiResult<object>.FailureResult(
+            "An unexpected error occurred",
+            ex.Message);
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
     }
 }

@@ -117,7 +117,7 @@ public static class CompanyEndpoints
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<object>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<CompanyReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (Exception ex)
         {
@@ -125,7 +125,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> SearchCompanies(string q, ICompanyService service )
+    private static async Task<IResult> SearchCompanies(string q, ICompanyService service)
     {
         try
         {
@@ -138,9 +138,10 @@ public static class CompanyEndpoints
             return HandleException(ex);
         }
     }
+
     private static IResult HandleException(Exception ex)
     {
-        var result = ApiResult<object>.FailureResult(
+        var result = ApiResult<CompanyReadDto>.FailureResult(
             "An unexpected error occurred",
             ex.Message);
         return Results.StatusCode(StatusCodes.Status500InternalServerError);

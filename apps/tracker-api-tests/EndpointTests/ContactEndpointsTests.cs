@@ -452,17 +452,13 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task SearchContact_ReturnsContactFromList()
     {
         // Arrange
-        var contact = new Contact
-        {
-            FirstName = "Joe",
-            LastName = "Tester"
-        };
-
-        _context.Contacts.Add(contact);
+        _context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
+        _context.Contacts.Add(new Contact { FirstName = "Billy", LastName = "Tester" });
+        _context.Contacts.Add(new Contact { FirstName = "Samantha", LastName = "Testarosa" });
         await _context.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/contacts/search?q=oe");
+        var response = await _client.GetAsync("/api/contacts/search?q=tester");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -471,6 +467,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
+        Assert.Equal(2, result.Data.Count);
     }
 
     #endregion

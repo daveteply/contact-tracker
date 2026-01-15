@@ -105,6 +105,18 @@ public class RoleService : IRoleService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<RoleReadDto>> SearchRolesAsync(string q)
+    {
+        var searchTerm = q.ToLower();
+
+        var roles = await _context.Roles
+            .AsNoTracking()
+            .Where(c => c.Title.ToLower().Contains(searchTerm))
+            .ToListAsync();
+
+        return roles.Select(MapToReadDto).ToList();
+    }
+
     private static RoleReadDto MapToReadDto(Role role)
     {
         return new RoleReadDto(
