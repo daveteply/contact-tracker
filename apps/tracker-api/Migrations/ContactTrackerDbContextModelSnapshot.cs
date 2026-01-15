@@ -123,7 +123,9 @@ namespace tracker_api.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("FirstName", "LastName");
+                    b.HasIndex("FirstName");
+
+                    b.HasIndex("LastName");
 
                     b.ToTable("Contacts");
 

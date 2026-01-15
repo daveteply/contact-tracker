@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     [DbContext(typeof(ContactTrackerDbContext))]
-    [Migration("20260115161835_InitialSchema")]
+    [Migration("20260115162558_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -126,7 +126,9 @@ namespace tracker_api.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("FirstName", "LastName");
+                    b.HasIndex("FirstName");
+
+                    b.HasIndex("LastName");
 
                     b.ToTable("Contacts");
 

@@ -210,9 +210,14 @@ namespace tracker_api.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contacts_FirstName_LastName",
+                name: "IX_Contacts_FirstName",
                 table: "Contacts",
-                columns: new[] { "FirstName", "LastName" });
+                column: "FirstName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contacts_LastName",
+                table: "Contacts",
+                column: "LastName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_CompanyId",
