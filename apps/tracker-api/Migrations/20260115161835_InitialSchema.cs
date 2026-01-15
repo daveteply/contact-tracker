@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -199,9 +199,20 @@ namespace tracker_api.Migrations
                 values: new object[] { -1L, -1L, null, "EngineeringManager", null, "Test Role" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companies_Name",
+                table: "Companies",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contacts_CompanyId",
                 table: "Contacts",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contacts_FirstName_LastName",
+                table: "Contacts",
+                columns: new[] { "FirstName", "LastName" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_CompanyId",
@@ -237,6 +248,11 @@ namespace tracker_api.Migrations
                 name: "IX_Roles_CompanyId",
                 table: "Roles",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Title",
+                table: "Roles",
+                column: "Title");
         }
 
         /// <inheritdoc />

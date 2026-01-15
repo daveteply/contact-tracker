@@ -57,6 +57,9 @@ namespace tracker_api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Companies");
 
                     b.HasData(
@@ -119,6 +122,8 @@ namespace tracker_api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("FirstName", "LastName");
 
                     b.ToTable("Contacts");
 
@@ -339,6 +344,8 @@ namespace tracker_api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("Title");
 
                     b.ToTable("Roles");
 
