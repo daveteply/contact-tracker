@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useController, Control, FieldValues, Path } from 'react-hook-form';
 import { CompanyReadDto } from '@contact-tracker/api-models';
 
@@ -21,13 +21,15 @@ export function CompanyCombobox<T extends FieldValues>({ control, name }: Props<
   const [suggestions, setSuggestions] = useState<CompanyReadDto[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // debounce
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Debounce
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedQuery(query), 300);
     return () => clearTimeout(handler);
   }, [query]);
 
-  // perform search
+  // Perform search
   useEffect(() => {
     let active = true;
     if (!debouncedQuery) {
@@ -61,6 +63,31 @@ export function CompanyCombobox<T extends FieldValues>({ control, name }: Props<
     };
   }, [debouncedQuery]);
 
+  // click outside or esc key on desktop
+  useEffect(() => {
+    // Click Outside Logic
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    // Escape Key Logic
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const handleSelect = (company: CompanyReadDto) => {
     setQuery(company.name);
     setIsOpen(false);
@@ -83,7 +110,7 @@ export function CompanyCombobox<T extends FieldValues>({ control, name }: Props<
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" ref={containerRef}>
       <div className="flex items-center gap-2">
         <input
           ref={ref}
