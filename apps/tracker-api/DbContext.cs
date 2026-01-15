@@ -74,7 +74,10 @@ public class ContactTrackerDbContext : DbContext
         modelBuilder.Entity<Event>().HasIndex(e => e.CompanyId);
         modelBuilder.Entity<Event>().HasIndex(e => e.OccurredAt);
         modelBuilder.Entity<Contact>().HasIndex(c => c.CompanyId);
+        modelBuilder.Entity<Contact>().HasIndex(c => new { c.FirstName, c.LastName });
         modelBuilder.Entity<Role>().HasIndex(r => r.CompanyId);
+        modelBuilder.Entity<Role>().HasIndex(r => r.Title);
+        modelBuilder.Entity<Company>().HasIndex(c => c.Name).IsUnique();
 
         // Seed data for event types
         modelBuilder.Entity<EventType>().HasData(
