@@ -30,6 +30,10 @@ public static class ContactEndpoints
         group.MapDelete("/{id}", DeleteContact)
             .WithName("DeleteContact")
             .WithDescription("Delete a contact");
+
+        group.MapGet("/search", SearchContacts)
+            .WithName("SearchContacts")
+            .WithDescription("Search contact by first or last name");
     }
 
     private static async Task<IResult> GetAllContacts(IContactService service)
@@ -114,6 +118,20 @@ public static class ContactEndpoints
         catch (ResourceNotFoundException ex)
         {
             return Results.NotFound(ApiResult<Contact>.FailureResult(ex.UserFriendlyMessage!));
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    private static async Task<IResult> SearchContacts(string q, IContactService service)
+    {
+        try
+        {
+            var contacts = await service.SearchContactsAsync(q);
+            var result = ApiResult<List<ContactReadDto>>.SuccessResult(contacts, "Contacts searched successfully");
+            return Results.Ok(result);
         }
         catch (Exception ex)
         {

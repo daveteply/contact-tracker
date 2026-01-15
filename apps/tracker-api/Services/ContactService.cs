@@ -121,6 +121,20 @@ public class ContactService : IContactService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<ContactReadDto>> SearchContactsAsync(string q)
+    {
+        var searchTerm = q.ToLower();
+
+        var contacts = await _context.Contacts
+            .AsNoTracking()
+            .Where(c => c.FirstName.ToLower().Contains(searchTerm)
+                || c.LastName.ToLower().Contains(searchTerm)
+            )
+            .ToListAsync();
+
+        return contacts.Select(MapToReadDto).ToList();
+    }
+
     private static ContactReadDto MapToReadDto(Contact contact)
     {
         return new ContactReadDto(

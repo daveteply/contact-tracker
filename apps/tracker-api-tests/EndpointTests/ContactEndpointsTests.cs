@@ -426,5 +426,52 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Fact]
+    public async Task SearchContact_ReturnsContact()
+    {
+        // Arrange
+        _context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
+        _context.Contacts.Add(new Contact { FirstName = "June", LastName = "Summers" });
+        _context.Contacts.Add(new Contact { FirstName = "Albert", LastName = "Testington" });
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/contacts/search?q=ing");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Data);
+        Assert.Single(result.Data);
+    }
+
+    [Fact]
+    public async Task SearchContact_ReturnsContactFromList()
+    {
+        // Arrange
+        var contact = new Contact
+        {
+            FirstName = "Joe",
+            LastName = "Tester"
+        };
+
+        _context.Contacts.Add(contact);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/contacts/search?q=oe");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+
+        Assert.NotNull(result);
+        Assert.NotNull(result!.Data);
+    }
+
     #endregion
 }

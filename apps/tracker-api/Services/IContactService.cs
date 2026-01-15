@@ -2,7 +2,6 @@
 
 namespace tracker_api.Services;
 
-
 public interface IContactService
 {
     /// <summary>
@@ -24,6 +23,13 @@ public interface IContactService
     /// Update an existing contact
     /// </summary>
     Task<ContactReadDto> UpdateContactAsync(long id, ContactUpdateDto contact);
+
+    /// <summary>
+    /// Search Contacts by First or Last Name
+    /// </summary>
+    /// <param name="q">Name search string</param>
+    /// <returns></returns>
+    Task<List<ContactReadDto>> SearchContactsAsync(string q);
 
     /// <summary>
     /// Delete a contact by ID
