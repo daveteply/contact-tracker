@@ -166,8 +166,11 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
           value={query}
           onChange={handleInputChange}
           placeholder={config.placeholder}
+          disabled={isLoading}
         />
-        {isLoading && <span className="loading loading-ring loading-xs"></span>}
+        {isLoading && (
+          <span className="loading loading-bars loading-xs absolute inset-y-0 left-2 flex items-center pr-3 text-primary"></span>
+        )}
       </div>
 
       {isOpen && query.length > 0 && (
