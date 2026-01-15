@@ -6,21 +6,29 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { CompanyReadDto, DirectionType, SourceType } from '@contact-tracker/api-models';
+import {
+  CompanyReadDto,
+  ContactReadDto,
+  DirectionType,
+  SourceType,
+} from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
+import ContactCombobox from '../contact/contact-combobox';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
   initialData?: EventFormValues;
   isEdit?: boolean;
-  onSearch: (query: string) => Promise<CompanyReadDto[]>;
+  onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
+  onSearchContact: (query: string) => Promise<ContactReadDto[]>;
 }
 
 export function EventForm({
   onSubmitAction,
   initialData,
   isEdit = false,
-  onSearch,
+  onSearchCompany,
+  onSearchContact,
 }: EventFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
@@ -63,33 +71,22 @@ export function EventForm({
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
-        <CompanyCombobox control={control} name="company" onSearch={onSearch} />
+        <CompanyCombobox control={control} name="company" onSearch={onSearchCompany} />
         {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
-      </fieldset>
-
-      {/* <fieldset className="fieldset">
-        <legend className="fieldset-legend">Company</legend>
-
-        <CompanyTypeAhead
-          value={company}
-          onChange={setCompany}
-          onCreate={handleCreateCompany}
-          onEdit={handleEditCompany}
-          onView={handleViewCompany}
-        />
-
-        <p className="text-red-600">
-          {errors.companyId && <span>{errors.companyId.message}</span>}
-        </p>
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Contact</legend>
-        <input className="input" {...register('contactId', { valueAsNumber: true })} value={1} />
-        <p className="text-red-600">
-          {errors.contactId && <span>{errors.contactId.message}</span>}
-        </p>
+        <ContactCombobox control={control} name="contact" onSearch={onSearchContact} />
+        {errors.contact?.firstName && (
+          <p className="text-red-600">{errors.contact.firstName.message}</p>
+        )}
+        {errors.contact?.lastName && (
+          <p className="text-red-600">{errors.contact.lastName.message}</p>
+        )}
       </fieldset>
+
+      {/* 
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Role</legend>

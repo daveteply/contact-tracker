@@ -10,12 +10,15 @@ export const EventInputSchema = z.object({
     },
     "Company can't be empty",
   ),
-  contact: z.object({
-    id: z.number().optional(),
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    isNew: z.boolean(),
-  }),
+  contact: z.object(
+    {
+      id: z.number().optional(),
+      firstName: z.string().min(1),
+      lastName: z.string().min(1),
+      isNew: z.boolean(),
+    },
+    "Contact can't be empty",
+  ),
   role: z.object({
     id: z.number().optional(),
     title: z.string().min(1),

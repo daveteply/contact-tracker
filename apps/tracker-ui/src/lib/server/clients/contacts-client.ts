@@ -37,6 +37,16 @@ export async function fetchContacts(): Promise<ContactReadDto[]> {
   return result.data || [];
 }
 
+export async function searchContacts(): Promise<ContactReadDto[]> {
+  const result = await apiRequest<ContactReadDto[]>('', { cache: 'no-store' });
+
+  if (!result.success) {
+    throw new Error(result.message || 'Failed to search contacts');
+  }
+
+  return result.data || [];
+}
+
 export async function fetchContactById(id: number) {
   return apiRequest<ContactReadDto>(`/${id}`, { cache: 'no-store' });
 }
