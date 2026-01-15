@@ -4,12 +4,17 @@ import { useEffect, useState, useRef } from 'react';
 import { useController, Control, FieldValues, Path } from 'react-hook-form';
 import { CompanyReadDto } from '@contact-tracker/api-models';
 
-interface Props<T extends FieldValues> {
+interface CompanyComboboxProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
+  onSearch: (query: string) => Promise<CompanyReadDto[]>;
 }
 
-export function CompanyCombobox<T extends FieldValues>({ control, name }: Props<T>) {
+export function CompanyCombobox<T extends FieldValues>({
+  control,
+  name,
+  onSearch,
+}: CompanyComboboxProps<T>) {
   const {
     field: { value, onChange, ref },
     fieldState: { error },
@@ -41,10 +46,9 @@ export function CompanyCombobox<T extends FieldValues>({ control, name }: Props<
       setIsLoading(true);
 
       try {
-        const res = await fetch(`/api/companies/search?q=${debouncedQuery}`);
-        const data = await res.json();
+        const data = await onSearch(debouncedQuery);
         if (active) {
-          setSuggestions(data.data || []);
+          setSuggestions(data || []);
         }
       } catch (error) {
         // TODO: log this

@@ -6,16 +6,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { DirectionType, SourceType } from '@contact-tracker/api-models';
+import { CompanyReadDto, DirectionType, SourceType } from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
   initialData?: EventFormValues;
   isEdit?: boolean;
+  onSearch: (query: string) => Promise<CompanyReadDto[]>;
 }
 
-export function EventForm({ onSubmitAction, initialData, isEdit = false }: EventFormProps) {
+export function EventForm({
+  onSubmitAction,
+  initialData,
+  isEdit = false,
+  onSearch,
+}: EventFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -57,7 +63,7 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
-        <CompanyCombobox control={control} name="company" />
+        <CompanyCombobox control={control} name="company" onSearch={onSearch} />
         {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
       </fieldset>
 

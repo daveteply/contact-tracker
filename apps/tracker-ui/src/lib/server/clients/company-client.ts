@@ -1,3 +1,5 @@
+'use server';
+
 import {
   ApiResult,
   CompanyCreateDto,
@@ -30,6 +32,16 @@ export async function fetchCompanies(): Promise<CompanyReadDto[]> {
 
   if (!result.success) {
     throw new Error(result.message || 'Failed to fetch companies');
+  }
+
+  return result.data || [];
+}
+
+export async function searchCompanies(query: string): Promise<CompanyReadDto[]> {
+  const result = await apiRequest<CompanyReadDto[]>(`/search?q=${query}`, { cache: 'no-store' });
+
+  if (!result.success) {
+    throw new Error(result.message || 'Failed to search companies');
   }
 
   return result.data || [];

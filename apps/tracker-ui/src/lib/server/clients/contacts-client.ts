@@ -1,69 +1,62 @@
+'use server';
+
+import {
+  ApiResult,
+  ContactCreateDto,
+  ContactReadDto,
+  ContactUpdateDto,
+} from '@contact-tracker/api-models';
 import { getInternalApiBase } from '../api-base';
 
-export async function fetchContacts() {
+async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResult<T>> {
   const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/contacts`, {
-    cache: 'no-store',
+  const url = `${baseUrl}/api/contacts${endpoint}`;
+
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch contacts');
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status} ${response.statusText}`);
   }
 
-  return res.json();
+  return response.json();
 }
 
-export async function fetchContactById(id: string) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/contacts/${id}`, {
-    cache: 'no-store',
-  });
+export async function fetchContacts(): Promise<ContactReadDto[]> {
+  const result = await apiRequest<ContactReadDto[]>('', { cache: 'no-store' });
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch contact');
+  if (!result.success) {
+    throw new Error(result.message || 'Failed to fetch contacts');
   }
 
-  return res.json();
+  return result.data || [];
 }
 
-export async function createContact(data: unknown) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/contacts`, {
+export async function fetchContactById(id: number) {
+  return apiRequest<ContactReadDto>(`/${id}`, { cache: 'no-store' });
+}
+
+export async function createContact(data: ContactCreateDto) {
+  return apiRequest<ContactReadDto>('', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to create contact');
-  }
-
-  return res.json();
 }
 
-export async function updateContact(id: string, data: unknown) {
-  const baseUrl = await getInternalApiBase();
-  const res = await fetch(`${baseUrl}/api/contacts/${id}`, {
+export async function updateContact(id: number, data: ContactUpdateDto) {
+  return apiRequest<ContactReadDto>(`/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to update contact');
-  }
-
-  return res.json();
 }
 
-export async function deleteContact(id: string) {
-  const res = await fetch(`/api/contacts/${id}`, {
+export async function deleteContact(id: number) {
+  return apiRequest<void>(`/${id}`, {
     method: 'DELETE',
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to delete contact');
-  }
-
-  return res.status === 204 ? null : res.json();
 }
