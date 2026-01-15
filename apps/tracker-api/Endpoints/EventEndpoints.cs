@@ -9,7 +9,7 @@ public static class EventEndpoints
     public static void MapEventEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/events")
-                .WithName("Events");
+            .WithName("Events");
 
         group.MapGet("/", GetAllEvents)
             .WithName("GetAllEvents")
