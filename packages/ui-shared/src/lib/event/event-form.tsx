@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { CompanyReadDto, DirectionType, SourceType } from '@contact-tracker/api-models';
-import { CompanyTypeAhead } from '../common/type-ahead/company-type-ahead';
+import { DirectionType, SourceType } from '@contact-tracker/api-models';
+import CompanyCombobox from '../company/company-combobox';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
@@ -23,6 +23,7 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventInputSchema),
@@ -35,22 +36,6 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
       reset(initialData);
     }
   }, [initialData, reset]);
-
-  // Company
-  const [company, setCompany] = useState<CompanyReadDto | null>(null);
-  const handleCreateCompany = () => {
-    console.log('Create new company');
-  };
-
-  const handleEditCompany = (company: CompanyReadDto) => {
-    // Open modal or navigate to edit company page
-    console.log('Edit company:', company);
-  };
-
-  const handleViewCompany = (company: CompanyReadDto) => {
-    // Open modal or navigate to view company page
-    console.log('View company:', company);
-  };
 
   const onSubmit = async (data: EventFormValues) => {
     try {
@@ -71,6 +56,12 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
+        <legend className="fieldset-legend">Company</legend>
+        <CompanyCombobox control={control} name="company" />
+        {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
+      </fieldset>
+
+      {/* <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
 
         <CompanyTypeAhead
@@ -98,7 +89,7 @@ export function EventForm({ onSubmitAction, initialData, isEdit = false }: Event
         <legend className="fieldset-legend">Role</legend>
         <input className="input" {...register('roleId', { valueAsNumber: true })} value={2} />
         <p className="text-red-600">{errors.roleId && <span>{errors.roleId.message}</span>}</p>
-      </fieldset>
+      </fieldset> */}
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Event Type</legend>

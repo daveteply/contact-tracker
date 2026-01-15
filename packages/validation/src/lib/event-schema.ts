@@ -2,9 +2,25 @@ import { z } from 'zod';
 import { DirectionTypeSchema, SourceTypeSchema } from './enum-schema';
 
 export const EventInputSchema = z.object({
-  companyId: z.number().optional(),
-  contactId: z.number().optional(),
-  roleId: z.number().optional(),
+  company: z.object(
+    {
+      id: z.number().optional(),
+      name: z.string().min(1),
+      isNew: z.boolean(),
+    },
+    "Company can't be empty",
+  ),
+  contact: z.object({
+    id: z.number().optional(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    isNew: z.boolean(),
+  }),
+  role: z.object({
+    id: z.number().optional(),
+    title: z.string().min(1),
+    isNew: z.boolean(),
+  }),
   eventTypeId: z.number(),
   occurredAt: z.coerce.date(),
   summary: z.string().optional(),
