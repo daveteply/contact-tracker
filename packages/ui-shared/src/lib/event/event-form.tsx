@@ -10,12 +10,14 @@ import {
   CompanyReadDto,
   ContactReadDto,
   DirectionType,
+  EventTypeReadDto,
   RoleReadDto,
   SourceType,
 } from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
 import ContactCombobox from '../contact/contact-combobox';
 import RoleCombobox from '../role/role-combobox';
+import { EventTypeSelect } from './event-type-select';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
@@ -24,6 +26,7 @@ interface EventFormProps {
   onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
   onSearchContact: (query: string) => Promise<ContactReadDto[]>;
   onSearchRole: (query: string) => Promise<RoleReadDto[]>;
+  onFetchEventTypes: () => Promise<EventTypeReadDto[]>;
 }
 
 export function EventForm({
@@ -33,6 +36,7 @@ export function EventForm({
   onSearchCompany,
   onSearchContact,
   onSearchRole,
+  onFetchEventTypes,
 }: EventFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
@@ -96,13 +100,12 @@ export function EventForm({
         {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
       </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Event Type</legend>
-        <input className="input" {...register('eventTypeId', { valueAsNumber: true })} value={1} />
-        <p className="text-red-600">
-          {errors.eventTypeId && <span>{errors.eventTypeId.message}</span>}
-        </p>
-      </fieldset>
+      <EventTypeSelect
+        label="Event Type"
+        register={register('eventTypeId', { valueAsNumber: true })}
+        onFetchEventTypes={onFetchEventTypes}
+        error={errors.eventTypeId?.message}
+      />
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Occurred At</legend>

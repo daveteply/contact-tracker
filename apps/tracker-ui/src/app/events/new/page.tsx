@@ -1,16 +1,18 @@
 import { createEventAction } from '@/lib/server/actions/event-actions';
 import { searchCompanies } from '@/lib/server/clients/company-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
+import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { searchRoles } from '@/lib/server/clients/role-client';
 import { EventForm } from '@contact-tracker/ui-shared';
 
-export default async function Index() {
+export default async function EventsNewPage() {
   return (
     <EventForm
       onSubmitAction={createEventAction}
       onSearchCompany={searchCompanies}
       onSearchContact={searchContacts}
       onSearchRole={searchRoles}
+      onFetchEventTypes={fetchEventTypes}
     ></EventForm>
   );
 }

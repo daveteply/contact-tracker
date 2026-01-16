@@ -168,10 +168,13 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
           placeholder={config.placeholder}
           disabled={isLoading}
         />
-        {isLoading && (
-          <span className="loading loading-bars loading-xs absolute inset-y-0 left-2 flex items-center pr-3 text-primary"></span>
-        )}
       </div>
+
+      {isLoading && (
+        <div className="absolute right-10 top-1/2 -translate-y-1/2">
+          <span className="loading loading-bars loading-xs text-primary"></span>
+        </div>
+      )}
 
       {isOpen && query.length > 0 && (
         <ul className="menu bg-base-200 w-full rounded-box absolute z-50 shadow-lg mt-1 max-h-60 overflow-auto">
