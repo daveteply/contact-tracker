@@ -3,23 +3,26 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { CompanyCreateDto } from "./company-create-dto";
-import { ContactCreateDto } from "./contact-create-dto";
-import { RoleCreateDto } from "./role-create-dto";
+import { CompanyReadDto } from "./company-read-dto";
+import { ContactReadDto } from "./contact-read-dto";
+import { RoleReadDto } from "./role-read-dto";
 import { SourceType } from "./source-type";
 import { DirectionType } from "./direction-type";
+import { EventTypeReadDto } from "./event-type-read-dto";
 
-export interface EventCreateDto {
+export interface EventReadDtoWithRelations {
+    id: number;
     companyId?: number;
-    newCompany?: CompanyCreateDto;
+    company?: CompanyReadDto;
     contactId?: number;
-    newContact?: ContactCreateDto;
+    contact?: ContactReadDto;
     roleId?: number;
-    newRole?: RoleCreateDto;
+    role?: RoleReadDto;
     eventTypeId: number;
     occurredAt: Date;
     summary?: string;
     details?: string;
     source: SourceType;
     direction: DirectionType;
+    eventType?: EventTypeReadDto;
 }

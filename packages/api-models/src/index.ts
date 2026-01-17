@@ -1,5 +1,8 @@
 export * from './lib/api-result';
 
+export * from './lib/paged-result';
+export * from './lib/pagination-metadata';
+
 export * from './lib/company-create-dto';
 export * from './lib/company-read-dto';
 export * from './lib/company-update-dto';
@@ -9,6 +12,7 @@ export * from './lib/contact-update-dto';
 export * from './lib/direction-type';
 export * from './lib/event-create-dto';
 export * from './lib/event-read-dto';
+export * from './lib/event-read-dto-with-relations';
 export * from './lib/event-type-create-dto';
 export * from './lib/event-type-read-dto';
 export * from './lib/event-type-update-dto';
