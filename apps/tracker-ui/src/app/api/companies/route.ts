@@ -1,12 +1,13 @@
 import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
+import { NextRequest } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}/api/companies`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       cache: 'no-store',
     });
 
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
     }
     const body = await request.json();
 
-    const response = await fetch(`${dotnetApiUrl}/api/companies`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

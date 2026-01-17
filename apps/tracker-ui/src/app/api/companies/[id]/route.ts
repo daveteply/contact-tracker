@@ -1,4 +1,6 @@
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+import { NextRequest } from 'next/server';
+
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -23,17 +25,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
 
-    const { id } = await params;
     const body = await request.json();
-
-    const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -49,16 +49,14 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest) {
   const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
   if (!dotnetApiUrl) {
     throw new Error('DOTNET_API_BASE_URL environment variable is not set');
   }
 
-  const { id } = await params;
-
   try {
-    const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'DELETE',
     });
 

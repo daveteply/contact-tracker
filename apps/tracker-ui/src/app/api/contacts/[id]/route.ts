@@ -1,10 +1,12 @@
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+import { NextRequest } from 'next/server';
+
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}/api/contacts/${params.id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}/${params.id}`, {
       cache: 'no-store',
     });
 
@@ -20,7 +22,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -28,7 +30,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
     const body = await request.json();
 
-    const response = await fetch(`${dotnetApiUrl}/api/contacts/${params.id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -49,13 +51,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}/api/contacts/${params.id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'DELETE',
     });
 

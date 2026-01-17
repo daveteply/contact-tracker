@@ -1,12 +1,17 @@
-export async function GET(request: Request) {
+import { NextRequest } from 'next/server';
+
+export async function GET(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}/api/events`, {
-      cache: 'no-store',
-    });
+    const response = await fetch(
+      `${dotnetApiUrl}${request.nextUrl.pathname}${request.nextUrl.search}`,
+      {
+        cache: 'no-store',
+      },
+    );
 
     if (!response.ok) {
       return Response.json({ error: 'Failed to fetch events' }, { status: response.status });
@@ -19,7 +24,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -27,7 +32,7 @@ export async function POST(request: Request) {
     }
     const body = await request.json();
 
-    const response = await fetch(`${dotnetApiUrl}/api/events`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
