@@ -4,9 +4,9 @@
  */
 
 export enum SourceType {
-    Email = 0,
-    LinkedIn = 1,
-    Website = 2,
-    Recruiter = 3,
-    Referral = 4,
+    Email = "Email",
+    LinkedIn = "LinkedIn",
+    Website = "Website",
+    Recruiter = "Recruiter",
+    Referral = "Referral",
 }

@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// In apps/tracker-ui/src/app/api/events/route.ts
 export async function POST(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
@@ -31,6 +32,8 @@ export async function POST(request: NextRequest) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
     const body = await request.json();
+
+    console.log('Sending to C# API:', JSON.stringify(body, null, 2)); // ← Add this
 
     const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'POST',
@@ -40,9 +43,18 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
+    console.log('C# API response status:', response.status); // ← Add this
+    console.log('C# API response headers:', Object.fromEntries(response.headers)); // ← Add this
+
     if (!response.ok) {
-      const errorData = await response.json();
-      return Response.json(errorData, { status: response.status });
+      const contentType = response.headers.get('content-type');
+      console.log('Error response content-type:', contentType); // ← Add this
+
+      // Check if it's JSON or HTML
+      const text = await response.text();
+      console.log('Error response body (first 500 chars):', text.substring(0, 500)); // ← Add this
+
+      return Response.json({ error: 'Failed to create event' }, { status: response.status });
     }
 
     const data = await response.json();

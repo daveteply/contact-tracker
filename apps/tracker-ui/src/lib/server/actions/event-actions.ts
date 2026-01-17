@@ -3,7 +3,7 @@
 import { EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { createEvent, deleteEvent, updateEvent } from '../clients/events-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, EventCreateDto, EventReadDto } from '@contact-tracker/api-models';
+import { ApiResult, EventCreateDto, EventReadDto, RoleLevel } from '@contact-tracker/api-models';
 
 const EVENTS_PATH = '/events';
 
@@ -43,7 +43,9 @@ export async function createEventAction(data: EventInput) {
       : undefined,
 
     roleId: !data.role.isNew ? data.role.id : undefined,
-    newRole: data.role.isNew ? { title: data.role.title, level: 0 } : undefined,
+    newRole: data.role.isNew
+      ? { title: data.role.title, level: RoleLevel.EngineeringManager }
+      : undefined,
 
     eventTypeId: data.eventTypeId,
     occurredAt: data.occurredAt,
@@ -52,6 +54,8 @@ export async function createEventAction(data: EventInput) {
     source: data.source,
     direction: data.direction,
   };
+
+  console.log('DTO being sent to API:', JSON.stringify(dto, null, 2)); // ← Add this
 
   return handleActionResult(createEvent(dto), 'Event created!');
 }

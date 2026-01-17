@@ -1,20 +1,29 @@
 import { DirectionType, RoleLevel, SourceType } from '@contact-tracker/api-models';
 import { z } from 'zod';
 
-export const DirectionTypeSchema = z.union([
-  z.literal(DirectionType.Inbound),
-  z.literal(DirectionType.Outbound),
-]);
+export const DirectionTypeSchema = z
+  .enum([DirectionType.Inbound, DirectionType.Outbound])
+  .or(z.literal(''))
+  .refine((val) => val !== '', {
+    message: 'Select a direction',
+  });
 
-export const RoleLevelSchema = z.union([
-  z.literal(RoleLevel.EngineeringManager),
-  z.literal(RoleLevel.StaffEngineer),
-]);
+export const RoleLevelSchema = z
+  .enum([RoleLevel.EngineeringManager, RoleLevel.StaffEngineer])
+  .or(z.literal(''))
+  .refine((val) => val !== '', {
+    message: 'Select a source',
+  });
 
-export const SourceTypeSchema = z.union([
-  z.literal(SourceType.Email),
-  z.literal(SourceType.LinkedIn),
-  z.literal(SourceType.Website),
-  z.literal(SourceType.Recruiter),
-  z.literal(SourceType.Referral),
-]);
+export const SourceTypeSchema = z
+  .enum([
+    SourceType.Email,
+    SourceType.LinkedIn,
+    SourceType.Website,
+    SourceType.Recruiter,
+    SourceType.Referral,
+  ])
+  .or(z.literal(''))
+  .refine((val) => val !== '', {
+    message: 'Select a source',
+  });

@@ -18,6 +18,7 @@ import CompanyCombobox from '../company/company-combobox';
 import ContactCombobox from '../contact/contact-combobox';
 import RoleCombobox from '../role/role-combobox';
 import { EventTypeSelect } from './event-type-select';
+import { EnumSelector } from '../common/enum-selector';
 
 interface EventFormProps {
   onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
@@ -50,6 +51,7 @@ export function EventForm({
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventInputSchema),
     defaultValues: initialData,
+    mode: 'onChange',
   });
 
   // Reset form when initialData changes
@@ -77,6 +79,24 @@ export function EventForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
+      <fieldset className="fieldset w-full">
+        <legend className="fieldset-legend">Direction</legend>
+        <EnumSelector
+          register={register('direction')}
+          enumObject={DirectionType}
+          useButtons={true}
+        />
+        <p className="text-red-600">
+          {errors.direction && <span>{errors.direction.message}</span>}
+        </p>
+      </fieldset>
+
+      <fieldset className="fieldset w-full">
+        <legend className="fieldset-legend">Source</legend>
+        <EnumSelector register={register('source')} enumObject={SourceType} />
+        <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
+      </fieldset>
+
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
         <CompanyCombobox control={control} name="company" onSearch={onSearchCompany} />
@@ -111,11 +131,7 @@ export function EventForm({
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Date</legend>
-        <input
-          className="input"
-          {...register('occurredAt', { valueAsDate: true })}
-          value={'1/12/2026'}
-        />
+        <input type="date" className="input" {...register('occurredAt', { valueAsDate: true })} />
         <p className="text-red-600">
           {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
         </p>
@@ -124,7 +140,6 @@ export function EventForm({
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Summary</legend>
         <input className="input" {...register('summary')} />
-        <p className="label">Required</p>
         <p className="text-red-600">{errors.summary && <span>{errors.summary.message}</span>}</p>
       </fieldset>
 
@@ -132,25 +147,6 @@ export function EventForm({
         <legend className="fieldset-legend">Details</legend>
         <textarea className="textarea" {...register('details')} />
         <p className="text-red-600">{errors.details && <span>{errors.details.message}</span>}</p>
-      </fieldset>
-
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Source</legend>
-        <select className="select" {...register('source', { valueAsNumber: true })}>
-          <option value={SourceType.Email}>Email</option>
-          <option value={SourceType.LinkedIn}>LinkedIn</option>
-          <option value={SourceType.Website}>Website</option>
-          <option value={SourceType.Recruiter}>Recruiter</option>
-          <option value={SourceType.Referral}>Referral</option>
-        </select>
-      </fieldset>
-
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Source</legend>
-        <select className="select" {...register('direction', { valueAsNumber: true })}>
-          <option value={DirectionType.Inbound}>Inbound</option>
-          <option value={DirectionType.Outbound}>Outbound</option>
-        </select>
       </fieldset>
 
       <button className="btn mt-4" type="submit" disabled={isSubmitting}>

@@ -19,13 +19,16 @@ export const EventInputSchema = z.object({
     },
     "Contact can't be empty",
   ),
-  role: z.object({
-    id: z.number().optional(),
-    title: z.string().min(1),
-    isNew: z.boolean(),
-  }),
-  eventTypeId: z.number(),
-  occurredAt: z.coerce.date(),
+  role: z.object(
+    {
+      id: z.number().optional(),
+      title: z.string().min(1),
+      isNew: z.boolean(),
+    },
+    "Role can't be empty",
+  ),
+  eventTypeId: z.number('Select an event type'),
+  occurredAt: z.coerce.date('Must be a valid date'),
   summary: z.string().optional(),
   details: z.string().optional(),
   source: SourceTypeSchema,

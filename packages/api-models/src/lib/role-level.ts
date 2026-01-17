@@ -4,6 +4,6 @@
  */
 
 export enum RoleLevel {
-    EngineeringManager = 0,
-    StaffEngineer = 1,
+    EngineeringManager = "EngineeringManager",
+    StaffEngineer = "StaffEngineer",
 }
