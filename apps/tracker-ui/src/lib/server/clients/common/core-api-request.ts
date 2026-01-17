@@ -5,9 +5,11 @@ export async function coreApiRequest<T>(
   resourcePath: string,
   endpoint: string,
   options: RequestInit = {},
+  params?: URLSearchParams,
 ): Promise<ApiResult<T>> {
   const baseUrl = await getInternalApiBase();
-  const url = `${baseUrl}/api/${resourcePath}${endpoint}`;
+  const paramString = params ? `?${params.toString()}` : '';
+  const url = `${baseUrl}/api/${resourcePath}${endpoint}${paramString}`;
 
   const response = await fetch(url, {
     ...options,

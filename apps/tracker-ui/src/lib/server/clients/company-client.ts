@@ -1,4 +1,5 @@
 'use server';
+
 import { CompanyCreateDto, CompanyReadDto, CompanyUpdateDto } from '@contact-tracker/api-models';
 import { createGenericClient } from './common/create-generic-client';
 

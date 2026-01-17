@@ -1,4 +1,5 @@
 'use server';
+
 import {
   EventTypeCreateDto,
   EventTypeReadDto,

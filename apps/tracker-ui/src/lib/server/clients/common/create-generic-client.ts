@@ -1,14 +1,40 @@
 import { coreApiRequest } from './core-api-request';
 
 export function createGenericClient<TRead, TCreate, TUpdate>(resourcePath: string) {
+  const createParams = (page?: string, pageSize?: string, include?: string): URLSearchParams => {
+    const params = new URLSearchParams();
+    // TODO: create and use shared constants for query param names across api and ui
+    if (page) {
+      params.append('page', page);
+    }
+    if (pageSize) {
+      params.append('pageSize', pageSize);
+    }
+    if (include) {
+      params.append('include', include);
+    }
+    return params;
+  };
+
   return {
-    fetchAll: async () => {
-      const result = await coreApiRequest<TRead[]>(resourcePath, '', { cache: 'no-store' });
+    fetchAll: async (page?: string, pageSize?: string, include?: string) => {
+      const result = await coreApiRequest<TRead[]>(
+        resourcePath,
+        '',
+        { cache: 'no-store' },
+        createParams(page, pageSize, include),
+      );
       if (!result.success) throw new Error(result.message);
       return result.data || [];
     },
 
-    fetchById: (id: number) => coreApiRequest<TRead>(resourcePath, `/${id}`, { cache: 'no-store' }),
+    fetchById: (id: number, include?: string) =>
+      coreApiRequest<TRead>(
+        resourcePath,
+        `/${id}`,
+        { cache: 'no-store' },
+        include ? new URLSearchParams([['include', include]]) : undefined,
+      ),
 
     create: (data: TCreate) =>
       coreApiRequest<TRead>(resourcePath, '', {

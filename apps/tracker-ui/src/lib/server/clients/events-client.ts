@@ -1,8 +1,15 @@
 'use server';
-import { EventCreateDto, EventReadDto, EventUpdateDto } from '@contact-tracker/api-models';
+
+import {
+  EventCreateDto,
+  EventReadDtoWithRelations,
+  EventUpdateDto,
+} from '@contact-tracker/api-models';
 import { createGenericClient } from './common/create-generic-client';
 
-const eventClient = createGenericClient<EventReadDto, EventCreateDto, EventUpdateDto>('events');
+const eventClient = createGenericClient<EventReadDtoWithRelations, EventCreateDto, EventUpdateDto>(
+  'events',
+);
 
 export const fetchEvents = eventClient.fetchAll;
 export const fetchEventById = eventClient.fetchById;

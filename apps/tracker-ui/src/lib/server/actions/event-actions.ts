@@ -3,7 +3,7 @@
 import { EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { createEvent, deleteEvent, updateEvent } from '../clients/events-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, EventReadDto } from '@contact-tracker/api-models';
+import { ApiResult, EventCreateDto, EventReadDto } from '@contact-tracker/api-models';
 
 const EVENTS_PATH = '/events';
 
@@ -33,7 +33,27 @@ export async function createEventAction(data: EventInput) {
   const validated = EventInputSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(createEvent(data), 'Event created!');
+  const dto: EventCreateDto = {
+    companyId: !data.company.isNew ? data.company.id : undefined,
+    newCompany: data.company.isNew ? { name: data.company.name } : undefined,
+
+    contactId: !data.contact.isNew ? data.contact.id : undefined,
+    newContact: data.contact.isNew
+      ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
+      : undefined,
+
+    roleId: !data.role.isNew ? data.role.id : undefined,
+    newRole: data.role.isNew ? { title: data.role.title, level: 0 } : undefined,
+
+    eventTypeId: data.eventTypeId,
+    occurredAt: data.occurredAt,
+    summary: data.summary,
+    details: data.details,
+    source: data.source,
+    direction: data.direction,
+  };
+
+  return handleActionResult(createEvent(dto), 'Event created!');
 }
 
 export async function updateEventAction(id: number, data: EventInput) {
