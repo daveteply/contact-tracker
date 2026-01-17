@@ -100,15 +100,17 @@ export function EventForm({
         {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
       </fieldset>
 
-      <EventTypeSelect
-        label="Event Type"
-        register={register('eventTypeId', { valueAsNumber: true })}
-        onFetchEventTypes={onFetchEventTypes}
-        error={errors.eventTypeId?.message}
-      />
+      <fieldset className="fieldset w-full">
+        <legend className="fieldset-legend">Event Type</legend>
+        <EventTypeSelect
+          register={register('eventTypeId', { valueAsNumber: true })}
+          onFetchEventTypes={onFetchEventTypes}
+          error={errors.eventTypeId?.message}
+        />
+      </fieldset>
 
       <fieldset className="fieldset">
-        <legend className="fieldset-legend">Occurred At</legend>
+        <legend className="fieldset-legend">Date</legend>
         <input
           className="input"
           {...register('occurredAt', { valueAsDate: true })}
