@@ -3,6 +3,25 @@ using TypeGen.Core.TypeAnnotations;
 namespace tracker_api.DTOs;
 
 // -----------------------------
+// Pagination DTOs
+// -----------------------------
+[ExportTsInterface]
+public record PagedResult<T>(
+    List<T> Data,
+    PaginationMetadata Pagination
+);
+
+[ExportTsInterface]
+public record PaginationMetadata(
+    int CurrentPage,
+    int PageSize,
+    int TotalPages,
+    int TotalCount,
+    bool HasPrevious,
+    bool HasNext
+);
+
+// -----------------------------
 // Company DTOs
 // -----------------------------
 [ExportTsInterface]
@@ -96,8 +115,11 @@ public record EventReadDto(
 [ExportTsInterface]
 public record EventCreateDto(
     long? CompanyId,
+    CompanyCreateDto? NewCompany,
     long? ContactId,
+    ContactCreateDto? NewContact,
     long? RoleId,
+    RoleCreateDto? NewRole,
     int EventTypeId,
     DateTime OccurredAt,
     string? Summary,
@@ -109,14 +131,35 @@ public record EventCreateDto(
 [ExportTsInterface]
 public record EventUpdateDto(
     long? CompanyId,
+    CompanyUpdateDto? UpdateCompany,
     long? ContactId,
+    ContactUpdateDto? UpdateContact,
     long? RoleId,
+    RoleUpdateDto? UpdateRole,
     int? EventTypeId,
     DateTime? OccurredAt,
     string? Summary,
     string? Details,
     SourceType? Source,
     DirectionType? Direction
+);
+
+[ExportTsInterface]
+public record EventReadDtoWithRelations(
+    long Id,
+    long? CompanyId,
+    CompanyReadDto? Company,    
+    long? ContactId,
+    ContactReadDto? Contact,    
+    long? RoleId,
+    RoleReadDto? Role,    
+    int EventTypeId,
+    DateTime OccurredAt,
+    string? Summary,
+    string? Details,
+    SourceType Source,
+    DirectionType Direction,
+    EventTypeReadDto? EventType
 );
 
 // -----------------------------

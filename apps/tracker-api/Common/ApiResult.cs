@@ -1,3 +1,5 @@
+using tracker_api.DTOs;
+
 namespace tracker_api.Common;
 
 /// <summary>
@@ -10,13 +12,16 @@ public class ApiResult<T>
     public string? Message { get; set; }
     public List<string> Errors { get; set; } = [];
 
-    public static ApiResult<T> SuccessResult(T data, string message = "Operation successful")
+    public PaginationMetadata? Pagination { get; set; }
+
+    public static ApiResult<T> SuccessResult(T data, string message = "Operation successful", PaginationMetadata? pagination = null)
     {
         return new ApiResult<T>
         {
             Success = true,
             Data = data,
-            Message = message
+            Message = message,
+            Pagination = pagination
         };
     }
 

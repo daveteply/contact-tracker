@@ -1,6 +1,7 @@
 using tracker_api.Services;
 using tracker_api.Common;
 using tracker_api.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace tracker_api.Endpoints;
 
@@ -13,7 +14,7 @@ public static class EventEndpoints
 
         group.MapGet("/", GetAllEvents)
             .WithName("GetAllEvents")
-            .WithDescription("Get all events");
+            .WithDescription("Get all events with pagination. Use 'include' for related entities");
 
         group.MapGet("/{id}", GetEventById)
             .WithName("GetEventById")
@@ -32,13 +33,36 @@ public static class EventEndpoints
             .WithDescription("Delete an event");
     }
 
-    private static async Task<IResult> GetAllEvents(IEventService service)
+    private static async Task<IResult> GetAllEvents(
+        [FromServices] IEventService service,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? include = null)
     {
-        var events = await service.GetAllEventsAsync();
-        return Results.Ok(ApiResult<List<EventReadDto>>.SuccessResult(events));
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100;
+
+        HashSet<string> includeRelations;
+        if (!string.IsNullOrWhiteSpace(include))
+        {
+            // Explicit list: "company,contact,role"
+            includeRelations = ParseIncludeParameter(include);
+        }
+        else
+        {
+            // Default: no related entities
+            includeRelations = new HashSet<string>();
+        }
+
+        var (items, metadata) = await service.GetAllEventsAsync(page, pageSize, includeRelations);
+
+        var result = ApiResult<List<EventReadDtoWithRelations>>.SuccessResult(items, "Events retrieved", metadata);
+
+        return Results.Ok(result);
     }
 
-    private static async Task<IResult> GetEventById(long id, IEventService service)
+    private static async Task<IResult> GetEventById(long id, [FromServices] IEventService service)
     {
         try
         {
@@ -51,7 +75,7 @@ public static class EventEndpoints
         }
     }
 
-    private static async Task<IResult> CreateEvent(EventCreateDto @event, IEventService service)
+    private static async Task<IResult> CreateEvent(EventCreateDto @event, [FromServices] IEventService service)
     {
         try
         {
@@ -65,7 +89,7 @@ public static class EventEndpoints
         }
     }
 
-    private static async Task<IResult> UpdateEvent(long id, EventUpdateDto @event, IEventService service)
+    private static async Task<IResult> UpdateEvent(long id, EventUpdateDto @event, [FromServices] IEventService service)
     {
         try
         {
@@ -82,7 +106,7 @@ public static class EventEndpoints
         }
     }
 
-    private static async Task<IResult> DeleteEvent(long id, IEventService service)
+    private static async Task<IResult> DeleteEvent(long id, [FromServices] IEventService service)
     {
         try
         {
@@ -93,5 +117,19 @@ public static class EventEndpoints
         {
             return Results.NotFound(ApiResult<Event>.FailureResult(ex.UserFriendlyMessage!));
         }
+    }
+
+    private static HashSet<string> ParseIncludeParameter(string include)
+    {
+        var validIncludes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "company", "contact", "role", "eventtype"
+        };
+
+        return include
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => validIncludes.Contains(x))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
 }
