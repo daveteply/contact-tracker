@@ -15,6 +15,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly string _databaseName = $"TestDatabase_{Guid.NewGuid()}";
 
+    // IMPORTANT:
+    // Tests must use these JsonSerializerOptions when calling ReadFromJsonAsync<T>.
+    // The API serializes enums as strings, but HttpClient does NOT automatically
+    // use server-side JSON configuration.
     public static readonly JsonSerializerOptions JsonOptions = CreateJsonOptions();
 
     private static JsonSerializerOptions CreateJsonOptions()
