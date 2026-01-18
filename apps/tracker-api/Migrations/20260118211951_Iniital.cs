@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSchema : Migration
+    public partial class Iniital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -170,16 +170,6 @@ namespace tracker_api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Companies",
-                columns: new[] { "Id", "Industry", "Name", "Notes", "SizeRange", "Website" },
-                values: new object[] { -1L, null, "Test Company", null, null, null });
-
-            migrationBuilder.InsertData(
-                table: "Contacts",
-                columns: new[] { "Id", "CompanyId", "Email", "FirstName", "IsPrimaryRecruiter", "LastName", "LinkedInUrl", "Notes", "PhoneNumber", "Title" },
-                values: new object[] { -1L, null, null, "Dave", null, "Test", null, null, null, null });
-
-            migrationBuilder.InsertData(
                 table: "EventTypes",
                 columns: new[] { "Id", "Category", "IsSystemDefined", "Name" },
                 values: new object[,]
@@ -193,11 +183,6 @@ namespace tracker_api.Migrations
                     { 7, "Outcome", true, "Offer Received" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "CompanyId", "JobPostingUrl", "Level", "Location", "Title" },
-                values: new object[] { -1L, -1L, null, "EngineeringManager", null, "Test Role" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Companies_Name",
                 table: "Companies",
@@ -208,6 +193,13 @@ namespace tracker_api.Migrations
                 name: "IX_Contacts_CompanyId",
                 table: "Contacts",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contacts_Email",
+                table: "Contacts",
+                column: "Email",
+                unique: true,
+                filter: "\"Email\" IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_FirstName",
@@ -253,6 +245,12 @@ namespace tracker_api.Migrations
                 name: "IX_Roles_CompanyId",
                 table: "Roles",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_CompanyId_Title",
+                table: "Roles",
+                columns: new[] { "CompanyId", "Title" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Roles_Title",

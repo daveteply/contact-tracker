@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     [DbContext(typeof(ContactTrackerDbContext))]
-    [Migration("20260115162558_InitialSchema")]
-    partial class InitialSchema
+    [Migration("20260118211951_Iniital")]
+    partial class Iniital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,15 +64,6 @@ namespace tracker_api.Migrations
                         .IsUnique();
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1L,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Test Company",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("tracker_api.Contact", b =>
@@ -126,21 +117,15 @@ namespace tracker_api.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("\"Email\" IS NOT NULL");
+
                     b.HasIndex("FirstName");
 
                     b.HasIndex("LastName");
 
                     b.ToTable("Contacts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1L,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Dave",
-                            LastName = "Test",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("tracker_api.Event", b =>
@@ -352,18 +337,10 @@ namespace tracker_api.Migrations
 
                     b.HasIndex("Title");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("CompanyId", "Title")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = -1L,
-                            CompanyId = -1L,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Level = "EngineeringManager",
-                            Title = "Test Role",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("tracker_api.Contact", b =>
