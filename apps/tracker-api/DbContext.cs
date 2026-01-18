@@ -79,6 +79,8 @@ public class ContactTrackerDbContext : DbContext
         modelBuilder.Entity<Role>().HasIndex(r => r.CompanyId);
         modelBuilder.Entity<Role>().HasIndex(r => r.Title);
         modelBuilder.Entity<Company>().HasIndex(c => c.Name).IsUnique();
+        modelBuilder.Entity<Role>().HasIndex(r => new { r.CompanyId, r.Title }).IsUnique();
+        modelBuilder.Entity<Contact>().HasIndex(c => c.Email).IsUnique().HasFilter("\"Email\" IS NOT NULL");
 
         // Seed data for event types
         modelBuilder.Entity<EventType>().HasData(
@@ -90,20 +92,6 @@ public class ContactTrackerDbContext : DbContext
             new EventType { Id = 6, Name = "Rejected", Category = "Outcome", IsSystemDefined = true },
             new EventType { Id = 7, Name = "Offer Received", Category = "Outcome", IsSystemDefined = true }
         );
-
-        // Other seed data (for development testing)
-        var isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
-            "Development", StringComparison.OrdinalIgnoreCase);
-        if (isDevelopment)
-        {
-            var seedCompanyId = -1;
-            var seedRoleId = -1;
-            var seedContactId = -1;
-
-            modelBuilder.Entity<Company>().HasData(new Company { Id = seedCompanyId, Name = "Test Company" });
-            modelBuilder.Entity<Contact>().HasData(new Contact { Id = seedContactId, FirstName = "Dave", LastName = "Test" });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = seedRoleId, CompanyId = seedCompanyId, Title = "Test Role" });
-        }
     }
 
     // Ensure the dates are updated in PostgresSql
