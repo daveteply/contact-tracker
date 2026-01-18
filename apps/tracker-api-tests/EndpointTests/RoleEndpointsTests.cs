@@ -44,7 +44,9 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Role>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Role>>(
+            CustomWebApplicationFactory.JsonOptions
+        );
         Assert.Equal("Staff Engineer", result?.Data?.Title);
         Assert.Equal(company.Id, result?.Data?.CompanyId);
     }
@@ -80,7 +82,9 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>(
+             CustomWebApplicationFactory.JsonOptions
+        );
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
@@ -101,7 +105,9 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>(
+             CustomWebApplicationFactory.JsonOptions
+        );
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);

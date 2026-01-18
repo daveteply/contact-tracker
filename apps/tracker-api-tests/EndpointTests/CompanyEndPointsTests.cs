@@ -42,7 +42,7 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         var result = await response.Content
-            .ReadFromJsonAsync<ApiResult<Company>>();
+            .ReadFromJsonAsync<ApiResult<Company>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
@@ -87,7 +87,7 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content
-            .ReadFromJsonAsync<ApiResult<List<Company>>>();
+            .ReadFromJsonAsync<ApiResult<List<Company>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
@@ -115,7 +115,7 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content
-            .ReadFromJsonAsync<ApiResult<Company>>();
+            .ReadFromJsonAsync<ApiResult<Company>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
@@ -159,13 +159,13 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
     }
 
-        [Fact]
+    [Fact]
     public async Task SearchCompany_ReturnsCompanies()
     {
         // Arrange
@@ -180,7 +180,7 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Company>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);

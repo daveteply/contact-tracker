@@ -56,7 +56,9 @@ public class EventEndpointsTests : IClassFixture<CustomWebApplicationFactory>, I
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Event>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Event>>(
+            CustomWebApplicationFactory.JsonOptions);
+
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Initial Outreach", result?.Data?.Summary);

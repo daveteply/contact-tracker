@@ -1,6 +1,7 @@
 using tracker_api.Services;
 using tracker_api.Common;
 using tracker_api.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace tracker_api.Endpoints;
 
@@ -36,7 +37,7 @@ public static class CompanyEndpoints
             .WithDescription("Search company by name");
     }
 
-    private static async Task<IResult> GetAllCompanies(ICompanyService service)
+    private static async Task<IResult> GetAllCompanies([FromServices] ICompanyService service)
     {
         try
         {
@@ -50,7 +51,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> GetCompanyById(long id, ICompanyService service)
+    private static async Task<IResult> GetCompanyById(long id, [FromServices] ICompanyService service)
     {
         try
         {
@@ -68,7 +69,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> CreateCompany(CompanyCreateDto dto, ICompanyService service)
+    private static async Task<IResult> CreateCompany(CompanyCreateDto dto, [FromServices] ICompanyService service)
     {
         try
         {
@@ -86,7 +87,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> UpdateCompany(long id, CompanyUpdateDto dto, ICompanyService service)
+    private static async Task<IResult> UpdateCompany(long id, CompanyUpdateDto dto, [FromServices] ICompanyService service)
     {
         try
         {
@@ -108,7 +109,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> DeleteCompany(long id, ICompanyService service)
+    private static async Task<IResult> DeleteCompany(long id, [FromServices] ICompanyService service)
     {
         try
         {
@@ -125,7 +126,7 @@ public static class CompanyEndpoints
         }
     }
 
-    private static async Task<IResult> SearchCompanies(string q, ICompanyService service)
+    private static async Task<IResult> SearchCompanies(string q, [FromServices] ICompanyService service)
     {
         try
         {

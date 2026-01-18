@@ -39,7 +39,7 @@ public class EventTypeEndpointsTests : IClassFixture<CustomWebApplicationFactory
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<EventType>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<EventType>>(CustomWebApplicationFactory.JsonOptions);
         Assert.Equal(101, result?.Data?.Id);
         Assert.Equal("Follow Up", result?.Data?.Name);
     }

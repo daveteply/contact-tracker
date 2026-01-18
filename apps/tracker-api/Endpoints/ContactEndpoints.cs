@@ -1,6 +1,7 @@
 ﻿using tracker_api.Services;
 using tracker_api.Common;
 using tracker_api.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace tracker_api.Endpoints;
 
@@ -36,7 +37,7 @@ public static class ContactEndpoints
             .WithDescription("Search contact by first or last name");
     }
 
-    private static async Task<IResult> GetAllContacts(IContactService service)
+    private static async Task<IResult> GetAllContacts([FromServices] IContactService service)
     {
         try
         {
@@ -50,7 +51,7 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> GetContactById(long id, IContactService service)
+    private static async Task<IResult> GetContactById(long id, [FromServices] IContactService service)
     {
         try
         {
@@ -68,7 +69,7 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> CreateContact(ContactCreateDto contact, IContactService service)
+    private static async Task<IResult> CreateContact(ContactCreateDto contact, [FromServices] IContactService service)
     {
         try
         {
@@ -86,7 +87,7 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> UpdateContact(long id, ContactUpdateDto contact, IContactService service)
+    private static async Task<IResult> UpdateContact(long id, ContactUpdateDto contact, [FromServices] IContactService service)
     {
         try
         {
@@ -108,7 +109,7 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> DeleteContact(long id, IContactService service)
+    private static async Task<IResult> DeleteContact(long id, [FromServices] IContactService service)
     {
         try
         {
@@ -125,7 +126,7 @@ public static class ContactEndpoints
         }
     }
 
-    private static async Task<IResult> SearchContacts(string q, IContactService service)
+    private static async Task<IResult> SearchContacts(string q, [FromServices] IContactService service)
     {
         try
         {

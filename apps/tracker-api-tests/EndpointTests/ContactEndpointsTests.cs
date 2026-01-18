@@ -50,7 +50,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -88,7 +88,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -124,7 +124,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -142,7 +142,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.False(result.Success);
@@ -178,7 +178,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>(CustomWebApplicationFactory.JsonOptions);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -264,7 +264,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>(CustomWebApplicationFactory.JsonOptions);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.NotNull(result.Errors);
@@ -310,7 +310,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<Contact>>(CustomWebApplicationFactory.JsonOptions);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -441,7 +441,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Data);
@@ -463,7 +463,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
-        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Contact>>>(CustomWebApplicationFactory.JsonOptions);
 
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);

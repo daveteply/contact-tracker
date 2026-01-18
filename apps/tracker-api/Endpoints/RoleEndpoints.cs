@@ -1,6 +1,7 @@
 using tracker_api.Services;
 using tracker_api.Common;
 using tracker_api.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace tracker_api.Endpoints;
 
@@ -36,7 +37,7 @@ public static class RoleEndpoints
             .WithDescription("Search role by title");
     }
 
-    private static async Task<IResult> GetAllRoles(IRoleService service)
+    private static async Task<IResult> GetAllRoles([FromServices] IRoleService service)
     {
         try
         {
@@ -49,7 +50,7 @@ public static class RoleEndpoints
         }
     }
 
-    private static async Task<IResult> GetRoleById(long id, IRoleService service)
+    private static async Task<IResult> GetRoleById(long id, [FromServices] IRoleService service)
     {
         try
         {
@@ -67,7 +68,7 @@ public static class RoleEndpoints
         }
     }
 
-    private static async Task<IResult> CreateRole(RoleCreateDto role, IRoleService service)
+    private static async Task<IResult> CreateRole(RoleCreateDto role, [FromServices] IRoleService service)
     {
         try
         {
@@ -85,7 +86,7 @@ public static class RoleEndpoints
         }
     }
 
-    private static async Task<IResult> UpdateRole(long id, RoleUpdateDto role, IRoleService service)
+    private static async Task<IResult> UpdateRole(long id, RoleUpdateDto role, [FromServices] IRoleService service)
     {
         try
         {
@@ -107,7 +108,7 @@ public static class RoleEndpoints
         }
     }
 
-    private static async Task<IResult> DeleteRole(long id, IRoleService service)
+    private static async Task<IResult> DeleteRole(long id, [FromServices] IRoleService service)
     {
         try
         {
@@ -124,7 +125,7 @@ public static class RoleEndpoints
         }
     }
 
-    private static async Task<IResult> SearchRoles(string q, IRoleService service)
+    private static async Task<IResult> SearchRoles(string q, [FromServices] IRoleService service)
     {
         try
         {
