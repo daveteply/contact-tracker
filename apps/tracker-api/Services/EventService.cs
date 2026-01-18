@@ -134,6 +134,9 @@ public class EventService : IEventService
             Direction = dto.Direction
         };
 
+        // Resolve entities: either link existing ID or process "New" DTOs
+        await ResolveEntitiesAsync(dto, @event);
+
         _context.Events.Add(@event);
         await _context.SaveChangesAsync();
 
@@ -217,6 +220,79 @@ public class EventService : IEventService
         );
     }
 
+
+    private async Task ResolveEntitiesAsync(EventCreateDto dto, Event @event)
+    {
+        // Resolve Company First
+        if (dto.CompanyId.HasValue)
+        {
+            @event.CompanyId = dto.CompanyId;
+        }
+        else if (dto.NewCompany != null)
+        {
+            var existingCompany = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == dto.NewCompany.Name.ToLower());
+
+            if (existingCompany != null)
+                @event.CompanyId = existingCompany.Id;
+            else
+                @event.Company = new Company { Name = dto.NewCompany.Name };
+        }
+
+        // Resolve Role (Link to the company object resolved above)
+        if (dto.RoleId.HasValue)
+        {
+            @event.RoleId = dto.RoleId;
+        }
+        else if (dto.NewRole != null)
+        {
+            // Try to find existing role within the specific company
+            var roleTitle = dto.NewRole.Title;
+            var compId = @event.CompanyId;
+
+            // If company is also new, we check by name instead of ID
+            Role? existingRole = compId.HasValue
+                ? await _context.Roles.FirstOrDefaultAsync(r => r.CompanyId == compId && r.Title == roleTitle)
+                : null;
+
+            if (existingRole != null)
+            {
+                @event.RoleId = existingRole.Id;
+            }
+            else
+            {
+                @event.Role = new Role { Title = roleTitle };
+                // link navigation properties
+                if (@event.Company != null)
+                    @event.Role.Company = @event.Company;
+                else if (@event.CompanyId.HasValue)
+                    @event.Role.CompanyId = @event.CompanyId;
+            }
+        }
+
+        // Finally, contact
+        if (dto.ContactId.HasValue)
+        {
+            @event.ContactId = dto.ContactId;
+        }
+        else if (dto.NewContact != null)
+        {
+            var existingContact = await _context.Contacts
+                .FirstOrDefaultAsync(c => c.FirstName == dto.NewContact.FirstName
+                    && c.LastName == dto.NewContact.LastName
+                    && c.Email == dto.NewContact.Email);
+
+            if (existingContact != null)
+                @event.ContactId = existingContact.Id;
+            else
+                @event.Contact = new Contact
+                {
+                    FirstName = dto.NewContact.FirstName,
+                    LastName = dto.NewContact.LastName
+                };
+        }
+    }
+
     private void ValidateEventCreate(EventCreateDto dto)
     {
         var errors = new List<string>();
@@ -258,4 +334,5 @@ public class EventService : IEventService
             throw new ValidationException("Event validation failed", errors);
         }
     }
+
 }
