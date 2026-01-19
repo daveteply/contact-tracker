@@ -9,13 +9,21 @@ namespace tracker_api.Tests;
 public class EventEndpointsTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory _factory;
     private readonly ContactTrackerDbContext _context;
 
     public EventEndpointsTests(CustomWebApplicationFactory factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
         _context = factory.GetDbContext();
         CleanDatabase();
+    }
+
+    private ContactTrackerDbContext GetFreshContext()
+    {
+        // Get a new context to see the latest changes
+        return _factory.GetDbContext();
     }
 
     private void CleanDatabase()
@@ -144,6 +152,114 @@ public class EventEndpointsTests : IClassFixture<CustomWebApplicationFactory>, I
 
         // CRITICAL: Verify the Role belongs to the new Company
         Assert.Equal(dbEvent.CompanyId, dbEvent.Role.CompanyId);
+    }
+
+    [Fact]
+    public async Task UpdateEvent_WithExistingCompanyName_ReLinksEvent()
+    {
+        // Arrange
+        var originalCompany = new Company { Name = "Original Corp" };
+        var existingOtherCompany = new Company { Name = "Target Corp" };
+        var @event = new Event
+        {
+            OccurredAt = DateTime.UtcNow,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            Company = originalCompany,
+            EventTypeId = 1
+        };
+
+        _context.Companies.AddRange(originalCompany, existingOtherCompany);
+        _context.Events.Add(@event);
+        await _context.SaveChangesAsync();
+
+        var updateDto = new EventUpdateDto(
+            CompanyId: null,
+            UpdateCompany: new CompanyUpdateDto("Target Corp", null, null, null, null), // Match existing
+            ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
+            EventTypeId: null, OccurredAt: null, Summary: "Updated Summary", Details: null,
+            Source: null, Direction: null
+        );
+
+        // Act
+        var response = await _client.PatchAsJsonAsync($"/api/events/{@event.Id}", updateDto);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        using var freshContext = GetFreshContext();
+        var dbEvent = await freshContext.Events.Include(e => e.Company).FirstAsync(e => e.Id == @event.Id);
+        Assert.Equal(existingOtherCompany.Id, dbEvent.CompanyId); // Linked to the other existing company
+        Assert.Equal("Target Corp", dbEvent.Company?.Name);
+    }
+
+    [Fact]
+    public async Task UpdateEvent_InlineCompanyNameChange_PreservesOtherCompanyFields()
+    {
+        // Arrange
+        var company = new Company
+        {
+            Name = "Old Name",
+            Website = "https://important-site.com",
+            Notes = "Sensitive data"
+        };
+        var @event = new Event { OccurredAt = DateTime.UtcNow, Source = SourceType.Email, Direction = DirectionType.Inbound, Company = company, EventTypeId = 1 };
+
+        _context.Events.Add(@event);
+        await _context.SaveChangesAsync();
+
+        var updateDto = new EventUpdateDto(
+            CompanyId: null,
+            UpdateCompany: new CompanyUpdateDto("New Name", null, null, null, null), // Only name provided
+            ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
+            EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
+            Source: null, Direction: null
+        );
+
+        // Act
+        await _client.PatchAsJsonAsync($"/api/events/{@event.Id}", updateDto);
+
+        // Assert
+        using var freshContext = GetFreshContext();
+        var dbCompany = await freshContext.Companies.FirstAsync(c => c.Id == company.Id);
+        Assert.Equal("New Name", dbCompany.Name);
+        Assert.Equal("https://important-site.com", dbCompany.Website); // Still exists!
+        Assert.Equal("Sensitive data", dbCompany.Notes); // Still exists!
+    }
+
+    [Fact]
+    public async Task UpdateEvent_WithNewCompanyAndRole_CreatesAndLinksBoth()
+    {
+        // Arrange
+        var @event = new Event { OccurredAt = DateTime.UtcNow, Source = SourceType.Email, Direction = DirectionType.Inbound, EventTypeId = 1 };
+        _context.Events.Add(@event);
+        await _context.SaveChangesAsync();
+
+        var updateDto = new EventUpdateDto(
+            CompanyId: null,
+            UpdateCompany: new CompanyUpdateDto("Brand New Startup", null, null, null, null),
+            ContactId: null, UpdateContact: null,
+            RoleId: null,
+            UpdateRole: new RoleUpdateDto(null, "CTO", null, "Remote", RoleLevel.EngineeringManager),
+            EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
+            Source: null, Direction: null
+        );
+
+        // Act
+        await _client.PatchAsJsonAsync($"/api/events/{@event.Id}", updateDto);
+
+        // Assert
+        using var freshContext = GetFreshContext();
+        var dbEvent = await freshContext.Events
+            .Include(e => e.Company)
+            .Include(e => e.Role)
+            .FirstAsync(e => e.Id == @event.Id);
+
+        Assert.NotNull(dbEvent.Company);
+        Assert.NotNull(dbEvent.Role);
+        Assert.Equal(dbEvent.CompanyId, dbEvent.Role.CompanyId); // They are linked to each other
+        Assert.Equal("Brand New Startup", dbEvent.Company.Name);
+        Assert.Equal("CTO", dbEvent.Role.Title);
     }
 
     [Fact]

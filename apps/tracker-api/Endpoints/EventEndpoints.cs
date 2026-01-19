@@ -24,7 +24,7 @@ public static class EventEndpoints
             .WithName("CreateEvent")
             .WithDescription("Create a new event");
 
-        group.MapPut("/{id}", UpdateEvent)
+        group.MapPatch("/{id}", UpdateEvent)
             .WithName("UpdateEvent")
             .WithDescription("Update an existing event");
 

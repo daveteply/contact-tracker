@@ -33,6 +33,23 @@ public class ContactTrackerDbContext : DbContext
                     .Property(nameof(IAuditableEntity.UpdatedAt))
                     .HasDefaultValueSql("now() at time zone 'utc'")
                     .ValueGeneratedOnAddOrUpdate(); // Let the DB handle value generation
+
+                // ensure case insensitive 
+                modelBuilder.Entity<Company>()
+                    .Property(c => c.Name)
+                    .UseCollation("case_insensitive");
+
+                modelBuilder.Entity<Contact>()
+                    .Property(c => c.FirstName)
+                    .UseCollation("case_insensitive");
+
+                modelBuilder.Entity<Contact>()
+                    .Property(c => c.LastName)
+                    .UseCollation("case_insensitive");
+
+                modelBuilder.Entity<Role>()
+                    .Property(c => c.Title)
+                    .UseCollation("case_insensitive");
             }
         }
 
