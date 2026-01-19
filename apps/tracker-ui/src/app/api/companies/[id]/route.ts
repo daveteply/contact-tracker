@@ -25,7 +25,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest) {
 
     const body = await request.json();
     const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },

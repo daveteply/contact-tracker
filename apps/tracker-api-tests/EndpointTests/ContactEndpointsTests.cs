@@ -273,7 +273,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
 
     #endregion
 
-    #region PUT /api/contacts/{id}
+    #region PATCH /api/contacts/{id}
 
     [Fact]
     public async Task UpdateContact_WithValidData_ReturnsUpdatedContact()
@@ -305,7 +305,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         };
 
         // Act
-        var response = await _client.PutAsJsonAsync($"/api/contacts/{contact.Id}", updatedContact);
+        var response = await _client.PatchAsJsonAsync($"/api/contacts/{contact.Id}", updatedContact);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -344,7 +344,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         };
 
         // Act
-        var response = await _client.PutAsJsonAsync("/api/contacts/99999", updatedContact);
+        var response = await _client.PatchAsJsonAsync("/api/contacts/99999", updatedContact);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -376,7 +376,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         };
 
         // Act
-        var response = await _client.PutAsJsonAsync($"/api/contacts/{contact.Id}", invalidUpdate);
+        var response = await _client.PatchAsJsonAsync($"/api/contacts/{contact.Id}", invalidUpdate);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

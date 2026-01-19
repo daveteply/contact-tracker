@@ -24,7 +24,7 @@ public static class EventTypeEndpoints
             .WithName("CreateEventType")
             .WithDescription("Create a new Event type");
 
-        group.MapPut("/{id}", UpdateEventType)
+        group.MapPatch("/{id}", UpdateEventType)
             .WithName("UpdateEventType")
             .WithDescription("Update an existing event type");
 

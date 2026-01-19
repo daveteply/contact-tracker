@@ -44,7 +44,7 @@ export function createGenericClient<TRead, TCreate, TUpdate>(resourcePath: strin
 
     update: (id: number, data: TUpdate) =>
       coreApiRequest<TRead>(resourcePath, `/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(data),
       }),
 

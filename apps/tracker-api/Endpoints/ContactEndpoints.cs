@@ -24,7 +24,7 @@ public static class ContactEndpoints
             .WithName("CreateContact")
             .WithDescription("Create a new contact");
 
-        group.MapPut("/{id}", UpdateContact)
+        group.MapPatch("/{id}", UpdateContact)
             .WithName("UpdateContact")
             .WithDescription("Update an existing contact");
 

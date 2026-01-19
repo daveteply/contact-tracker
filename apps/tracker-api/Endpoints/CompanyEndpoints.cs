@@ -24,7 +24,7 @@ public static class CompanyEndpoints
             .WithName("CreateCompany")
             .WithDescription("Create a new company");
 
-        group.MapPut("/{id}", UpdateCompany)
+        group.MapPatch("/{id}", UpdateCompany)
             .WithName("UpdateCompany")
             .WithDescription("Update an existing company");
 

@@ -24,7 +24,7 @@ public static class RoleEndpoints
             .WithName("CreateRole")
             .WithDescription("Create a new role");
 
-        group.MapPut("/{id}", UpdateRole)
+        group.MapPatch("/{id}", UpdateRole)
             .WithName("UpdateRole")
             .WithDescription("Update an existing role");
 
