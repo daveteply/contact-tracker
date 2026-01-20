@@ -1,3 +1,5 @@
+import { Breadcrumbs } from '@contact-tracker/ui-shared';
+
 export default function EventsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
@@ -6,6 +8,9 @@ export default function EventsLayout({ children }: { children: React.ReactNode }
           <h1 className="text-2xl font-bold">Contract Tracker</h1>
         </div>
       </header>
+      <nav className="p-1 pl-3 bg-accent-content">
+        <Breadcrumbs />
+      </nav>
       <main className="container mx-auto p-4 grow">{children}</main>
     </div>
   );

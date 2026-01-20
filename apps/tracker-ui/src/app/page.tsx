@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Index() {
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -8,9 +10,9 @@ export default function Index() {
             Contact Tracker is a job seeker's tracking tool. Let's get you on your way to your next
             dream gig!
           </p>
-          <a className="btn btn-primary" href="/events">
+          <Link className="btn btn-primary" href="/events">
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </div>

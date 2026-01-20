@@ -1,3 +1,5 @@
+// Not intended to be consumed directly in the UI
+
 'use client';
 
 import { useEffect, useState, useRef } from 'react';

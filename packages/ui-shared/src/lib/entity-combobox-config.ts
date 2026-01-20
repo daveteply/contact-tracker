@@ -1,5 +1,5 @@
 import { EntityComboboxConfig } from './entity-combobox';
-import { CompanyReadDto, ContactReadDto } from '@contact-tracker/api-models';
+import { CompanyReadDto, ContactReadDto, RoleReadDto } from '@contact-tracker/api-models';
 
 // Form value shapes for new entities
 export interface CompanyFormValue {
@@ -97,7 +97,7 @@ export const contactComboboxConfig: EntityComboboxConfig<ContactReadDto, Contact
 
 // Role configuration
 // Assumes Role has a similar structure with an id and title
-export const roleComboboxConfig: EntityComboboxConfig<any, RoleFormValue> = {
+export const roleComboboxConfig: EntityComboboxConfig<RoleReadDto, RoleFormValue> = {
   getDisplayValue: (role) => role.title,
 
   parseNewEntity: (input) => ({

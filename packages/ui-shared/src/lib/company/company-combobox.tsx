@@ -2,8 +2,8 @@
 
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { CompanyReadDto } from '@contact-tracker/api-models';
-import EntityCombobox from '../common/entity-combobox';
-import { companyComboboxConfig } from '../common/entity-combobox-config';
+import EntityCombobox from '../entity-combobox';
+import { companyComboboxConfig } from '../entity-combobox-config';
 
 interface CompanyComboboxProps<T extends FieldValues> {
   control: Control<T>;

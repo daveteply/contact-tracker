@@ -1,8 +1,8 @@
 'use client';
 
 import { Control, FieldValues, Path } from 'react-hook-form';
-import EntityCombobox from '../common/entity-combobox';
-import { roleComboboxConfig } from '../common/entity-combobox-config';
+import EntityCombobox from '../entity-combobox';
+import { roleComboboxConfig } from '../entity-combobox-config';
 import { RoleReadDto } from '@contact-tracker/api-models';
 
 interface RoleComboboxProps<T extends FieldValues> {
