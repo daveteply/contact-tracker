@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Npgsql;
 using tracker_api;
 
 public class ContactTrackerDbContext : DbContext
@@ -38,10 +39,8 @@ public class ContactTrackerDbContext : DbContext
 
         // ensure case insensitive 
         modelBuilder.HasCollation(name: "case_insensitive", locale: "en-u-ks-primary", provider: "icu", deterministic: false);
-        modelBuilder.Entity<Company>().Property(c => c.Name).UseCollation("case_insensitive");
-        modelBuilder.Entity<Contact>().Property(c => c.FirstName).UseCollation("case_insensitive");
-        modelBuilder.Entity<Contact>().Property(c => c.LastName).UseCollation("case_insensitive");
-        modelBuilder.Entity<Role>().Property(c => c.Title).UseCollation("case_insensitive");
+        // Note: Collation removed from search fields (Name, FirstName, LastName, Title) as nondeterministic collations don't support LIKE operations
+        // Collation is only applied to fields used for ordering, not searching
 
         // Configure enum storage for PostgreSQL
         modelBuilder.Entity<Event>().Property(e => e.Source).HasConversion<string>();
@@ -118,6 +117,12 @@ public class ContactTrackerDbContext : DbContext
         }
 
         return base.SaveChanges();
+    }
+
+    public static bool IsUniqueViolation(DbUpdateException ex)
+    {
+        return ex.InnerException is PostgresException pgEx
+            && pgEx.SqlState == PostgresErrorCodes.UniqueViolation;
     }
 }
 

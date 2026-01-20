@@ -77,10 +77,10 @@ public class EventTypeService : IEventTypeService
         ValidateEventTypeUpdate(dto);
 
         // Only update properties that are provided (not null)
-        if (dto.Name != null)
+        if (dto.Name is not null)
             existingEventType.Name = dto.Name;
 
-        if (dto.Category != null)
+        if (dto.Category is not null)
             existingEventType.Category = dto.Category;
 
         // Note: We usually don't allow changing IsSystemDefined via API
@@ -153,12 +153,12 @@ public class EventTypeService : IEventTypeService
 
         // For update, fields can be null (meaning don't update them)
         // But if they ARE provided, they shouldn't be empty/whitespace
-        if (dto.Name != null && string.IsNullOrWhiteSpace(dto.Name))
+        if (dto.Name is not null && string.IsNullOrWhiteSpace(dto.Name))
         {
             errors.Add("Name cannot be empty");
         }
 
-        if (dto.Category != null && string.IsNullOrWhiteSpace(dto.Category))
+        if (dto.Category is not null && string.IsNullOrWhiteSpace(dto.Category))
         {
             errors.Add("Category cannot be empty");
         }

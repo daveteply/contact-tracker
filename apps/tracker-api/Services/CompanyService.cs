@@ -38,6 +38,12 @@ public class CompanyService : ICompanyService
 
     public async Task<CompanyReadDto> CreateCompanyAsync(CompanyCreateDto dto)
     {
+        if (await _context.Companies.AnyAsync(c => c.Name.ToLower() == dto.Name.ToLower()))
+        {
+            throw new ValidationException("A company with this name already exists.",
+                 new List<string> { "Company name must be unique." } );
+        }
+
         ValidateCompanyCreate(dto);
 
         var company = new Company
@@ -50,7 +56,15 @@ public class CompanyService : ICompanyService
         };
 
         _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+
+        try
+        {
+            await _context.SaveChangesAsync();    
+        }
+       catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(company);
     }
@@ -68,25 +82,38 @@ public class CompanyService : ICompanyService
         ValidateCompanyUpdate(dto);
 
         // Only update properties that are provided (not null)
-        if (dto.Name != null)
-            existingCompany.Name = dto.Name;
+        if (dto.Name is not null) {
+            var exists = await _context.Companies
+                .AnyAsync(c => c.Id != id && c.Name.ToLower() == dto.Name.ToLower());
 
-        if (dto.Website != null)
+            if (exists) 
+            {
+                DuplicateFound();
+            }
+
+            existingCompany.Name = dto.Name;
+        }
+
+        if (dto.Website is not null)
             existingCompany.Website = dto.Website;
 
-        if (dto.Industry != null)
+        if (dto.Industry is not null)
             existingCompany.Industry = dto.Industry;
 
-        if (dto.SizeRange != null)
+        if (dto.SizeRange is not null)
             existingCompany.SizeRange = dto.SizeRange;
 
-        if (dto.Notes != null)
+        if (dto.Notes is not null)
             existingCompany.Notes = dto.Notes;
 
-        existingCompany.UpdatedAt = DateTime.UtcNow;
-
-        _context.Companies.Update(existingCompany);
-        await _context.SaveChangesAsync();
+        try 
+        {
+            await _context.SaveChangesAsync();
+        }
+         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(existingCompany);
     }
@@ -107,7 +134,7 @@ public class CompanyService : ICompanyService
 
     public async Task<List<CompanyReadDto>> SearchCompaniesAsync(string q)
     {
-        var searchTerm = q.ToLower();
+        var searchTerm = q.Trim().ToLower();
 
         var companies = await _context.Companies
             .AsNoTracking()
@@ -150,7 +177,7 @@ public class CompanyService : ICompanyService
 
         // For update, Name can be null (meaning don't update it)
         // But if it IS provided, it shouldn't be empty/whitespace
-        if (dto.Name != null && string.IsNullOrWhiteSpace(dto.Name))
+        if (dto.Name is not null && string.IsNullOrWhiteSpace(dto.Name))
         {
             errors.Add("Company name cannot be empty");
         }
@@ -159,5 +186,13 @@ public class CompanyService : ICompanyService
         {
             throw new ValidationException("Company validation failed", errors);
         }
+    }
+
+    private static void DuplicateFound()
+    {
+        throw new ValidationException(
+            "A company with this name already exists.",
+            new List<string> { "Company name must be unique." }
+        );
     }
 }

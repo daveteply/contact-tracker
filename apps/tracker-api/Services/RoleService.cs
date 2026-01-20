@@ -72,19 +72,17 @@ public class RoleService : IRoleService
         if (dto.CompanyId.HasValue)
             existingRole.CompanyId = dto.CompanyId;
 
-        if (dto.Title != null)
+        if (dto.Title is not null)
             existingRole.Title = dto.Title;
 
-        if (dto.JobPostingUrl != null)
+        if (dto.JobPostingUrl is not null)
             existingRole.JobPostingUrl = dto.JobPostingUrl;
 
-        if (dto.Location != null)
+        if (dto.Location is not null)
             existingRole.Location = dto.Location;
 
         if (dto.Level.HasValue)
             existingRole.Level = dto.Level.Value;
-
-        existingRole.UpdatedAt = DateTime.UtcNow;
 
         _context.Roles.Update(existingRole);
         await _context.SaveChangesAsync();
@@ -107,7 +105,7 @@ public class RoleService : IRoleService
 
     public async Task<List<RoleReadDto>> SearchRolesAsync(string q)
     {
-        var searchTerm = q.ToLower();
+        var searchTerm = q.Trim().ToLower();
 
         var roles = await _context.Roles
             .AsNoTracking()
@@ -150,7 +148,7 @@ public class RoleService : IRoleService
 
         // For update, Title can be null (meaning don't update it)
         // But if it IS provided, it shouldn't be empty/whitespace
-        if (dto.Title != null && string.IsNullOrWhiteSpace(dto.Title))
+        if (dto.Title is not null && string.IsNullOrWhiteSpace(dto.Title))
         {
             errors.Add("Role title cannot be empty");
         }

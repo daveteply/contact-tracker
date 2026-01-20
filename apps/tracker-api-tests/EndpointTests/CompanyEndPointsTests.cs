@@ -1,25 +1,32 @@
 using System.Net;
 using System.Net.Http.Json;
 using tracker_api.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace tracker_api.Tests;
 
-public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+/// <summary>
+/// Integration tests for Company API endpoints.
+/// These tests use a PostgreSQL test database with proper cleanup between tests.
+/// </summary>
+[Collection("Database collection")]
+public class CompanyEndpointsTests : IAsyncDisposable
 {
     private readonly HttpClient _client;
-    private readonly ContactTrackerDbContext _context;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public CompanyEndpointsTests(CustomWebApplicationFactory factory)
+    public CompanyEndpointsTests(DatabaseFixture databaseFixture)
     {
-        _client = factory.CreateClient();
-        _context = factory.GetDbContext();
-        CleanDatabase();
+        _factory = new CustomWebApplicationFactory(databaseFixture);
+        _client = _factory.CreateClient();
+        
+        // Clean database before each test
+        CleanDatabase().GetAwaiter().GetResult();
     }
 
-    private void CleanDatabase()
+    private async Task CleanDatabase()
     {
-        _context.Companies.RemoveRange(_context.Companies);
-        _context.SaveChanges();
+        await _factory.ResetDatabaseAsync();
     }
 
     [Fact]
@@ -71,14 +78,17 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task GetCompanies_ReturnsCompanies()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company
         {
             Name = "Dream Corp",
             Industry = "Software"
         };
 
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/companies");
@@ -99,14 +109,17 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task GetCompany_ById_ReturnsCompany()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company
         {
             Name = "Stripe",
             Industry = "FinTech"
         };
 
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync($"/api/companies/{company.Id}");
@@ -127,9 +140,12 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task GetCompany_WithUnknownId_ReturnsNotFound()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "TempCo" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var unknownId = company.Id + 1;
 
@@ -144,14 +160,17 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task SearchCompany_ReturnsCompany()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company
         {
             Name = "Search the World",
             Industry = "Software"
         };
 
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/companies/search?q=earch");
@@ -169,10 +188,13 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task SearchCompany_ReturnsCompanies()
     {
         // Arrange
-        _context.Companies.Add(new Company { Name = "Search the World", Industry = "Software" });
-        _context.Companies.Add(new Company { Name = "Software R Us", Industry = "Software" });
-        _context.Companies.Add(new Company { Name = "Building the World", Industry = "Software" });
-        await _context.SaveChangesAsync();
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        context.Companies.Add(new Company { Name = "Search the World", Industry = "Software" });
+        context.Companies.Add(new Company { Name = "Software R Us", Industry = "Software" });
+        context.Companies.Add(new Company { Name = "Building the World", Industry = "Software" });
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/companies/search?q=world");
@@ -187,5 +209,85 @@ public class CompanyEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.Equal(2, result.Data.Count);
     }
 
-    public void Dispose() => _client?.Dispose();
+    [Fact]
+    public async Task CreateCompany_WithDuplicateName_ReturnsConflict()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        context.Companies.Add(new Company { Name = "OpenAI" });
+        await context.SaveChangesAsync();
+
+        var duplicate = new
+        {
+            Name = "openai"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/companies", duplicate);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var result = await response.Content
+            .ReadFromJsonAsync<ApiResult<object>>(CustomWebApplicationFactory.JsonOptions);
+
+        Assert.False(result!.Success);
+    }
+
+    [Fact]
+    public async Task UpdateCompany_ToExistingName_ReturnsBadRequest()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        var c1 = new Company { Name = "Google" };
+        var c2 = new Company { Name = "Amazon" };
+        context.Companies.AddRange(c1, c2);
+        await context.SaveChangesAsync();
+
+        var update = new
+        {
+            Name = "google"
+        };
+
+        // Act
+        var response = await _client.PatchAsJsonAsync(
+            $"/api/companies/{c2.Id}", update);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateCompany_WithSameName_DoesNotFail()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        var company = new Company { Name = "Netflix" };
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
+
+        var update = new
+        {
+            Name = "netflix"
+        };
+
+        // Act
+        var response = await _client.PatchAsJsonAsync(
+            $"/api/companies/{company.Id}", update);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _client?.Dispose();
+        await _factory.DisposeAsync();
+    }
 }

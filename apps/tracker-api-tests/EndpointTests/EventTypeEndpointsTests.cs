@@ -1,31 +1,43 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using tracker_api.Common;
+using tracker_api.DTOs;
 
 namespace tracker_api.Tests;
 
-public class EventTypeEndpointsTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+/// <summary>
+/// Integration tests for Event Type API endpoints.
+/// These tests use a PostgreSQL test database with proper cleanup between tests.
+/// </summary>
+[Collection("Database collection")]
+public class EventTypeEndpointsTests : IAsyncDisposable
 {
     private readonly HttpClient _client;
-    private readonly ContactTrackerDbContext _context;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public EventTypeEndpointsTests(CustomWebApplicationFactory factory)
+    public EventTypeEndpointsTests(DatabaseFixture databaseFixture)
     {
-        _client = factory.CreateClient();
-        _context = factory.GetDbContext();
-        CleanDatabase();
+        _factory = new CustomWebApplicationFactory(databaseFixture);
+        _client = _factory.CreateClient();
+        
+        // Clean database before each test
+        CleanDatabase().GetAwaiter().GetResult();
     }
 
-    private void CleanDatabase()
+    private async Task CleanDatabase()
     {
-        _context.EventTypes.RemoveRange(_context.EventTypes);
-        _context.SaveChanges();
+        await _factory.ResetDatabaseAsync();
     }
 
     [Fact]
     public async Task CreateEventType_WithManualId_ReturnsCreated()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
         var newType = new
         {
             Id = 101, // Manual ID required by DatabaseGeneratedOption.None
@@ -48,9 +60,12 @@ public class EventTypeEndpointsTests : IClassFixture<CustomWebApplicationFactory
     public async Task CreateEventType_DuplicateId_ReturnsBadRequest()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
         var existing = new EventType { Id = 50, Name = "Existing", Category = "Test", IsSystemDefined = true };
-        _context.EventTypes.Add(existing);
-        await _context.SaveChangesAsync();
+        context.EventTypes.Add(existing);
+        await context.SaveChangesAsync();
 
         var duplicate = new { Id = 50, Name = "New", Category = "Test", IsSystemDefined = false };
 
@@ -61,5 +76,9 @@ public class EventTypeEndpointsTests : IClassFixture<CustomWebApplicationFactory
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    public void Dispose() => _client?.Dispose();
+    public async ValueTask DisposeAsync()
+    {
+        _client?.Dispose();
+        await _factory.DisposeAsync();
+    }
 }

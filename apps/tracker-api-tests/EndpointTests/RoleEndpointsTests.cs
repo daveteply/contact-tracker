@@ -1,35 +1,44 @@
 using System.Net;
 using System.Net.Http.Json;
 using tracker_api.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace tracker_api.Tests;
 
-public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+/// <summary>
+/// Integration tests for Role API endpoints.
+/// These tests use a PostgreSQL test database with proper cleanup between tests.
+/// </summary>
+[Collection("Database collection")]
+public class RoleEndpointsTests : IAsyncDisposable
 {
     private readonly HttpClient _client;
-    private readonly ContactTrackerDbContext _context;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public RoleEndpointsTests(CustomWebApplicationFactory factory)
+    public RoleEndpointsTests(DatabaseFixture databaseFixture)
     {
-        _client = factory.CreateClient();
-        _context = factory.GetDbContext();
-        CleanDatabase();
+        _factory = new CustomWebApplicationFactory(databaseFixture);
+        _client = _factory.CreateClient();
+        
+        // Clean database before each test
+        CleanDatabase().GetAwaiter().GetResult();
     }
 
-    private void CleanDatabase()
+   private async Task CleanDatabase()
     {
-        _context.Roles.RemoveRange(_context.Roles);
-        _context.Companies.RemoveRange(_context.Companies);
-        _context.SaveChanges();
+        await _factory.ResetDatabaseAsync();
     }
 
     [Fact]
     public async Task CreateRole_WithValidData_ReturnsCreated()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
         var company = new Company { Name = "Dream Corp", Industry = "Software" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var newRole = new
         {
@@ -68,22 +77,33 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
     public async Task SearchRole_ReturnsRole()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
         var role = new Role
         {
             Title = "Staff Software Engineer",
+            // Don't need a company since CompanyId is nullable
         };
 
-        _context.Roles.Add(role);
-        await _context.SaveChangesAsync();
+        context.Roles.Add(role);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/roles/search?q=So");
+
+        // Get detailed error
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Search failed with {response.StatusCode}: {errorContent}");
+        }
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Assert
         var result = await response.Content.ReadFromJsonAsync<ApiResult<List<Role>>>(
-             CustomWebApplicationFactory.JsonOptions
+            CustomWebApplicationFactory.JsonOptions
         );
 
         Assert.NotNull(result);
@@ -94,10 +114,13 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
     public async Task SearchRole_ReturnsRolesFromList()
     {
         // Arrange
-        _context.Roles.Add(new Role { Title = "Staff Software Engineer", });
-        _context.Roles.Add(new Role { Title = "Tech Writer", });
-        _context.Roles.Add(new Role { Title = "Jr Software Engineer", });
-        await _context.SaveChangesAsync();
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        context.Roles.Add(new Role { Title = "Staff Software Engineer", });
+        context.Roles.Add(new Role { Title = "Tech Writer", });
+        context.Roles.Add(new Role { Title = "Jr Software Engineer", });
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/roles/search?q=So");
@@ -114,5 +137,9 @@ public class RoleEndpointsTests : IClassFixture<CustomWebApplicationFactory>, ID
         Assert.Equal(2, result.Data.Count);
     }
 
-    public void Dispose() => _client?.Dispose();
+    public async ValueTask DisposeAsync()
+    {
+        _client?.Dispose();
+        await _factory.DisposeAsync();
+    }
 }

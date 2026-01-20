@@ -8,18 +8,23 @@ using Microsoft.Extensions.DependencyInjection;
 namespace tracker_api.Tests;
 
 /// <summary>
-/// Custom factory that replaces the PostgreSQL database with an in-memory database for testing.
-/// This ensures tests don't touch your production or development databases.
+/// Custom factory that uses a dedicated PostgreSQL test database.
+/// The database is managed by DatabaseFixture and shared across all tests.
 /// </summary>
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly string _databaseName = $"TestDatabase_{Guid.NewGuid()}";
-
+    private readonly DatabaseFixture _databaseFixture;
+    
     // IMPORTANT:
     // Tests must use these JsonSerializerOptions when calling ReadFromJsonAsync<T>.
     // The API serializes enums as strings, but HttpClient does NOT automatically
     // use server-side JSON configuration.
     public static readonly JsonSerializerOptions JsonOptions = CreateJsonOptions();
+
+    public CustomWebApplicationFactory(DatabaseFixture databaseFixture)
+    {
+        _databaseFixture = databaseFixture;
+    }
 
     private static JsonSerializerOptions CreateJsonOptions()
     {
@@ -39,11 +44,19 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
-            // Add DbContext with in-memory database
-            // Use the same database name for the entire factory lifetime
+            // Remove the existing DbContext registration
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<ContactTrackerDbContext>));
+            
+            if (descriptor != null)
+            {
+                services.Remove(descriptor);
+            }
+
+            // Add DbContext with PostgreSQL test database
             services.AddDbContext<ContactTrackerDbContext>(options =>
             {
-                options.UseInMemoryDatabase(_databaseName);
+                options.UseNpgsql(_databaseFixture.ConnectionString);
             });
 
             // Ensure JSON options match app
@@ -55,9 +68,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         });
     }
 
-    public ContactTrackerDbContext GetDbContext()
+    /// <summary>
+    /// Resets the database to a clean state - delegates to the shared DatabaseFixture
+    /// </summary>
+    public async Task ResetDatabaseAsync()
     {
-        var scope = Services.CreateScope();
-        return scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        await _databaseFixture.ResetDatabaseAsync();
     }
 }

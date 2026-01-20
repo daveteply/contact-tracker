@@ -8,36 +8,32 @@ namespace tracker_api.Tests;
 
 /// <summary>
 /// Integration tests for Contact API endpoints.
-/// These tests use an in-memory database, so they won't affect your PostgreSQL database.
+/// These tests use a PostgreSQL test database with proper cleanup between tests.
 /// </summary>
-public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+[Collection("Database collection")]
+public class ContactEndpointsTests : IAsyncDisposable
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory _factory;
-    private readonly ContactTrackerDbContext _context;
 
-    public ContactEndpointsTests(CustomWebApplicationFactory factory)
+    public ContactEndpointsTests(DatabaseFixture databaseFixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient();
-
-        // Get the database context from the factory
-        _context = _factory.GetDbContext();
-
+        _factory = new CustomWebApplicationFactory(databaseFixture);
+        _client = _factory.CreateClient();
+        
         // Clean database before each test
-        CleanDatabase();
+        CleanDatabase().GetAwaiter().GetResult();
     }
 
-    private void CleanDatabase()
+    private async Task CleanDatabase()
     {
-        _context.Contacts.RemoveRange(_context.Contacts);
-        _context.Companies.RemoveRange(_context.Companies);
-        _context.SaveChanges();
+        await _factory.ResetDatabaseAsync();
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         _client?.Dispose();
+        await _factory.DisposeAsync();
     }
 
     #region GET /api/contacts
@@ -62,9 +58,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task GetAllContacts_WhenContactsExist_ReturnsAllContacts()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var contact1 = new Contact
         {
@@ -80,8 +79,8 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
             CompanyId = company.Id,
             Company = company
         };
-        _context.Contacts.AddRange(contact1, contact2);
-        await _context.SaveChangesAsync();
+        context.Contacts.AddRange(contact1, contact2);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/contacts");
@@ -104,9 +103,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task GetContactById_WhenContactExists_ReturnsContact()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var contact = new Contact
         {
@@ -116,8 +118,8 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
             CompanyId = company.Id,
             Company = company
         };
-        _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync($"/api/contacts/{contact.Id}");
@@ -156,9 +158,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task CreateContact_WithValidData_ReturnsCreatedContact()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // When sending JSON to the API, we don't need to include the Company navigation property
         // The API will handle the relationship via CompanyId
@@ -187,13 +192,15 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
         Assert.True(result.Data.Id > 0); // Verify ID was assigned
 
         // Verify Location header (if present)
-        if (response.Headers.Location != null)
+        if (response.Headers.Location is not null)
         {
             Assert.Contains($"/api/contacts/{result.Data.Id}", response.Headers.Location.ToString());
         }
 
         // Verify it's actually in the database
-        var dbContact = await _context.Contacts.FindAsync(result.Data.Id);
+        using var verifyScope = _factory.Services.CreateScope();
+        var verifyContext = verifyScope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        var dbContact = await verifyContext.Contacts.FindAsync(result.Data.Id);
         Assert.NotNull(dbContact);
         Assert.Equal("Alice", dbContact.FirstName);
     }
@@ -202,9 +209,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task CreateContact_WithoutFirstName_ReturnsBadRequest()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // Using anonymous object without FirstName will cause deserialization error
         // The API will return 400 BadRequest before reaching your validation
@@ -225,9 +235,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task CreateContact_WithoutLastName_ReturnsBadRequest()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         // Using anonymous object without LastName will cause deserialization error
         var invalidJson = $@"{{
@@ -247,9 +260,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task CreateContact_WithEmptyFirstName_ReturnsBadRequest()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var invalidContact = new
         {
@@ -279,9 +295,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task UpdateContact_WithValidData_ReturnsUpdatedContact()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var contact = new Contact
         {
@@ -291,8 +310,8 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
             CompanyId = company.Id,
             Company = company
         };
-        _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
 
         var updatedContact = new
         {
@@ -332,9 +351,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task UpdateContact_WhenContactDoesNotExist_ReturnsNotFound()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var updatedContact = new
         {
@@ -354,9 +376,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task UpdateContact_WithInvalidData_ReturnsBadRequest()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var contact = new Contact
         {
@@ -365,8 +390,8 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
             CompanyId = company.Id,
             Company = company
         };
-        _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
 
         var invalidUpdate = new
         {
@@ -390,9 +415,12 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task DeleteContact_WhenContactExists_ReturnsNoContent()
     {
         // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
         var company = new Company { Name = "Test Company", Industry = "Tech" };
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
 
         var contact = new Contact
         {
@@ -401,8 +429,8 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
             CompanyId = company.Id,
             Company = company
         };
-        _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
         var contactId = contact.Id;
 
         // Act
@@ -430,10 +458,13 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task SearchContact_ReturnsContact()
     {
         // Arrange
-        _context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
-        _context.Contacts.Add(new Contact { FirstName = "June", LastName = "Summers" });
-        _context.Contacts.Add(new Contact { FirstName = "Albert", LastName = "Testington" });
-        await _context.SaveChangesAsync();
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
+        context.Contacts.Add(new Contact { FirstName = "June", LastName = "Summers" });
+        context.Contacts.Add(new Contact { FirstName = "Albert", LastName = "Testington" });
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/contacts/search?q=ing");
@@ -452,10 +483,13 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>,
     public async Task SearchContact_ReturnsContactFromList()
     {
         // Arrange
-        _context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
-        _context.Contacts.Add(new Contact { FirstName = "Billy", LastName = "Tester" });
-        _context.Contacts.Add(new Contact { FirstName = "Samantha", LastName = "Testarosa" });
-        await _context.SaveChangesAsync();
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+        
+        context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
+        context.Contacts.Add(new Contact { FirstName = "Billy", LastName = "Tester" });
+        context.Contacts.Add(new Contact { FirstName = "Samantha", LastName = "Testarosa" });
+        await context.SaveChangesAsync();
 
         // Act
         var response = await _client.GetAsync("/api/contacts/search?q=tester");

@@ -75,31 +75,29 @@ public class ContactService : IContactService
         if (dto.CompanyId.HasValue)
             existingContact.CompanyId = dto.CompanyId;
 
-        if (dto.FirstName != null)
+        if (dto.FirstName is not null)
             existingContact.FirstName = dto.FirstName;
 
-        if (dto.LastName != null)
+        if (dto.LastName is not null)
             existingContact.LastName = dto.LastName;
 
-        if (dto.Title != null)
+        if (dto.Title is not null)
             existingContact.Title = dto.Title;
 
-        if (dto.Email != null)
+        if (dto.Email is not null)
             existingContact.Email = dto.Email;
 
-        if (dto.PhoneNumber != null)
+        if (dto.PhoneNumber is not null)
             existingContact.PhoneNumber = dto.PhoneNumber;
 
-        if (dto.LinkedInUrl != null)
+        if (dto.LinkedInUrl is not null)
             existingContact.LinkedInUrl = dto.LinkedInUrl;
 
         if (dto.IsPrimaryRecruiter.HasValue)
             existingContact.IsPrimaryRecruiter = dto.IsPrimaryRecruiter;
 
-        if (dto.Notes != null)
+        if (dto.Notes is not null)
             existingContact.Notes = dto.Notes;
-
-        existingContact.UpdatedAt = DateTime.UtcNow;
 
         _context.Contacts.Update(existingContact);
         await _context.SaveChangesAsync();
@@ -123,7 +121,7 @@ public class ContactService : IContactService
 
     public async Task<List<ContactReadDto>> SearchContactsAsync(string q)
     {
-        var searchTerm = q.ToLower();
+        var searchTerm = q.Trim().ToLower();
 
         var contacts = await _context.Contacts
             .AsNoTracking()
@@ -177,12 +175,12 @@ public class ContactService : IContactService
 
         // For update, fields can be null (meaning don't update them)
         // But if they ARE provided, they shouldn't be empty/whitespace
-        if (dto.FirstName != null && string.IsNullOrWhiteSpace(dto.FirstName))
+        if (dto.FirstName is not null && string.IsNullOrWhiteSpace(dto.FirstName))
         {
             errors.Add("Contact first name cannot be empty");
         }
 
-        if (dto.LastName != null && string.IsNullOrWhiteSpace(dto.LastName))
+        if (dto.LastName is not null && string.IsNullOrWhiteSpace(dto.LastName))
         {
             errors.Add("Contact last name cannot be empty");
         }
