@@ -53,6 +53,7 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
   const [suggestions, setSuggestions] = useState<TEntity[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -116,6 +117,21 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
     };
   }, []);
 
+  // Reduce the flicker of the loading indicator
+  //  Only show if the search takes longer than 250ms
+  useEffect(() => {
+    if (!isLoading) {
+      setShowSpinner(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setShowSpinner(true);
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
   const handleSelect = (entity: TEntity) => {
     const displayValue = config.getDisplayValue(entity);
     setQuery(displayValue);
@@ -170,12 +186,12 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
           value={query}
           onChange={handleInputChange}
           placeholder={config.placeholder}
-          disabled={isLoading}
+          aria-busy={isLoading}
           required={required}
         />
       </div>
 
-      {isLoading && (
+      {showSpinner && (
         <div className="absolute right-10 top-1/2 -translate-y-1/2">
           <span className="loading loading-bars loading-xs text-primary"></span>
         </div>

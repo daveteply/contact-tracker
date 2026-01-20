@@ -13,11 +13,11 @@ export const EventInputSchema = z.object({
   contact: z.object(
     {
       id: z.number().optional(),
-      firstName: z.string().min(1),
-      lastName: z.string().min(1),
+      firstName: z.string("First name can't be empty").min(1),
+      lastName: z.string("Last name can't be empty").min(1),
       isNew: z.boolean(),
     },
-    "Contact can't be empty",
+    "Contact first and last name can't be empty",
   ),
   role: z.object(
     {
