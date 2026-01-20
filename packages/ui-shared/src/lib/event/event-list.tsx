@@ -1,58 +1,26 @@
 import { EventReadDtoWithRelations } from '@contact-tracker/api-models';
 import Link from 'next/link';
+import CompanyInfoCard from '../company/company-info-card';
+import ContactInfoCard from '../contact/contact-info-card';
 
 export interface EventListProps {
-  eventList: EventReadDtoWithRelations[];
+  events: EventReadDtoWithRelations[];
 }
 
 export function EventList(props: EventListProps) {
   return (
     <div className="mt-5 flex flex-wrap">
-      {props.eventList && props.eventList.length ? (
+      {props.events && props.events.length ? (
         <>
-          {props.eventList.map((event: EventReadDtoWithRelations) => (
+          {props.events.map((event: EventReadDtoWithRelations) => (
             <div
               className="card bg-neutral text-neutral-content w-64 shadow-sm mb-3 mr-3"
               key={event.id}
             >
               <div className="card-body">
+                {event.company && <CompanyInfoCard company={event.company}></CompanyInfoCard>}
+                {event.contact && <ContactInfoCard contact={event.contact}></ContactInfoCard>}
                 <ul>
-                  <li>
-                    <div className="card card-xs">
-                      <div className="card-body">
-                        <h2 className="card-title">{event.company?.name}</h2>
-                      </div>
-                      <ul>
-                        <li>
-                          <Link
-                            href={event.company?.website || ''}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {event.company?.website}
-                            {event.company?.website && (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                className="size-4"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            )}
-                          </Link>
-                        </li>
-                        <li>{event.company?.industry}</li>
-                        <li>{event.company?.sizeRange}</li>
-                        <li>{event.company?.notes}</li>
-                      </ul>
-                    </div>
-                  </li>
-
                   <li>
                     <div className="card card-xs">
                       <div className="card-body">

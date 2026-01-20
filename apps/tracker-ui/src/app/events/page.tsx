@@ -12,7 +12,7 @@ export default async function Index() {
         Add New Event
       </Link>
 
-      <EventList eventList={events} />
+      <EventList events={events} />
     </div>
   );
 }
