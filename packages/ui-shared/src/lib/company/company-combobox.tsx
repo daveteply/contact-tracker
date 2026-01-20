@@ -9,12 +9,14 @@ interface CompanyComboboxProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   onSearch: (query: string) => Promise<CompanyReadDto[]>;
+  required?: boolean;
 }
 
 export function CompanyCombobox<T extends FieldValues>({
   control,
   name,
   onSearch,
+  required = false,
 }: CompanyComboboxProps<T>) {
   return (
     <EntityCombobox
@@ -22,6 +24,7 @@ export function CompanyCombobox<T extends FieldValues>({
       name={name}
       onSearch={onSearch}
       config={companyComboboxConfig}
+      required={required}
     />
   );
 }

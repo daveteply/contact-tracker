@@ -30,6 +30,7 @@ interface EntityComboboxProps<TEntity, T extends FieldValues, TFormValue> {
   name: Path<T>;
   onSearch: (query: string) => Promise<TEntity[]>;
   config: EntityComboboxConfig<TEntity, TFormValue>;
+  required?: boolean;
 }
 
 export function EntityCombobox<TEntity extends { id: number }, T extends FieldValues, TFormValue>({
@@ -37,6 +38,7 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
   name,
   onSearch,
   config,
+  required = false,
 }: EntityComboboxProps<TEntity, T, TFormValue>) {
   const {
     field: { value, onChange, ref },
@@ -161,12 +163,15 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
       <div className="flex items-center gap-2">
         <input
           ref={ref}
+          name={name}
+          autoComplete="off"
           className={`input input-bordered w-full ${error ? 'input-error' : ''}`}
           type="text"
           value={query}
           onChange={handleInputChange}
           placeholder={config.placeholder}
           disabled={isLoading}
+          required={required}
         />
       </div>
 

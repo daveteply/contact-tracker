@@ -9,12 +9,14 @@ interface ContactComboboxProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   onSearch: (query: string) => Promise<ContactReadDto[]>;
+  required?: boolean;
 }
 
 export function ContactCombobox<T extends FieldValues>({
   control,
   name,
   onSearch,
+  required = false,
 }: ContactComboboxProps<T>) {
   return (
     <EntityCombobox
@@ -22,6 +24,7 @@ export function ContactCombobox<T extends FieldValues>({
       name={name}
       onSearch={onSearch}
       config={contactComboboxConfig}
+      required={required}
     />
   );
 }

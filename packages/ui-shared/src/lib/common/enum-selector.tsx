@@ -5,12 +5,14 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 interface EnumSelectorProps<T extends Record<string, string | number>> {
   enumObject: T;
   register: UseFormRegisterReturn;
+  required?: boolean;
   useButtons?: boolean;
 }
 
 export function EnumSelector<T extends Record<string, string | number>>({
   enumObject,
   register,
+  required = false,
   useButtons = false,
 }: EnumSelectorProps<T>) {
   const options = Object.entries(enumObject);
@@ -25,13 +27,14 @@ export function EnumSelector<T extends Record<string, string | number>>({
               className="join-item btn"
               type="radio"
               value={value}
+              required={required}
               aria-label={key}
               {...register}
             />
           ))}
         </div>
       ) : (
-        <select className="select" {...register} defaultValue="">
+        <select className="select" {...register} defaultValue="" required={required}>
           <option value="" disabled>
             Select an option
           </option>

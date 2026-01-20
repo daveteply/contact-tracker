@@ -8,9 +8,15 @@ interface EventTypeSelectProps {
   register: UseFormRegisterReturn;
   onFetchEventTypes: () => Promise<EventTypeReadDto[]>;
   error?: string;
+  required?: boolean;
 }
 
-export function EventTypeSelect({ register, onFetchEventTypes, error }: EventTypeSelectProps) {
+export function EventTypeSelect({
+  register,
+  onFetchEventTypes,
+  error,
+  required = false,
+}: EventTypeSelectProps) {
   const [eventTypes, setEventTypes] = useState<EventTypeReadDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,6 +43,7 @@ export function EventTypeSelect({ register, onFetchEventTypes, error }: EventTyp
         className={`select w-full ${error ? 'select-error' : ''}`}
         disabled={isLoading}
         defaultValue=""
+        required={required}
       >
         <option value="" disabled>
           {isLoading ? 'Loading event types...' : 'Select an event type'}

@@ -9,15 +9,23 @@ interface RoleComboboxProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   onSearch: (query: string) => Promise<RoleReadDto[]>;
+  required?: boolean;
 }
 
 export function RoleCombobox<T extends FieldValues>({
   control,
   name,
   onSearch,
+  required = false,
 }: RoleComboboxProps<T>) {
   return (
-    <EntityCombobox control={control} name={name} onSearch={onSearch} config={roleComboboxConfig} />
+    <EntityCombobox
+      control={control}
+      name={name}
+      onSearch={onSearch}
+      config={roleComboboxConfig}
+      required={required}
+    />
   );
 }
 

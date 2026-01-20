@@ -77,82 +77,112 @@ export function EventForm({
     }
   };
 
+  const getCurrentDateInput = () => {
+    const dateObj = new Date();
+    const month = ('0' + (dateObj.getMonth() + 1)).slice(-2); // Add leading zero if needed
+    const day = ('0' + dateObj.getDate()).slice(-2); // Add leading zero if needed
+    const year = dateObj.getFullYear();
+    const shortDate = `${year}-${month}-${day}`;
+    return shortDate;
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
-      <fieldset className="fieldset w-full">
-        <legend className="fieldset-legend">Direction</legend>
-        <EnumSelector
-          register={register('direction')}
-          enumObject={DirectionType}
-          useButtons={true}
-        />
-        <p className="text-red-600">
-          {errors.direction && <span>{errors.direction.message}</span>}
-        </p>
-      </fieldset>
+    <div className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold text-primary mb-4">Create a new Event</h1>
+      <p className="mb-5">Note: most fields are required</p>
 
-      <fieldset className="fieldset w-full">
-        <legend className="fieldset-legend">Source</legend>
-        <EnumSelector register={register('source')} enumObject={SourceType} />
-        <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
-      </fieldset>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <fieldset className="fieldset w-full">
+          <legend className="fieldset-legend">Direction</legend>
+          <EnumSelector
+            register={register('direction')}
+            enumObject={DirectionType}
+            useButtons={true}
+            required={true}
+          />
+          <p className="text-red-600">
+            {errors.direction && <span>{errors.direction.message}</span>}
+          </p>
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Company</legend>
-        <CompanyCombobox control={control} name="company" onSearch={onSearchCompany} />
-        {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
-      </fieldset>
+        <fieldset className="fieldset w-full">
+          <legend className="fieldset-legend">Source</legend>
+          <EnumSelector register={register('source')} enumObject={SourceType} required={true} />
+          <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Contact</legend>
-        <ContactCombobox control={control} name="contact" onSearch={onSearchContact} />
-        {errors.contact?.firstName && (
-          <p className="text-red-600">{errors.contact.firstName.message}</p>
-        )}
-        {errors.contact?.lastName && (
-          <p className="text-red-600">{errors.contact.lastName.message}</p>
-        )}
-      </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Company</legend>
+          <CompanyCombobox
+            control={control}
+            name="company"
+            onSearch={onSearchCompany}
+            required={true}
+          />
+          {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Role</legend>
-        <RoleCombobox control={control} name="role" onSearch={onSearchRole} />
-        {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
-      </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Contact</legend>
+          <ContactCombobox
+            control={control}
+            name="contact"
+            onSearch={onSearchContact}
+            required={true}
+          />
+          {errors.contact?.firstName && (
+            <p className="text-red-600">{errors.contact.firstName.message}</p>
+          )}
+          {errors.contact?.lastName && (
+            <p className="text-red-600">{errors.contact.lastName.message}</p>
+          )}
+        </fieldset>
 
-      <fieldset className="fieldset w-full">
-        <legend className="fieldset-legend">Event Type</legend>
-        <EventTypeSelect
-          register={register('eventTypeId', { valueAsNumber: true })}
-          onFetchEventTypes={onFetchEventTypes}
-          error={errors.eventTypeId?.message}
-        />
-      </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Role</legend>
+          <RoleCombobox control={control} name="role" onSearch={onSearchRole} required={true} />
+          {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Date</legend>
-        <input type="date" className="input" {...register('occurredAt', { valueAsDate: true })} />
-        <p className="text-red-600">
-          {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
-        </p>
-      </fieldset>
+        <fieldset className="fieldset w-full">
+          <legend className="fieldset-legend">Event Type</legend>
+          <EventTypeSelect
+            register={register('eventTypeId', { valueAsNumber: true })}
+            onFetchEventTypes={onFetchEventTypes}
+            error={errors.eventTypeId?.message}
+          />
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Summary</legend>
-        <input className="input" {...register('summary')} />
-        <p className="text-red-600">{errors.summary && <span>{errors.summary.message}</span>}</p>
-      </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Date</legend>
+          <input
+            type="date"
+            className="input"
+            {...register('occurredAt', { valueAsDate: true })}
+            defaultValue={getCurrentDateInput()}
+          />
+          <p className="text-red-600">
+            {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
+          </p>
+        </fieldset>
 
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Details</legend>
-        <textarea className="textarea" {...register('details')} />
-        <p className="text-red-600">{errors.details && <span>{errors.details.message}</span>}</p>
-      </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Summary (optional)</legend>
+          <input className="input" {...register('summary')} />
+          <p className="text-red-600">{errors.summary && <span>{errors.summary.message}</span>}</p>
+        </fieldset>
 
-      <button className="btn mt-4" type="submit" disabled={isSubmitting}>
-        {isEdit ? 'Update' : 'Create'}
-      </button>
-    </form>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Details (optional)</legend>
+          <textarea className="textarea" {...register('details')} />
+          <p className="text-red-600">{errors.details && <span>{errors.details.message}</span>}</p>
+        </fieldset>
+
+        <button className="btn mt-4" type="submit" disabled={isSubmitting}>
+          {isEdit ? 'Update' : 'Create'}
+        </button>
+      </form>
+    </div>
   );
 }
 
