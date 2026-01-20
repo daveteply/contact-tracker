@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     [DbContext(typeof(ContactTrackerDbContext))]
-    [Migration("20260119182952_Initial")]
-    partial class Initial
+    [Migration("20260120122936_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,8 +43,7 @@ namespace tracker_api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("case_insensitive");
+                        .HasColumnType("text");
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
@@ -89,16 +88,14 @@ namespace tracker_api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("case_insensitive");
+                        .HasColumnType("text");
 
                     b.Property<bool?>("IsPrimaryRecruiter")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("case_insensitive");
+                        .HasColumnType("text");
 
                     b.Property<string>("LinkedInUrl")
                         .HasColumnType("text");
@@ -328,8 +325,7 @@ namespace tracker_api.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("case_insensitive");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
