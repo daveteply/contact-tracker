@@ -3,6 +3,9 @@ import Link from 'next/link';
 import CompanyInfoCard from '../company/company-info-card';
 import ContactInfoCard from '../contact/contact-info-card';
 import RoleInfoCard from '../role/role-info-card';
+import { EventTypeInfoCard } from './event-type-info-card';
+import FormattedDate from '../common/formatted-date';
+import DirectionInfo from '../common/direction-info';
 
 export interface EventListProps {
   events: EventReadDtoWithRelations[];
@@ -19,17 +22,29 @@ export function EventList(props: EventListProps) {
               key={event.id}
             >
               <div className="card-body">
+                {event.direction && <DirectionInfo direction={event.direction} />}
                 {event.company && <CompanyInfoCard company={event.company} renderFull={false} />}
                 {event.contact && <ContactInfoCard contact={event.contact} renderFull={false} />}
                 {event.role && <RoleInfoCard role={event.role} renderFull={false} />}
+                {event.eventType && (
+                  <EventTypeInfoCard eventType={event.eventType} renderFull={false} />
+                )}
                 <ul>
-                  <li>{event.roleId}</li>
-                  <li>{event.eventTypeId}</li>
-                  {/* {<li>{event.occurredAt.toDateString()}</li>} */}
-                  <li>{event.summary}</li>
-                  <li>{event.details}</li>
-                  <li>{event.source}</li>
-                  <li>{event.direction}</li>
+                  <li>
+                    <FormattedDate dateValue={event.occurredAt} />
+                  </li>
+                  <li>
+                    {event.summary && <span>Summary: </span>}
+                    {event.summary}
+                  </li>
+                  <li>
+                    {event.details && <span>Details: </span>}
+                    {event.details}
+                  </li>
+                  <li>
+                    {event.source && <span>Source: </span>}
+                    {event.source}
+                  </li>
                 </ul>
               </div>
             </div>

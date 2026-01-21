@@ -121,6 +121,7 @@ public record EventCreateDto(
     long? RoleId,
     RoleCreateDto? NewRole,
     int EventTypeId,
+    EventTypeReadDto? EventType,
     DateTime OccurredAt,
     string? Summary,
     string? Details,
@@ -137,6 +138,7 @@ public record EventUpdateDto(
     long? RoleId,
     RoleUpdateDto? UpdateRole,
     int? EventTypeId,
+    EventTypeReadDto? EventType,
     DateTime? OccurredAt,
     string? Summary,
     string? Details,
@@ -148,18 +150,18 @@ public record EventUpdateDto(
 public record EventReadDtoWithRelations(
     long Id,
     long? CompanyId,
-    CompanyReadDto? Company,    
+    CompanyReadDto? Company,
     long? ContactId,
-    ContactReadDto? Contact,    
+    ContactReadDto? Contact,
     long? RoleId,
-    RoleReadDto? Role,    
+    RoleReadDto? Role,
     int EventTypeId,
+    EventTypeReadDto? EventType,
     DateTime OccurredAt,
     string? Summary,
     string? Details,
     SourceType Source,
-    DirectionType Direction,
-    EventTypeReadDto? EventType
+    DirectionType Direction
 );
 
 // -----------------------------

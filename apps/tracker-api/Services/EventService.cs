@@ -78,17 +78,17 @@ public class EventService : IEventService
                 e.Role.Level
             ) : null,
             e.EventTypeId,
-            e.OccurredAt,
-            e.Summary,
-            e.Details,
-            e.Source,
-            e.Direction,
             e.EventType is not null ? new EventTypeReadDto(
                 e.EventType.Id,
                 e.EventType.Name,
                 e.EventType.Category,
                 e.EventType.IsSystemDefined
-            ) : null
+            ) : null,
+            e.OccurredAt,
+            e.Summary,
+            e.Details,
+            e.Source,
+            e.Direction
         )).ToList();
 
         var metadata = new PaginationMetadata(

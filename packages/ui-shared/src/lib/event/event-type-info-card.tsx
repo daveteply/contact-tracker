@@ -1,0 +1,32 @@
+'use client';
+
+import { EventTypeReadDto } from '@contact-tracker/api-models';
+
+export interface EventTypeCardProps {
+  eventType: EventTypeReadDto;
+  renderFull?: boolean;
+}
+
+export function EventTypeInfoCard({ eventType, renderFull = true }: EventTypeCardProps) {
+  return (
+    <div className="card w-50 bg-base-100 card-sm shadow-sm">
+      <div className="card-body">
+        {renderFull ? (
+          <>
+            <h2 className="card-title">{eventType.name}</h2>
+            <ul>
+              <li>{eventType.category}</li>
+              <li>{eventType.isSystemDefined}</li>
+            </ul>
+          </>
+        ) : (
+          <div className="flex">
+            <h2 className="card-title  pr-1">{eventType.name} </h2>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default EventTypeCardProps;
