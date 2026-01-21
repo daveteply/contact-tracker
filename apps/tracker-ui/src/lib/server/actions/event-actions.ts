@@ -55,8 +55,6 @@ export async function createEventAction(data: EventInput) {
     direction: data.direction,
   };
 
-  console.log('DTO being sent to API:', JSON.stringify(dto, null, 2)); // ← Add this
-
   return handleActionResult(createEvent(dto), 'Event created!');
 }
 
