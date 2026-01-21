@@ -5,20 +5,30 @@ import ExternalLink from '../common/external-link';
 
 export interface RoleCardProps {
   role: RoleReadDto;
+  renderFull?: boolean;
 }
 
-export function RoleInfoCard({ role }: RoleCardProps) {
+export function RoleInfoCard({ role, renderFull = true }: RoleCardProps) {
   return (
     <div className="card w-50 bg-base-100 card-sm shadow-sm">
       <div className="card-body">
-        <h2 className="card-title">{role.title}</h2>
-        <ul>
-          <li>{role.level}</li>
-          <li>
-            <ExternalLink url={role.jobPostingUrl} />
-          </li>
-          <li>{role.location}</li>
-        </ul>
+        {renderFull ? (
+          <>
+            <h2 className="card-title">{role.title}</h2>
+            <ul>
+              <li>{role.level}</li>
+              <li>
+                <ExternalLink url={role.jobPostingUrl} iconOnly={!renderFull} />
+              </li>
+              <li>{role.location}</li>
+            </ul>
+          </>
+        ) : (
+          <div className="flex">
+            <h2 className="card-title pr-1">{role.title}</h2>
+            <ExternalLink url={role.jobPostingUrl} iconOnly={!renderFull} />
+          </div>
+        )}
       </div>
     </div>
   );

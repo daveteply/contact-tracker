@@ -19,9 +19,9 @@ export function EventList(props: EventListProps) {
               key={event.id}
             >
               <div className="card-body">
-                {event.company && <CompanyInfoCard company={event.company} />}
-                {event.contact && <ContactInfoCard contact={event.contact} />}
-                {event.role && <RoleInfoCard role={event.role} />}
+                {event.company && <CompanyInfoCard company={event.company} renderFull={false} />}
+                {event.contact && <ContactInfoCard contact={event.contact} renderFull={false} />}
+                {event.role && <RoleInfoCard role={event.role} renderFull={false} />}
                 <ul>
                   <li>{event.roleId}</li>
                   <li>{event.eventTypeId}</li>
