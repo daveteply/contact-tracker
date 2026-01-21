@@ -1,6 +1,7 @@
 export * from './lib/common/toast-context';
 export * from './lib/common/enum-selector';
 export * from './lib/common/bread-crumbs';
+export * from './lib/common/external-link';
 
 export * from './lib/company/company-form';
 export * from './lib/company/company-list';

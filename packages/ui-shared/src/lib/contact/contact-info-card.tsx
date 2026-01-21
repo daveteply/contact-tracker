@@ -1,6 +1,7 @@
 'use client';
 
 import { ContactReadDto } from '@contact-tracker/api-models';
+import ExternalLink, { ExternalLinkType } from '../common/external-link';
 
 export interface ContactCardProps {
   contact: ContactReadDto;
@@ -15,9 +16,15 @@ export function ContactInfoCard({ contact }: ContactCardProps) {
         </h2>
         <h2>{contact.title}</h2>
         <ul>
-          <li>{contact.email}</li>
-          <li>{contact.phoneNumber}</li>
-          <li>{contact.linkedInUrl}</li>
+          <li>
+            <ExternalLink url={contact.email} linkType={ExternalLinkType.Email} />
+          </li>
+          <li>
+            <ExternalLink url={contact.phoneNumber} linkType={ExternalLinkType.Phone} />{' '}
+          </li>
+          <li>
+            <ExternalLink url={contact.linkedInUrl} />
+          </li>
           <li>{contact.isPrimaryRecruiter}</li>
           <li>{contact.notes}</li>
         </ul>

@@ -65,3 +65,5 @@ export function EventTypeSelect({
     </div>
   );
 }
+
+export default EventTypeSelect;

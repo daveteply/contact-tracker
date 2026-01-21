@@ -48,3 +48,5 @@ export function EnumSelector<T extends Record<string, string | number>>({
     </div>
   );
 }
+
+export default EnumSelector;

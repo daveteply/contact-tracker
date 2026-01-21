@@ -3,7 +3,7 @@ import { fetchEvents } from '@/lib/server/clients/events-client';
 import Link from 'next/link';
 
 export default async function Index() {
-  const events = await fetchEvents(undefined, undefined, 'company,contact');
+  const events = await fetchEvents(undefined, undefined, 'company,contact,role');
 
   return (
     <div>
