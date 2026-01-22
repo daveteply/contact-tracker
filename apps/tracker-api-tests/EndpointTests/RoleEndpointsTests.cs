@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using tracker_api.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace tracker_api.Tests;
@@ -19,12 +20,12 @@ public class RoleEndpointsTests : IAsyncDisposable
     {
         _factory = new CustomWebApplicationFactory(databaseFixture);
         _client = _factory.CreateClient();
-        
+
         // Clean database before each test
         CleanDatabase().GetAwaiter().GetResult();
     }
 
-   private async Task CleanDatabase()
+    private async Task CleanDatabase()
     {
         await _factory.ResetDatabaseAsync();
     }
@@ -135,6 +136,79 @@ public class RoleEndpointsTests : IAsyncDisposable
         Assert.NotNull(result);
         Assert.NotNull(result!.Data);
         Assert.Equal(2, result.Data.Count);
+    }
+
+    [Fact]
+    public async Task CanDeleteRole_WithNoRelatedEvents_ReturnsTrue()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var role = new Role
+        {
+            Title = "Software Tester"
+        };
+        context.Roles.Add(role);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/roles/{role.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanDeleteRole_WithRelatedEvents_ReturnsFalse()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var role = new Role
+        {
+            Title = "Software Tester"
+        };
+        context.Roles.Add(role);
+        await context.SaveChangesAsync();
+
+        // Get or create EventType
+        var eventType = await context.EventTypes.FirstOrDefaultAsync();
+        if (eventType == null)
+        {
+            eventType = new EventType
+            {
+                Id = 1,
+                Name = "Meeting",
+                Category = "Testing Category",
+                IsSystemDefined = true
+            };
+            context.EventTypes.Add(eventType);
+            await context.SaveChangesAsync();
+        }
+        // If eventType already exists, don't add it again - just use its Id
+
+        var eventItem = new Event
+        {
+            RoleId = role.Id,
+            EventTypeId = eventType.Id,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            OccurredAt = DateTime.UtcNow
+        };
+        context.Events.Add(eventItem);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/roles/{role.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.False(result);
     }
 
     public async ValueTask DisposeAsync()

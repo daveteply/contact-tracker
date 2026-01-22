@@ -20,7 +20,7 @@ public class ContactEndpointsTests : IAsyncDisposable
     {
         _factory = new CustomWebApplicationFactory(databaseFixture);
         _client = _factory.CreateClient();
-        
+
         // Clean database before each test
         CleanDatabase().GetAwaiter().GetResult();
     }
@@ -60,7 +60,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -105,7 +105,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -160,7 +160,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -211,7 +211,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -237,7 +237,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -262,7 +262,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -297,7 +297,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -353,7 +353,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -378,7 +378,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -417,7 +417,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Test Company", Industry = "Tech" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -460,7 +460,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
         context.Contacts.Add(new Contact { FirstName = "June", LastName = "Summers" });
         context.Contacts.Add(new Contact { FirstName = "Albert", LastName = "Testington" });
@@ -485,7 +485,7 @@ public class ContactEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         context.Contacts.Add(new Contact { FirstName = "Joe", LastName = "Tester" });
         context.Contacts.Add(new Contact { FirstName = "Billy", LastName = "Tester" });
         context.Contacts.Add(new Contact { FirstName = "Samantha", LastName = "Testarosa" });
@@ -505,4 +505,79 @@ public class ContactEndpointsTests : IAsyncDisposable
     }
 
     #endregion
+
+    [Fact]
+    public async Task CanDeleteContact_WithNoRelatedEvents_ReturnsTrue()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var contact = new Contact
+        {
+            FirstName = "David",
+            LastName = "Testing"
+        };
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/contacts/{contact.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanDeleteContact_WithRelatedEvents_ReturnsFalse()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var contact = new Contact
+        {
+            FirstName = "David",
+            LastName = "Testing"
+        };
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync();
+
+        // Get or create EventType
+        var eventType = await context.EventTypes.FirstOrDefaultAsync();
+        if (eventType == null)
+        {
+            eventType = new EventType
+            {
+                Id = 1,
+                Name = "Meeting",
+                Category = "Testing Category",
+                IsSystemDefined = true
+            };
+            context.EventTypes.Add(eventType);
+            await context.SaveChangesAsync();
+        }
+        // If eventType already exists, don't add it again - just use its Id
+
+        var eventItem = new Event
+        {
+            ContactId = contact.Id,
+            EventTypeId = eventType.Id,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            OccurredAt = DateTime.UtcNow
+        };
+        context.Events.Add(eventItem);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/contacts/{contact.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.False(result);
+    }
 }
