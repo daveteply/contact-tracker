@@ -21,7 +21,7 @@ public class EventEndpointsTests : IAsyncDisposable
     {
         _factory = new CustomWebApplicationFactory(databaseFixture);
         _client = _factory.CreateClient();
-        
+
         // Clean database before each test
         CleanDatabase().GetAwaiter().GetResult();
     }
@@ -37,11 +37,11 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         // EventTypes are seeded, so we can use the seeded IDs
         // Or verify they exist first
         var eventType = await context.EventTypes.FirstOrDefaultAsync(et => et.Name == "Applied");
-        
+
         // If not seeded in test DB, create one
         if (eventType == null)
         {
@@ -94,7 +94,7 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var existingCompany = new Company { Name = "Existing Corp" };
         context.Companies.Add(existingCompany);
 
@@ -105,7 +105,7 @@ public class EventEndpointsTests : IAsyncDisposable
             eventType = new EventType { Id = 2, Name = "Call", Category = "General", IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
-        
+
         await context.SaveChangesAsync();
 
         var dto = new EventCreateDto(
@@ -113,6 +113,7 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Existing Corp", null, null, null, null), // Matches existing name
             ContactId: null, NewContact: null, RoleId: null, NewRole: null,
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Test", Details: "Test",
+            EventType: null,
             Source: SourceType.Email, Direction: DirectionType.Inbound
         );
 
@@ -137,7 +138,7 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
@@ -153,6 +154,7 @@ public class EventEndpointsTests : IAsyncDisposable
             RoleId: null,
             NewRole: new RoleCreateDto(null, "Founding Engineer", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Founders Meeting", Details: "Initial chat",
+            EventType: null,
             Source: SourceType.LinkedIn, Direction: DirectionType.Inbound
         );
 
@@ -189,14 +191,14 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
             eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
-        
+
         var originalCompany = new Company { Name = "Original Corp" };
         var existingOtherCompany = new Company { Name = "Target Corp" };
         var @event = new Event
@@ -217,6 +219,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("Target Corp", null, null, null, null), // Match existing
             ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
             EventTypeId: null, OccurredAt: null, Summary: "Updated Summary", Details: null,
+            EventType: null,
             Source: null, Direction: null
         );
 
@@ -239,27 +242,27 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
             eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
-        
+
         var company = new Company
         {
             Name = "Old Name",
             Website = "https://important-site.com",
             Notes = "Sensitive data"
         };
-        var @event = new Event 
-        { 
-            OccurredAt = DateTime.UtcNow, 
-            Source = SourceType.Email, 
-            Direction = DirectionType.Inbound, 
-            Company = company, 
-            EventTypeId = eventType.Id 
+        var @event = new Event
+        {
+            OccurredAt = DateTime.UtcNow,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            Company = company,
+            EventTypeId = eventType.Id
         };
 
         context.Events.Add(@event);
@@ -270,6 +273,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("New Name", null, null, null, null), // Only name provided
             ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
+            EventType: null,
             Source: null, Direction: null
         );
 
@@ -291,20 +295,20 @@ public class EventEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
             eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
-        
-        var @event = new Event 
-        { 
-            OccurredAt = DateTime.UtcNow, 
-            Source = SourceType.Email, 
-            Direction = DirectionType.Inbound, 
-            EventTypeId = eventType.Id 
+
+        var @event = new Event
+        {
+            OccurredAt = DateTime.UtcNow,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            EventTypeId = eventType.Id
         };
         context.Events.Add(@event);
         await context.SaveChangesAsync();
@@ -316,6 +320,7 @@ public class EventEndpointsTests : IAsyncDisposable
             RoleId: null,
             UpdateRole: new RoleUpdateDto(null, "CTO", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
+            EventType: null,
             Source: null, Direction: null
         );
 

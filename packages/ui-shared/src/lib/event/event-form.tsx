@@ -77,7 +77,7 @@ export function EventForm({
     }
   };
 
-  const getCurrentDateInput = () => {
+  const getCurrentDate = () => {
     const dateObj = new Date();
     const month = ('0' + (dateObj.getMonth() + 1)).slice(-2); // Add leading zero if needed
     const day = ('0' + dateObj.getDate()).slice(-2); // Add leading zero if needed
@@ -88,17 +88,25 @@ export function EventForm({
 
   return (
     <div className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold text-primary mb-4">Create a new Event</h1>
-      <p className="mb-5">Note: most fields are required</p>
-
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="fieldset w-full">
+          <legend className="fieldset-legend">Event Type</legend>
+          <EventTypeSelect
+            register={register('eventTypeId', { valueAsNumber: true })}
+            onFetchEventTypes={onFetchEventTypes}
+            error={errors.eventTypeId?.message}
+            required={true}
+          />
+        </fieldset>
+
+        <fieldset className="fieldset">
           <legend className="fieldset-legend">Direction</legend>
           <EnumSelector
             register={register('direction')}
             enumObject={DirectionType}
             useButtons={true}
             required={true}
+            defaultVale={DirectionType.Outbound}
           />
           <p className="text-red-600">
             {errors.direction && <span>{errors.direction.message}</span>}
@@ -144,22 +152,13 @@ export function EventForm({
           {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
         </fieldset>
 
-        <fieldset className="fieldset w-full">
-          <legend className="fieldset-legend">Event Type</legend>
-          <EventTypeSelect
-            register={register('eventTypeId', { valueAsNumber: true })}
-            onFetchEventTypes={onFetchEventTypes}
-            error={errors.eventTypeId?.message}
-          />
-        </fieldset>
-
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Date</legend>
           <input
             type="date"
             className="input"
             {...register('occurredAt', { valueAsDate: true })}
-            defaultValue={getCurrentDateInput()}
+            defaultValue={getCurrentDate()}
           />
           <p className="text-red-600">
             {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
@@ -178,9 +177,14 @@ export function EventForm({
           <p className="text-red-600">{errors.details && <span>{errors.details.message}</span>}</p>
         </fieldset>
 
-        <button className="btn mt-4" type="submit" disabled={isSubmitting}>
-          {isEdit ? 'Update' : 'Create'}
-        </button>
+        <div className="mt-4">
+          <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+            {isEdit ? 'Update' : 'Create'}
+          </button>
+          <button className="btn ml-3" onClick={() => router.push('/events')}>
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

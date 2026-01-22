@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 
 export interface FormattedDateProps {
   dateValue?: Date;
-  showTime?: boolean;
+  useRelativeTime?: boolean;
 }
 
-export function FormattedDate({ dateValue, showTime = false }: FormattedDateProps) {
+export function FormattedDate({ dateValue, useRelativeTime = true }: FormattedDateProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -16,14 +16,21 @@ export function FormattedDate({ dateValue, showTime = false }: FormattedDateProp
 
   if (!mounted || !dateValue) return null;
 
-  const date = new Date(dateValue);
+  const eventDate = new Date(dateValue);
+  if (useRelativeTime) {
+    const currentDate = new Date();
+    const differenceInMs = eventDate.getTime() - currentDate.getTime();
+    // A day has 86,400,000 milliseconds (1000 * 60 * 60 * 24)
+    const differenceInDays = Math.round(differenceInMs / 86400000);
+    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    const formattedTime = rtf.format(differenceInDays, 'day');
+    return <span>{formattedTime}</span>;
+  }
 
   return (
     <span>
       {
-        showTime
-          ? date.toLocaleString() // Date and Time (e.g., "1/23/2026, 10:00:00 AM")
-          : date.toLocaleDateString() // Date only (e.g., "1/23/2026")
+        eventDate.toLocaleDateString() // Date only (e.g., "1/23/2026")
       }
     </span>
   );

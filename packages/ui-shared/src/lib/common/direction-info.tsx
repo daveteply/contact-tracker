@@ -28,8 +28,7 @@ export function DirectionInfo({ direction }: DirectionInfoProps) {
   };
 
   return (
-    <div className="flex text-accent">
-      <span className="pr-1">{direction}</span>
+    <div className="flex items-center pr-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -38,6 +37,7 @@ export function DirectionInfo({ direction }: DirectionInfoProps) {
       >
         {directionIcon(direction)}
       </svg>
+      <span className="pl-1">{direction}</span>
     </div>
   );
 }

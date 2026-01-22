@@ -8,8 +8,8 @@ public interface IEventService
         int page,
         int pageSize,
         HashSet<string> includeRelations);
-    Task<EventReadDto> GetEventByIdAsync(long id);
-    Task<EventReadDto> CreateEventAsync(EventCreateDto @event);
-    Task<EventReadDto> UpdateEventAsync(long id, EventUpdateDto @event);
+    Task<EventReadDtoWithRelations> GetEventByIdAsync(long id, HashSet<string> includeRelations);
+    Task<EventReadDtoWithRelations> CreateEventAsync(EventCreateDto @event);
+    Task<EventReadDtoWithRelations> UpdateEventAsync(long id, EventUpdateDto @event);
     Task DeleteEventAsync(long id);
 }

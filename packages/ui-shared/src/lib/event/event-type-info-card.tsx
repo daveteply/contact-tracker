@@ -9,7 +9,7 @@ export interface EventTypeCardProps {
 
 export function EventTypeInfoCard({ eventType, renderFull = true }: EventTypeCardProps) {
   return (
-    <div className="card w-50 bg-base-100 card-sm shadow-sm">
+    <div className="card bg-base-300 card-sm shadow-sm">
       <div className="card-body">
         {renderFull ? (
           <>

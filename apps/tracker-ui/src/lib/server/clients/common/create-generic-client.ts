@@ -33,7 +33,7 @@ export function createGenericClient<TRead, TCreate, TUpdate>(resourcePath: strin
         resourcePath,
         `/${id}`,
         { cache: 'no-store' },
-        include ? new URLSearchParams([['include', include]]) : undefined,
+        createParams('', '', include),
       ),
 
     create: (data: TCreate) =>
