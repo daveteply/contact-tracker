@@ -31,6 +31,13 @@ public interface ICompanyService
     Task<List<CompanyReadDto>> SearchCompaniesAsync(string q);
 
     /// <summary>
+    /// Checks for related records
+    /// </summary>
+    /// <param name="companyId"></param>
+    /// <returns></returns>
+    Task<bool> CanDeleteCompany(long companyId);
+
+    /// <summary>
     /// Delete a company by ID
     /// </summary>
     Task DeleteCompanyAsync(long id);

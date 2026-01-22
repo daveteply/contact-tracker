@@ -115,6 +115,12 @@ public class RoleService : IRoleService
         return roles.Select(MapToReadDto).ToList();
     }
 
+    public async Task<bool> CanDeleteRole(long roleId)
+    {
+        var eventCount = await _context.Events.Where(e => e.RoleId == roleId).CountAsync();
+        return eventCount == 0;
+    }
+
     private static RoleReadDto MapToReadDto(Role role)
     {
         return new RoleReadDto(
@@ -158,4 +164,5 @@ public class RoleService : IRoleService
             throw new ValidationException("Role validation failed", errors);
         }
     }
+
 }

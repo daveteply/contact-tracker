@@ -119,6 +119,12 @@ public class ContactService : IContactService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<bool> CanDeleteContact(long contactId)
+    {
+        var eventCount = await _context.Events.Where(e => e.ContactId == contactId).CountAsync();
+        return eventCount == 0;
+    }
+
     public async Task<List<ContactReadDto>> SearchContactsAsync(string q)
     {
         var searchTerm = q.Trim().ToLower();

@@ -35,4 +35,11 @@ public interface IContactService
     /// Delete a contact by ID
     /// </summary>
     Task DeleteContactAsync(long id);
+
+    /// <summary>
+    /// Checks for related records
+    /// </summary>
+    /// <param name="contactId"></param>
+    /// <returns></returns>
+    Task<bool> CanDeleteContact(long contactId);
 }

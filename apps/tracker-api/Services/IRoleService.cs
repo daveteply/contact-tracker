@@ -44,4 +44,11 @@ public interface IRoleService
     /// <param name="id"></param>
     /// <returns></returns>
     Task DeleteRoleAsync(long id);
+
+    /// <summary>
+    /// Checks for related records
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<bool> CanDeleteRole(long roleId);
 }

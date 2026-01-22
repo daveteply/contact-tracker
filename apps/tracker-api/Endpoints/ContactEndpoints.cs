@@ -35,6 +35,16 @@ public static class ContactEndpoints
         group.MapGet("/search", SearchContacts)
             .WithName("SearchContacts")
             .WithDescription("Search contact by first or last name");
+
+        group.MapGet("/{id}/can-delete", CanDeleteContact)
+            .WithName("CanDeleteContact")
+            .WithDescription("Checks for related records");
+    }
+
+    private static async Task<IResult> CanDeleteContact(long id, [FromServices] IContactService service)
+    {
+        var canDelete = await service.CanDeleteContact(id);
+        return Results.Ok(canDelete);
     }
 
     private static async Task<IResult> GetAllContacts([FromServices] IContactService service)

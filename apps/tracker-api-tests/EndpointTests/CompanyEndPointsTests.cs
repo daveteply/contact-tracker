@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using tracker_api.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace tracker_api.Tests;
 
@@ -19,7 +20,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
     {
         _factory = new CustomWebApplicationFactory(databaseFixture);
         _client = _factory.CreateClient();
-        
+
         // Clean database before each test
         CleanDatabase().GetAwaiter().GetResult();
     }
@@ -80,7 +81,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company
         {
             Name = "Dream Corp",
@@ -111,7 +112,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company
         {
             Name = "Stripe",
@@ -142,7 +143,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "TempCo" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -162,7 +163,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company
         {
             Name = "Search the World",
@@ -190,7 +191,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         context.Companies.Add(new Company { Name = "Search the World", Industry = "Software" });
         context.Companies.Add(new Company { Name = "Software R Us", Industry = "Software" });
         context.Companies.Add(new Company { Name = "Building the World", Industry = "Software" });
@@ -215,7 +216,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         context.Companies.Add(new Company { Name = "OpenAI" });
         await context.SaveChangesAsync();
 
@@ -242,7 +243,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var c1 = new Company { Name = "Google" };
         var c2 = new Company { Name = "Amazon" };
         context.Companies.AddRange(c1, c2);
@@ -267,7 +268,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
         // Arrange
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
-        
+
         var company = new Company { Name = "Netflix" };
         context.Companies.Add(company);
         await context.SaveChangesAsync();
@@ -283,6 +284,81 @@ public class CompanyEndpointsTests : IAsyncDisposable
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CanDeleteCompany_WithNoRelatedEvents_ReturnsTrue()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var company = new Company
+        {
+            Name = "Stripe",
+            Industry = "FinTech"
+        };
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/companies/{company.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task CanDeleteCompany_WithRelatedEvents_ReturnsFalse()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
+
+        var company = new Company
+        {
+            Name = "Stripe",
+            Industry = "FinTech"
+        };
+        context.Companies.Add(company);
+        await context.SaveChangesAsync();
+
+        // Get or create EventType
+        var eventType = await context.EventTypes.FirstOrDefaultAsync();
+        if (eventType == null)
+        {
+            eventType = new EventType
+            {
+                Id = 1,
+                Name = "Meeting",
+                Category = "Testing Category",
+                IsSystemDefined = true
+            };
+            context.EventTypes.Add(eventType);
+            await context.SaveChangesAsync();
+        }
+        // If eventType already exists, don't add it again - just use its Id
+
+        var eventItem = new Event
+        {
+            CompanyId = company.Id,
+            EventTypeId = eventType.Id,
+            Source = SourceType.Email,
+            Direction = DirectionType.Inbound,
+            OccurredAt = DateTime.UtcNow
+        };
+        context.Events.Add(eventItem);
+        await context.SaveChangesAsync();
+
+        // Act
+        var response = await _client.GetAsync($"/api/companies/{company.Id}/can-delete");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<bool>(CustomWebApplicationFactory.JsonOptions);
+        Assert.False(result);
     }
 
     public async ValueTask DisposeAsync()

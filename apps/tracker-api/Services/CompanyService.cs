@@ -41,7 +41,7 @@ public class CompanyService : ICompanyService
         if (await _context.Companies.AnyAsync(c => c.Name.ToLower() == dto.Name.ToLower()))
         {
             throw new ValidationException("A company with this name already exists.",
-                 new List<string> { "Company name must be unique." } );
+                 new List<string> { "Company name must be unique." });
         }
 
         ValidateCompanyCreate(dto);
@@ -59,9 +59,9 @@ public class CompanyService : ICompanyService
 
         try
         {
-            await _context.SaveChangesAsync();    
+            await _context.SaveChangesAsync();
         }
-       catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
             DuplicateFound();
         }
@@ -82,11 +82,12 @@ public class CompanyService : ICompanyService
         ValidateCompanyUpdate(dto);
 
         // Only update properties that are provided (not null)
-        if (dto.Name is not null) {
+        if (dto.Name is not null)
+        {
             var exists = await _context.Companies
                 .AnyAsync(c => c.Id != id && c.Name.ToLower() == dto.Name.ToLower());
 
-            if (exists) 
+            if (exists)
             {
                 DuplicateFound();
             }
@@ -106,11 +107,11 @@ public class CompanyService : ICompanyService
         if (dto.Notes is not null)
             existingCompany.Notes = dto.Notes;
 
-        try 
+        try
         {
             await _context.SaveChangesAsync();
         }
-         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
             DuplicateFound();
         }
@@ -132,6 +133,12 @@ public class CompanyService : ICompanyService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<bool> CanDeleteCompany(long companyId)
+    {
+        var eventCount = await _context.Events.Where(e => e.CompanyId == companyId).CountAsync();
+        return eventCount == 0;
+    }
+
     public async Task<List<CompanyReadDto>> SearchCompaniesAsync(string q)
     {
         var searchTerm = q.Trim().ToLower();
@@ -141,7 +148,7 @@ public class CompanyService : ICompanyService
             .Where(c => c.Name.ToLower().Contains(searchTerm))
             .ToListAsync();
 
-            return companies.Select(MapToReadDto).ToList();
+        return companies.Select(MapToReadDto).ToList();
     }
 
     private static CompanyReadDto MapToReadDto(Company company)
@@ -195,4 +202,5 @@ public class CompanyService : ICompanyService
             new List<string> { "Company name must be unique." }
         );
     }
+
 }

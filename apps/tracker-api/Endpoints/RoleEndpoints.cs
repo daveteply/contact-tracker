@@ -35,6 +35,16 @@ public static class RoleEndpoints
         group.MapGet("/search", SearchRoles)
             .WithName("SearchRole")
             .WithDescription("Search role by title");
+
+        group.MapGet("/{id}/can-delete", CanDeleteRole)
+            .WithName("CanDeleteRole")
+            .WithDescription("Checks for related records");
+    }
+
+    private static async Task<IResult> CanDeleteRole(long id, [FromServices] IRoleService service)
+    {
+        var canDelete = await service.CanDeleteRole(id);
+        return Results.Ok(canDelete);
     }
 
     private static async Task<IResult> GetAllRoles([FromServices] IRoleService service)

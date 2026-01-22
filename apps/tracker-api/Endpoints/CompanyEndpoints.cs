@@ -35,6 +35,16 @@ public static class CompanyEndpoints
         group.MapGet("/search", SearchCompanies)
             .WithName("SearchCompany")
             .WithDescription("Search company by name");
+
+        group.MapGet("/{id}/can-delete", CanDeleteCompany)
+            .WithName("CanDeleteCompany")
+            .WithDescription("Checks for related records");
+    }
+
+    private static async Task<IResult> CanDeleteCompany(long id, [FromServices] ICompanyService service)
+    {
+        var canDelete = await service.CanDeleteCompany(id);
+        return Results.Ok(canDelete);
     }
 
     private static async Task<IResult> GetAllCompanies([FromServices] ICompanyService service)
