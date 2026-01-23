@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
@@ -82,11 +82,18 @@ export function EventForm({
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Event Type</legend>
-          <EventTypeSelect
-            register={register('eventTypeId', { valueAsNumber: true })}
-            onFetchEventTypes={onFetchEventTypes}
-            error={errors.eventTypeId?.message}
-            required={true}
+          <Controller
+            name="eventTypeId"
+            control={control}
+            render={({ field }) => (
+              <EventTypeSelect
+                value={field.value}
+                onChange={field.onChange}
+                onFetchEventTypes={onFetchEventTypes}
+                error={errors.eventTypeId?.message}
+                required
+              />
+            )}
           />
         </fieldset>
 
@@ -96,7 +103,7 @@ export function EventForm({
             register={register('direction')}
             enumObject={DirectionType}
             useButtons={true}
-            required={true}
+            required
             defaultVale={DirectionType.Outbound}
           />
           <p className="text-red-600">
@@ -106,29 +113,19 @@ export function EventForm({
 
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Source</legend>
-          <EnumSelector register={register('source')} enumObject={SourceType} required={true} />
+          <EnumSelector register={register('source')} enumObject={SourceType} required />
           <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Company</legend>
-          <CompanyCombobox
-            control={control}
-            name="company"
-            onSearch={onSearchCompany}
-            required={true}
-          />
+          <CompanyCombobox control={control} name="company" onSearch={onSearchCompany} required />
           {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Contact</legend>
-          <ContactCombobox
-            control={control}
-            name="contact"
-            onSearch={onSearchContact}
-            required={true}
-          />
+          <ContactCombobox control={control} name="contact" onSearch={onSearchContact} required />
           {errors.contact?.firstName && (
             <p className="text-red-600">{errors.contact.firstName.message}</p>
           )}
@@ -139,7 +136,7 @@ export function EventForm({
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Role</legend>
-          <RoleCombobox control={control} name="role" onSearch={onSearchRole} required={true} />
+          <RoleCombobox control={control} name="role" onSearch={onSearchRole} required />
           {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
         </fieldset>
 

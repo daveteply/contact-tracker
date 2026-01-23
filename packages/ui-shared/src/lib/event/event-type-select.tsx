@@ -2,17 +2,17 @@
 
 import { EventTypeReadDto } from '@contact-tracker/api-models';
 import { useEffect, useState } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
-
 interface EventTypeSelectProps {
-  register: UseFormRegisterReturn;
+  value?: number;
+  onChange: (value: number | undefined) => void;
   onFetchEventTypes: () => Promise<EventTypeReadDto[]>;
   error?: string;
   required?: boolean;
 }
 
 export function EventTypeSelect({
-  register,
+  value,
+  onChange,
   onFetchEventTypes,
   error,
   required = false,
@@ -48,10 +48,10 @@ export function EventTypeSelect({
   return (
     <div className="relative w-full">
       <select
-        {...register}
         className={`select w-full ${error ? 'select-error' : ''}`}
-        disabled={isLoading}
         required={required}
+        value={value ?? ''}
+        onChange={(e) => onChange(Number(e.target.value))}
       >
         <option value="">{isLoading ? 'Loading event types...' : 'Select an event type'}</option>
 
