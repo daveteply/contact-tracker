@@ -13,3 +13,4 @@ export const createCompany = companyClient.create;
 export const updateCompany = companyClient.update;
 export const deleteCompany = companyClient.delete;
 export const searchCompanies = companyClient.search;
+export const canDeleteCompany = companyClient.canDelete;

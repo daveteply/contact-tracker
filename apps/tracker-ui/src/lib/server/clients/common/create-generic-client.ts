@@ -48,6 +48,8 @@ export function createGenericClient<TRead, TCreate, TUpdate>(resourcePath: strin
         body: JSON.stringify(data),
       }),
 
+    canDelete: (id: number) => coreApiRequest<boolean>(resourcePath, `/${id}/can-delete`),
+
     delete: (id: number) => coreApiRequest<void>(resourcePath, `/${id}`, { method: 'DELETE' }),
 
     search: async (query: string) => {

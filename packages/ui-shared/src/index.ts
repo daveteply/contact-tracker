@@ -9,6 +9,7 @@ export * from './lib/company/company-form';
 export * from './lib/company/company-list';
 export * from './lib/company/company-combobox';
 export * from './lib/company/company-info-card';
+export * from './lib/company/company-delete';
 
 export * from './lib/contact/contact-combobox';
 export * from './lib/contact/contact-info-card';
