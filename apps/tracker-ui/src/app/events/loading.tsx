@@ -1,4 +1,4 @@
-export default function IndexLoading() {
+export default function EventsLoading() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div>
