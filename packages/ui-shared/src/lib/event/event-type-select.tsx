@@ -21,20 +21,29 @@ export function EventTypeSelect({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const loadData = async () => {
       try {
-        setIsLoading(true);
         const data = await onFetchEventTypes();
-        setEventTypes(data);
+        if (isMounted) {
+          setEventTypes(data);
+        }
       } catch (err) {
         console.error('Failed to load event types', err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     loadData();
+    return () => {
+      isMounted = false;
+    };
   }, [onFetchEventTypes]);
+
+  const showSpinner = isLoading;
 
   return (
     <div className="relative w-full">
@@ -42,12 +51,9 @@ export function EventTypeSelect({
         {...register}
         className={`select w-full ${error ? 'select-error' : ''}`}
         disabled={isLoading}
-        defaultValue=""
         required={required}
       >
-        <option value="" disabled>
-          {isLoading ? 'Loading event types...' : 'Select an event type'}
-        </option>
+        <option value="">{isLoading ? 'Loading event types...' : 'Select an event type'}</option>
 
         {eventTypes.map((type) => (
           <option key={type.id} value={type.id}>
@@ -56,7 +62,7 @@ export function EventTypeSelect({
         ))}
       </select>
 
-      {isLoading && (
+      {showSpinner && (
         <div className="absolute right-10 top-1/2 -translate-y-1/2">
           <span className="loading loading-bars loading-xs text-primary"></span>
         </div>

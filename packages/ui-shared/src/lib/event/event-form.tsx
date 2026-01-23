@@ -77,15 +77,6 @@ export function EventForm({
     }
   };
 
-  const getCurrentDate = () => {
-    const dateObj = new Date();
-    const month = ('0' + (dateObj.getMonth() + 1)).slice(-2); // Add leading zero if needed
-    const day = ('0' + dateObj.getDate()).slice(-2); // Add leading zero if needed
-    const year = dateObj.getFullYear();
-    const shortDate = `${year}-${month}-${day}`;
-    return shortDate;
-  };
-
   return (
     <div className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -154,12 +145,7 @@ export function EventForm({
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Date</legend>
-          <input
-            type="date"
-            className="input"
-            {...register('occurredAt', { valueAsDate: true })}
-            defaultValue={getCurrentDate()}
-          />
+          <input type="date" className="input" {...register('occurredAt', { valueAsDate: true })} />
           <p className="text-red-600">
             {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
           </p>

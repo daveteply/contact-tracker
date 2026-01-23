@@ -25,6 +25,30 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function PATCH(request: NextRequest) {
+  try {
+    const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
+    if (!dotnetApiUrl) {
+      throw new Error('DOTNET_API_BASE_URL environment variable is not set');
+    }
+
+    const body = await request.json();
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const result = await response.json();
+    return Response.json(result, { status: response.status });
+  } catch (error) {
+    console.error('Error updating event:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: NextRequest) {
   const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
   if (!dotnetApiUrl) {

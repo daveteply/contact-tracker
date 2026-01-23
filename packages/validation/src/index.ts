@@ -4,3 +4,5 @@ export * from './lib/event-schema';
 export * from './lib/event-type-schema';
 export * from './lib/reminder-schema';
 export * from './lib/role-schema';
+
+export * from './lib/mappers/event-mapper';

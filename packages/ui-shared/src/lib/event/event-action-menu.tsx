@@ -65,12 +65,13 @@ export function EventActionMenu({ id }: EventActionMenuProps) {
 
       <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-40 p-2 shadow-lg border border-base-200">
         <li>
-          <button
+          <Link
+            href={`/events/${id}/edit`}
             className="flex items-center gap-2 hover:bg-base-200"
             onClick={() => setIsOpen(false)} // Close menu after clicking action
           >
             Edit
-          </button>
+          </Link>
         </li>
         <li>
           <Link

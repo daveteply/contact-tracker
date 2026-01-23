@@ -32,15 +32,12 @@ export function EnumSelector<T extends Record<string, string | number>>({
               required={required}
               aria-label={key}
               {...register}
-              defaultChecked={defaultVale === value}
             />
           ))}
         </div>
       ) : (
-        <select className="select" {...register} defaultValue="" required={required}>
-          <option value="" disabled>
-            Select an option
-          </option>
+        <select className="select" {...register} required={required}>
+          <option value="">Select an option</option>
           {options.map(([key, value]) => (
             <option key={key} value={value}>
               {key}
