@@ -6,7 +6,7 @@ import {
 import { EntityDelete, CompanyInfoCard } from '@contact-tracker/ui-shared';
 import Link from 'next/link';
 
-export default async function DeleteCompanyPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const companyId = parseInt(id);
 
