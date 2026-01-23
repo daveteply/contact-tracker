@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const ReminderInputSchema = z.object({
   eventId: z.number(),
   remindAt: z.date().or(z.string().datetime()),
-  completedAt: z.date().or(z.string().datetime()).optional(),
+  completedAt: z.date().or(z.string().datetime()).nullish(),
 });
 export const ReminderUpdateSchema = ReminderInputSchema.partial().required({
   eventId: true,
