@@ -24,3 +24,28 @@ export async function GET(request: NextRequest) {
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
+  if (!dotnetApiUrl) {
+    throw new Error('DOTNET_API_BASE_URL environment variable is not set');
+  }
+
+  try {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      return Response.json(
+        { success: false, message: 'Failed to delete event' },
+        { status: response.status },
+      );
+    }
+
+    return Response.json({ success: true, message: 'Event deleted!' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}

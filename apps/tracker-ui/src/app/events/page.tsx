@@ -2,7 +2,7 @@ import { EventList } from '@contact-tracker/ui-shared';
 import { fetchEvents } from '@/lib/server/clients/events-client';
 import Link from 'next/link';
 
-export default async function Index() {
+export default async function EventsPage() {
   const events = await fetchEvents(undefined, undefined, 'company,contact,role,eventtype');
 
   return (

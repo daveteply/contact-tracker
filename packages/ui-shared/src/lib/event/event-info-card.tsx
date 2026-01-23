@@ -8,16 +8,17 @@ import Link from 'next/link';
 
 export interface EventInfoCardProps {
   event: EventReadDtoWithRelations;
+  showControls?: boolean;
 }
 
-export function EventInfoCard({ event }: EventInfoCardProps) {
+export function EventInfoCard({ event, showControls = true }: EventInfoCardProps) {
   return (
     <div className="relative card bg-neutral text-neutral-content w-full shadow-sm mb-3 mr-3">
       {/* The invisible primary link */}
       <Link
         href={`/events/${event.id}`}
         className="absolute inset-0 z-10"
-        aria-label="Go to target page"
+        aria-label="Go to Event Details page"
       />
 
       <div className="relative card-body">
@@ -27,9 +28,11 @@ export function EventInfoCard({ event }: EventInfoCardProps) {
             <div className="text-sm capitalize">
               <FormattedDate dateValue={event.occurredAt} />
             </div>
-            <div className="relative z-20">
-              <EventActionMenu />
-            </div>
+            {showControls && (
+              <div className="relative z-20">
+                <EventActionMenu id={event.id} />
+              </div>
+            )}
           </div>
         </div>
         <ul>

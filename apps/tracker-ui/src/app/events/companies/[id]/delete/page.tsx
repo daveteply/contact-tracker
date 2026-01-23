@@ -3,7 +3,7 @@ import {
   deleteCompany,
   fetchCompanyById,
 } from '@/lib/server/clients/company-client';
-import { CompanyDelete, CompanyInfoCard } from '@contact-tracker/ui-shared';
+import { EntityDelete, CompanyInfoCard } from '@contact-tracker/ui-shared';
 import Link from 'next/link';
 
 export default async function DeleteCompanyPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,7 +22,12 @@ export default async function DeleteCompanyPage({ params }: { params: Promise<{ 
         <>
           <CompanyInfoCard company={company} showControls={false} />
           {canDelete ? (
-            <CompanyDelete id={company.id} onDeleteAction={deleteCompany} />
+            <EntityDelete
+              id={company.id}
+              entityName="company"
+              postActionRoute="/events/companies"
+              onDeleteAction={deleteCompany}
+            />
           ) : (
             <>
               <p>This Company is associated with Events and cannot be deleted</p>

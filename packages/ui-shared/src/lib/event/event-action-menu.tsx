@@ -1,6 +1,12 @@
 'use client';
 
-export function EventActionMenu() {
+import Link from 'next/link';
+
+interface EventActionMenuProps {
+  id: number;
+}
+
+export function EventActionMenu({ id }: EventActionMenuProps) {
   return (
     <details className="dropdown dropdown-end">
       <summary className="btn btn-ghost btn-circle list-none">
@@ -32,7 +38,10 @@ export function EventActionMenu() {
           </button>
         </li>
         <li>
-          <button className="flex items-center gap-2 text-error hover:bg-error/10">
+          <Link
+            href={`/events/${id}/delete`}
+            className="flex items-center gap-2 text-error hover:bg-error/10"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -46,7 +55,7 @@ export function EventActionMenu() {
               />
             </svg>
             Delete
-          </button>
+          </Link>
         </li>
       </ul>
     </details>

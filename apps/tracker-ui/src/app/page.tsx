@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Index() {
+export default function IndexPage() {
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content text-center">
