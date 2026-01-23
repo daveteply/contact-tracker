@@ -38,6 +38,7 @@ export function EventInfoCard({ event, showControls = true }: EventInfoCardProps
         <ul>
           <li>{event.company?.name}</li>
           <li>{event.role?.title}</li>
+          <li>{event.source}</li>
         </ul>
         <div className="flex">
           <DirectionInfo direction={event.direction} />

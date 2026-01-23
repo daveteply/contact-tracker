@@ -202,10 +202,10 @@ public class EventService : IEventService
             @event.Company is not null ? new CompanyReadDto(
                 @event.Company.Id,
                 @event.Company.Name,
-                @event.Company.Website,
-                @event.Company.Industry,
-                @event.Company.SizeRange,
-                @event.Company.Notes
+                @event.Company.Website ?? string.Empty,
+                @event.Company.Industry ?? string.Empty,
+                @event.Company.SizeRange ?? string.Empty,
+                @event.Company.Notes ?? string.Empty
             ) : null,
             @event.ContactId,
             @event.Contact is not null ? new ContactReadDto(
@@ -213,20 +213,20 @@ public class EventService : IEventService
                 @event.Contact.CompanyId,
                 @event.Contact.FirstName,
                 @event.Contact.LastName,
-                @event.Contact.Title,
-                @event.Contact.Email,
-                @event.Contact.PhoneNumber,
-                @event.Contact.LinkedInUrl,
-                @event.Contact.IsPrimaryRecruiter,
-                @event.Contact.Notes
+                @event.Contact.Title ?? string.Empty,
+                @event.Contact.Email ?? string.Empty,
+                @event.Contact.PhoneNumber ?? string.Empty,
+                @event.Contact.LinkedInUrl ?? string.Empty,
+                @event.Contact.IsPrimaryRecruiter = false,
+                @event.Contact.Notes ?? string.Empty
             ) : null,
             @event.RoleId,
             @event.Role is not null ? new RoleReadDto(
                 @event.Role.Id,
                 @event.Role.CompanyId,
                 @event.Role.Title,
-                @event.Role.JobPostingUrl,
-                @event.Role.Location,
+                @event.Role.JobPostingUrl ?? string.Empty,
+                @event.Role.Location ?? string.Empty,
                 @event.Role.Level
             ) : null,
             @event.EventTypeId,
@@ -237,8 +237,8 @@ public class EventService : IEventService
                 @event.EventType.IsSystemDefined
             ) : null,
             @event.OccurredAt,
-            @event.Summary,
-            @event.Details,
+            @event.Summary ?? string.Empty,
+            @event.Details ?? string.Empty,
             @event.Source,
             @event.Direction
         );

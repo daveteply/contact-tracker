@@ -2,10 +2,10 @@ import { z } from 'zod';
 import { RoleLevelSchema } from './enum-schema';
 
 export const RoleInputSchema = z.object({
-  companyId: z.number().nullish(),
+  companyId: z.number().optional(),
   title: z.string().min(1),
-  jobPostingUrl: z.string().url().nullish().or(z.literal('')),
-  location: z.string().nullish(),
+  jobPostingUrl: z.string().url('Must be a valid URL').or(z.literal('')),
+  location: z.string().optional(),
   level: RoleLevelSchema,
 });
 export const RoleUpdateSchema = RoleInputSchema.partial();

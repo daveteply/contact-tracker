@@ -146,12 +146,12 @@ public class ContactService : IContactService
             contact.CompanyId,
             contact.FirstName,
             contact.LastName,
-            contact.Title,
-            contact.Email,
-            contact.PhoneNumber,
-            contact.LinkedInUrl,
-            contact.IsPrimaryRecruiter,
-            contact.Notes
+            contact.Title ?? string.Empty,
+            contact.Email ?? string.Empty,
+            contact.PhoneNumber ?? string.Empty,
+            contact.LinkedInUrl ?? string.Empty,
+            contact.IsPrimaryRecruiter = false,
+            contact.Notes ?? string.Empty
         );
     }
 

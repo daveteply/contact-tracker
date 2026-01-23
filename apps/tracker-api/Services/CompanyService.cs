@@ -156,10 +156,10 @@ public class CompanyService : ICompanyService
         return new CompanyReadDto(
             company.Id,
             company.Name,
-            company.Website,
-            company.Industry,
-            company.SizeRange,
-            company.Notes
+            company.Website ?? string.Empty,
+            company.Industry ?? string.Empty,
+            company.SizeRange ?? string.Empty,
+            company.Notes ?? string.Empty
         );
     }
 

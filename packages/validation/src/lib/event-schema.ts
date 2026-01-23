@@ -4,7 +4,7 @@ import { DirectionTypeSchema, SourceTypeSchema } from './enum-schema';
 export const EventInputSchema = z.object({
   company: z.object(
     {
-      id: z.number().nullish(),
+      id: z.number().optional(),
       name: z.string().min(1),
       isNew: z.boolean(),
     },
@@ -12,7 +12,7 @@ export const EventInputSchema = z.object({
   ),
   contact: z.object(
     {
-      id: z.number().nullish(),
+      id: z.number().optional(),
       firstName: z.string("First name can't be empty").min(1),
       lastName: z.string("Last name can't be empty").min(1),
       isNew: z.boolean(),
@@ -21,7 +21,7 @@ export const EventInputSchema = z.object({
   ),
   role: z.object(
     {
-      id: z.number().nullish(),
+      id: z.number().optional(),
       title: z.string().min(1),
       isNew: z.boolean(),
     },
@@ -29,8 +29,8 @@ export const EventInputSchema = z.object({
   ),
   eventTypeId: z.number('Select an event type'),
   occurredAt: z.coerce.date('Must be a valid date'),
-  summary: z.string().nullish(),
-  details: z.string().nullish(),
+  summary: z.string().optional(),
+  details: z.string().optional(),
   source: SourceTypeSchema,
   direction: DirectionTypeSchema,
 });

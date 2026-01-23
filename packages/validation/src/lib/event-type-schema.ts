@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const EventTypeInputSchema = z.object({
-  id: z.number().nullish(),
+  id: z.number().optional(),
   name: z.string().min(1),
   category: z.string().min(1),
   isSystemDefined: z.boolean().default(false),

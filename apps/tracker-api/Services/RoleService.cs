@@ -127,8 +127,8 @@ public class RoleService : IRoleService
             role.Id,
             role.CompanyId,
             role.Title,
-            role.JobPostingUrl,
-            role.Location,
+            role.JobPostingUrl ?? string.Empty,
+            role.Location ?? string.Empty,
             role.Level
         );
     }
