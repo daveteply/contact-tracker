@@ -40,6 +40,11 @@ public class RoleService : IRoleService
 
     public async Task<RoleReadDto> CreateRoleAsync(RoleCreateDto dto)
     {
+        if (await _context.Roles.AnyAsync(c => c.Title.ToLower() == dto.Title.ToLower()))
+        {
+            throw new ValidationException("A Role with this name already exists.",
+                 new List<string> { "Role title must be unique." });
+        }
         ValidateRoleCreate(dto);
 
         var role = new Role
@@ -52,7 +57,15 @@ public class RoleService : IRoleService
         };
 
         _context.Roles.Add(role);
-        await _context.SaveChangesAsync();
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(role);
     }
@@ -69,6 +82,19 @@ public class RoleService : IRoleService
         ValidateRoleUpdate(dto);
 
         // Only update properties that are provided (not null)
+        if (dto.Title is not null)
+        {
+            var exists = await _context.Roles
+                .AnyAsync(c => c.Id != id && c.Title.ToLower() == dto.Title.ToLower());
+
+            if (exists)
+            {
+                DuplicateFound();
+            }
+
+            existingRole.Title = dto.Title;
+        }
+
         if (dto.CompanyId.HasValue)
             existingRole.CompanyId = dto.CompanyId;
 
@@ -85,7 +111,15 @@ public class RoleService : IRoleService
             existingRole.Level = dto.Level.Value;
 
         _context.Roles.Update(existingRole);
-        await _context.SaveChangesAsync();
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(existingRole);
     }
@@ -103,6 +137,13 @@ public class RoleService : IRoleService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<bool> CanDeleteRole(long roleId)
+    {
+        var eventCount = await _context.Events.Where(e => e.RoleId == roleId).CountAsync();
+        return eventCount == 0;
+    }
+
+
     public async Task<List<RoleReadDto>> SearchRolesAsync(string q)
     {
         var searchTerm = q.Trim().ToLower();
@@ -113,12 +154,6 @@ public class RoleService : IRoleService
             .ToListAsync();
 
         return roles.Select(MapToReadDto).ToList();
-    }
-
-    public async Task<bool> CanDeleteRole(long roleId)
-    {
-        var eventCount = await _context.Events.Where(e => e.RoleId == roleId).CountAsync();
-        return eventCount == 0;
     }
 
     private static RoleReadDto MapToReadDto(Role role)
@@ -165,4 +200,12 @@ public class RoleService : IRoleService
         }
     }
 
+    private static void DuplicateFound()
+    {
+        throw new ValidationException(
+            "A Role with this Title already exists.",
+            new List<string> { "Role Title must be unique." }
+        );
+    }
 }
+

@@ -54,7 +54,15 @@ public class ContactService : IContactService
         };
 
         _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync();
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(contact);
     }
@@ -72,6 +80,22 @@ public class ContactService : IContactService
         ValidateContactUpdate(dto);
 
         // Only update properties that are provided (not null)
+        if (dto.FirstName is not null && dto.LastName is not null)
+        {
+            var exists = await _context.Contacts
+                .AnyAsync(c => c.Id != id && c.FirstName.ToLower() == dto.FirstName.ToLower()
+                    && c.LastName.ToLower() == dto.LastName.ToLower()
+                );
+
+            if (exists)
+            {
+                DuplicateFound();
+            }
+
+            existingContact.FirstName = dto.FirstName;
+            existingContact.LastName = dto.LastName;
+        }
+
         if (dto.CompanyId.HasValue)
             existingContact.CompanyId = dto.CompanyId;
 
@@ -100,7 +124,15 @@ public class ContactService : IContactService
             existingContact.Notes = dto.Notes;
 
         _context.Contacts.Update(existingContact);
-        await _context.SaveChangesAsync();
+        
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
+        {
+            DuplicateFound();
+        }
 
         return MapToReadDto(existingContact);
     }
@@ -195,5 +227,13 @@ public class ContactService : IContactService
         {
             throw new ValidationException("Contact validation failed", errors);
         }
+    }
+
+    private static void DuplicateFound()
+    {
+        throw new ValidationException(
+            "A contact with this name already exists.",
+            new List<string> { "Contact first and last name must be unique." }
+        );
     }
 }

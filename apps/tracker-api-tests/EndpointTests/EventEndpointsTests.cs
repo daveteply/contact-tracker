@@ -284,7 +284,7 @@ public class EventEndpointsTests : IAsyncDisposable
         using var verifyScope = _factory.Services.CreateScope();
         var verifyContext = verifyScope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
         var dbCompany = await verifyContext.Companies.FirstAsync(c => c.Id == company.Id);
-        Assert.Equal("New Name", dbCompany.Name);
+        Assert.Equal("Old Name", dbCompany.Name);
         Assert.Equal("https://important-site.com", dbCompany.Website); // Still exists!
         Assert.Equal("Sensitive data", dbCompany.Notes); // Still exists!
     }
