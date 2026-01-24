@@ -113,9 +113,6 @@ public class EventService : IEventService
         ValidateEventUpdate(dto);
 
         var @event = await _context.Events
-            .Include(e => e.Company)
-            .Include(e => e.Contact)
-            .Include(e => e.Role)
             .FirstOrDefaultAsync(e => e.Id == id);
 
         if (@event == null)
@@ -177,6 +174,12 @@ public class EventService : IEventService
 
         _context.Events.Update(@event);
         await _context.SaveChangesAsync();
+
+        // Reload the related entities to return them in the response
+        await _context.Entry(@event).Reference(e => e.Company).LoadAsync();
+        await _context.Entry(@event).Reference(e => e.Contact).LoadAsync();
+        await _context.Entry(@event).Reference(e => e.Role).LoadAsync();
+        await _context.Entry(@event).Reference(e => e.EventType).LoadAsync();
 
         return MapToReadDto(@event);
     }
@@ -323,46 +326,26 @@ public class EventService : IEventService
 
     private async Task HandleInlineCompanyUpdate(Event @event, CompanyUpdateDto updateDto)
     {
+        // Name is the only required field for Company
         if (string.IsNullOrWhiteSpace(updateDto.Name)) return;
 
         var newName = updateDto.Name.Trim();
 
-        // Check if a DIFFERENT company with this name already exists
-        var existingDifferentCompany = await _context.Companies
-            .FirstOrDefaultAsync(c => c.Name == newName && c.Id != @event.CompanyId);
+        // Check if a company with this name already exists
+        var existingCompany = await _context.Companies
+            .FirstOrDefaultAsync(c => c.Name == newName);
 
-        if (existingDifferentCompany is not null)
+        if (existingCompany is not null)
         {
-            // Re-link to the existing different company
-            @event.CompanyId = existingDifferentCompany.Id;
-            @event.Company = null; // Clear navigation
+            // Link to the existing company
+            @event.CompanyId = existingCompany.Id;
+            @event.Company = null;
             return;
         }
 
-        // Now handle updating the current company or creating a new one
-        if (@event.CompanyId.HasValue)
-        {
-            // Event is linked to a company - update it
-            Company? companyToUpdate = @event.Company;
-
-            if (companyToUpdate == null)
-            {
-                // Navigation not loaded, fetch it
-                companyToUpdate = await _context.Companies.FindAsync(@event.CompanyId.Value);
-            }
-
-            if (companyToUpdate is not null)
-            {
-                companyToUpdate.Name = newName;
-                // CRITICAL: Mark the company as modified so EF tracks the change
-                _context.Entry(companyToUpdate).State = EntityState.Modified;
-            }
-        }
-        else
-        {
-            // Event has no company - create a new one
-            @event.Company = new Company { Name = newName };
-        }
+        // Create a new company (don't update the existing one)
+        @event.Company = new Company { Name = newName };
+        @event.CompanyId = null; // Will be assigned by EF after insert
     }
 
     private async Task HandleInlineRoleUpdate(Event @event, RoleUpdateDto updateDto)
@@ -378,60 +361,33 @@ public class EventService : IEventService
             compId = @event.Company.Id;
         }
 
-        // Check if a DIFFERENT role with this title exists in the same company
+        // Check if a role with this title already exists (for deduplication)
+        Role? existingRole = null;
         if (compId.HasValue)
         {
-            var existingDifferentRole = await _context.Roles
-                .FirstOrDefaultAsync(r => r.CompanyId == compId
-                    && r.Title == newTitle.Trim()
-                    && r.Id != @event.RoleId);
-
-            if (existingDifferentRole is not null)
-            {
-                // Re-link to existing role
-                @event.RoleId = existingDifferentRole.Id;
-                @event.Role = null;
-                return;
-            }
+            existingRole = await _context.Roles
+                .FirstOrDefaultAsync(r => r.CompanyId == compId && r.Title == newTitle);
         }
 
-        // Update existing role or create new one
-        if (@event.RoleId.HasValue)
+        if (existingRole is not null)
         {
-            // Event is linked to a role - update it
-            Role? roleToUpdate = @event.Role;
-
-            if (roleToUpdate == null)
-            {
-                // Navigation not loaded, fetch it
-                roleToUpdate = await _context.Roles.FindAsync(@event.RoleId.Value);
-            }
-
-            if (roleToUpdate is not null)
-            {
-                roleToUpdate.Title = newTitle;
-                // Update other fields if provided
-                if (updateDto.Location is not null) roleToUpdate.Location = updateDto.Location;
-                if (updateDto.Level.HasValue) roleToUpdate.Level = updateDto.Level.Value;
-                if (updateDto.JobPostingUrl is not null) roleToUpdate.JobPostingUrl = updateDto.JobPostingUrl;
-
-                // CRITICAL: Mark the role as modified
-                _context.Entry(roleToUpdate).State = EntityState.Modified;
-            }
+            // Link to the existing role
+            @event.RoleId = existingRole.Id;
+            @event.Role = null;
+            return;
         }
-        else
+
+        // Create a new role (don't update the existing one)
+        @event.Role = new Role
         {
-            // Event has no role - create a new one
-            @event.Role = new Role
-            {
-                Title = newTitle,
-                CompanyId = compId,
-                Company = @event.Company,
-                Location = updateDto.Location,
-                Level = updateDto.Level ?? RoleLevel.EngineeringManager,
-                JobPostingUrl = updateDto.JobPostingUrl
-            };
-        }
+            Title = newTitle,
+            CompanyId = compId,
+            Company = @event.Company,
+            Location = updateDto.Location,
+            Level = updateDto.Level ?? RoleLevel.EngineeringManager,
+            JobPostingUrl = updateDto.JobPostingUrl
+        };
+        @event.RoleId = null; // Will be assigned by EF after insert
     }
 
     private async Task HandleInlineContactUpdate(Event @event, ContactUpdateDto updateDto)
@@ -454,22 +410,13 @@ public class EventService : IEventService
             return;
         }
 
-        // 3. Update or Create
-        if (@event.Contact is not null)
+        // Create a new contact (don't update the existing one)
+        @event.Contact = new Contact
         {
-            // Update the name of the contact currently attached to the event
-            @event.Contact.FirstName = first;
-            @event.Contact.LastName = last;
-        }
-        else
-        {
-            // Create a brand new contact
-            @event.Contact = new Contact
-            {
-                FirstName = first,
-                LastName = last
-            };
-        }
+            FirstName = first,
+            LastName = last
+        };
+        @event.ContactId = null; // Will be assigned by EF after insert
     }
 
     private void ValidateEventCreate(EventCreateDto dto)

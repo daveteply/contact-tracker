@@ -159,6 +159,7 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
 
     onChange({
       ...parsed,
+      id: undefined,
       displayValue: val,
       isNew: true,
     });

@@ -3,7 +3,13 @@
 import { EventInput, EventInputSchema } from '@contact-tracker/validation';
 import { createEvent, deleteEvent, updateEvent } from '../clients/events-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, EventCreateDto, EventReadDto, RoleLevel } from '@contact-tracker/api-models';
+import {
+  ApiResult,
+  EventCreateDto,
+  EventReadDto,
+  EventUpdateDto,
+  RoleLevel,
+} from '@contact-tracker/api-models';
 
 const EVENTS_PATH = '/events';
 
@@ -62,7 +68,34 @@ export async function updateEventAction(id: number, data: EventInput) {
   const validated = EventInputSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(updateEvent(id, data), 'Event updated!');
+  // Logic Change: If it's new, the ID must be undefined/null
+  // to prevent EF from updating the existing linked entity.
+  const dto: EventUpdateDto = {
+    companyId: !data.company.isNew ? data.company.id : undefined,
+    // Note: Use 'updateCompany' carefully.
+    // If isNew is true, this should trigger a 'Create' on the backend.
+    updateCompany: data.company.isNew ? { name: data.company.name } : undefined,
+
+    // Repeat logic for contact and role...
+    contactId: !data.contact.isNew ? data.contact.id : undefined,
+    updateContact: data.contact.isNew
+      ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
+      : undefined,
+
+    roleId: !data.role.isNew ? data.role.id : undefined,
+    updateRole: data.role.isNew
+      ? { title: data.role.title, level: RoleLevel.EngineeringManager }
+      : undefined,
+
+    eventTypeId: data.eventTypeId,
+    occurredAt: data.occurredAt,
+    summary: data.summary,
+    details: data.details,
+    source: data.source,
+    direction: data.direction,
+  };
+
+  return handleActionResult(updateEvent(id, dto), 'Event updated!');
 }
 
 export async function deleteEventAction(id: number) {
