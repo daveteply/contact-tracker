@@ -8,18 +8,18 @@ export function mapEventDtoToFormValues(dto: EventReadDtoWithRelations): EventFo
     company: {
       id: dto.company?.id,
       name: dto.company?.name ?? '',
-      isNew: false,
+      isNew: false, // Explicitly tell the form this is an existing entity
     },
     contact: {
       id: dto.contact?.id,
       firstName: dto.contact?.firstName ?? '',
       lastName: dto.contact?.lastName ?? '',
-      isNew: false,
+      isNew: false, // Explicitly tell the form this is an existing entity
     },
     role: {
       id: dto.role?.id,
       title: dto.role?.title ?? '',
-      isNew: false,
+      isNew: false, // Explicitly tell the form this is an existing entity
     },
     source: dto.source,
     direction: dto.direction,
