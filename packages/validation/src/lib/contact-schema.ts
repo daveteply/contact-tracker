@@ -4,10 +4,10 @@ export const ContactInputSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   title: z.string().optional(),
-  email: z.email('Email must be valid').optional(),
+  email: z.email('Myst be a valid email').optional(),
   phoneNumber: z.string().optional(),
-  linkedInUrl: z.url('Url must be valid').optional(),
-  isPrimaryRecruiter: z.boolean().default(false),
+  linkedInUrl: z.url('Must be a valid URL').optional(),
+  isPrimaryRecruiter: z.boolean().default(false).optional(),
   notes: z.string().optional(),
 });
 export const ContactUpdateSchema = ContactInputSchema.partial();

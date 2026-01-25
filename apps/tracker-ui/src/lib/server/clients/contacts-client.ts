@@ -13,3 +13,4 @@ export const createContact = contactClient.create;
 export const updateContact = contactClient.update;
 export const deleteContact = contactClient.delete;
 export const searchContacts = contactClient.search;
+export const canDeleteContact = contactClient.canDelete;
