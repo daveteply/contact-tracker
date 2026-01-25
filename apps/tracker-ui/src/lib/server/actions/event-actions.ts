@@ -68,23 +68,33 @@ export async function updateEventAction(id: number, data: EventInput) {
   const validated = EventInputSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
+  // Prepare the Company (shared by Event and Role)
+  const sharedCompanyUpdate = data.company.isNew ? { name: data.company.name } : undefined;
+
   // Logic Change: If it's new, the ID must be undefined/null
   // to prevent EF from updating the existing linked entity.
   const dto: EventUpdateDto = {
+    // Top-level Event -> Company Link
     companyId: !data.company.isNew ? data.company.id : undefined,
-    // Note: Use 'updateCompany' carefully.
-    // If isNew is true, this should trigger a 'Create' on the backend.
-    updateCompany: data.company.isNew ? { name: data.company.name } : undefined,
+    updateCompany: sharedCompanyUpdate,
 
-    // Repeat logic for contact and role...
+    // Top-level Event -> Contact Link
     contactId: !data.contact.isNew ? data.contact.id : undefined,
     updateContact: data.contact.isNew
       ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
       : undefined,
 
+    // Top-level Event -> Role Link
     roleId: !data.role.isNew ? data.role.id : undefined,
     updateRole: data.role.isNew
-      ? { title: data.role.title, level: RoleLevel.EngineeringManager }
+      ? {
+          title: data.role.title,
+          level: RoleLevel.EngineeringManager,
+          // CRITICAL: Link the new role to the same company info
+          // If company is existing, pass its ID. If new, pass the new info.
+          companyId: !data.company.isNew ? data.company.id : undefined,
+          company: sharedCompanyUpdate,
+        }
       : undefined,
 
     eventTypeId: data.eventTypeId,
