@@ -8,13 +8,18 @@ export * from './lib/common/entity-delete';
 
 export * from './lib/company/company-form';
 export * from './lib/company/company-list';
-export * from './lib/company/company-combobox';
 export * from './lib/company/company-info-card';
+export * from './lib/company/company-combobox';
 
-export * from './lib/contact/contact-combobox';
+export * from './lib/contact/contact-form';
+export * from './lib/contact/contact-list';
 export * from './lib/contact/contact-info-card';
+export * from './lib/contact/contact-combobox';
 
+export * from './lib/role/role-form';
+export * from './lib/role/role-list';
 export * from './lib/role/role-info-card';
+export * from './lib/role/role-combobox';
 
 export * from './lib/event/event-form';
 export * from './lib/event/event-list';
