@@ -1,12 +1,13 @@
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}/${params.id}`, {
+
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       cache: 'no-store',
     });
 
@@ -28,8 +29,8 @@ export async function PATCH(request: NextRequest) {
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
-    const body = await request.json();
 
+    const body = await request.json();
     const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'PATCH',
       headers: {
@@ -46,28 +47,32 @@ export async function PATCH(request: NextRequest) {
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.error('Error updating contact:', error);
+    console.error('Error updating Contact:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 export async function DELETE(request: NextRequest) {
+  const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
+  if (!dotnetApiUrl) {
+    throw new Error('DOTNET_API_BASE_URL environment variable is not set');
+  }
+
   try {
-    const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
-    if (!dotnetApiUrl) {
-      throw new Error('DOTNET_API_BASE_URL environment variable is not set');
-    }
     const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       method: 'DELETE',
     });
 
     if (!response.ok) {
-      return Response.json({ error: 'Failed to delete contact' }, { status: response.status });
+      return Response.json(
+        { success: false, message: 'Failed to delete Contact' },
+        { status: response.status },
+      );
     }
 
-    return new Response(null, { status: 204 });
+    return Response.json({ success: true, message: 'Contact deleted!' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting contact:', error);
+    console.error('Error deleting Contact:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
