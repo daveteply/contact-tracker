@@ -11,3 +11,4 @@ export const createRole = roleClient.create;
 export const updateRole = roleClient.update;
 export const deleteRole = roleClient.delete;
 export const searchRoles = roleClient.search;
+export const canDeleteRole = roleClient.canDelete;

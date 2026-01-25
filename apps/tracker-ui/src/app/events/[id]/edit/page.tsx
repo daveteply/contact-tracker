@@ -1,9 +1,9 @@
 import { updateEventAction } from '@/lib/server/actions/event-actions';
-import { searchCompanies } from '@/lib/server/clients/company-client';
+import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { fetchEventById } from '@/lib/server/clients/events-client';
-import { searchRoles } from '@/lib/server/clients/role-client';
+import { searchRoles } from '@/lib/server/clients/roles-client';
 
 import { EventForm } from '@contact-tracker/ui-shared';
 import { mapEventDtoToFormValues } from '@contact-tracker/validation';

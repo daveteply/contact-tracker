@@ -2,7 +2,7 @@ import {
   canDeleteCompany,
   deleteCompany,
   fetchCompanyById,
-} from '@/lib/server/clients/company-client';
+} from '@/lib/server/clients/companies-client';
 import { EntityDelete, CompanyInfoCard } from '@contact-tracker/ui-shared';
 import Link from 'next/link';
 
@@ -33,6 +33,9 @@ export default async function CompanyDeletePage({ params }: { params: Promise<{ 
               <p>This Company is associated with Events and cannot be deleted</p>
               <Link className="btn" href="../">
                 Back to Companies
+              </Link>
+              <Link className="btn" href="../../">
+                Back to Events
               </Link>
             </>
           )}

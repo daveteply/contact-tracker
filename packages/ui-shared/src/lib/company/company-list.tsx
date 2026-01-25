@@ -17,7 +17,7 @@ export function CompanyList({ companies }: CompanyListProps) {
           ))}
         </>
       ) : (
-        <p>No companies found</p>
+        <p>No Companies found</p>
       )}
     </div>
   );

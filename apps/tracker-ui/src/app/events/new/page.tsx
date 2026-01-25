@@ -1,8 +1,8 @@
 import { createEventAction } from '@/lib/server/actions/event-actions';
-import { searchCompanies } from '@/lib/server/clients/company-client';
+import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
-import { searchRoles } from '@/lib/server/clients/role-client';
+import { searchRoles } from '@/lib/server/clients/roles-client';
 import { DirectionType } from '@contact-tracker/api-models';
 import { EventForm } from '@contact-tracker/ui-shared';
 import { EventFormValues } from '@contact-tracker/validation';

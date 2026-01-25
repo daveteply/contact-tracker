@@ -1,4 +1,4 @@
-import { fetchCompanies } from '@/lib/server/clients/company-client';
+import { fetchCompanies } from '@/lib/server/clients/companies-client';
 import { CompanyList } from '@contact-tracker/ui-shared';
 import Link from 'next/link';
 

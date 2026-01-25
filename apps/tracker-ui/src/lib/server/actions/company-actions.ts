@@ -1,7 +1,7 @@
 'use server';
 
 import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
-import { createCompany, updateCompany, deleteCompany } from '../clients/company-client';
+import { createCompany, updateCompany, deleteCompany } from '../clients/companies-client';
 import { revalidatePath } from 'next/cache';
 import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
 

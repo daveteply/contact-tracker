@@ -3,8 +3,9 @@ import { CompanyForm } from '@contact-tracker/ui-shared';
 
 export default async function CreateCompanyPage() {
   return (
-    <div>
+    <>
+      <h1 className="text-xl mb-5">Companies - new Company</h1>
       <CompanyForm onSubmitAction={createCompanyAction} />
-    </div>
+    </>
   );
 }
