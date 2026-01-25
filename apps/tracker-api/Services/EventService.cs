@@ -226,7 +226,15 @@ public class EventService : IEventService
             @event.RoleId,
             @event.Role is not null ? new RoleReadDto(
                 @event.Role.Id,
-                @event.Role.CompanyId,
+                @event.CompanyId,
+                @event.Company is not null ? new CompanyReadDto(
+                @event.Company.Id,
+                @event.Company.Name,
+                @event.Company.Website ?? string.Empty,
+                @event.Company.Industry ?? string.Empty,
+                @event.Company.SizeRange ?? string.Empty,
+                @event.Company.Notes ?? string.Empty
+            ) : null,
                 @event.Role.Title,
                 @event.Role.JobPostingUrl ?? string.Empty,
                 @event.Role.Location ?? string.Empty,

@@ -152,7 +152,7 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Startup Inc", "https://startup.io", null, null, null),
             ContactId: null, NewContact: null,
             RoleId: null,
-            NewRole: new RoleCreateDto(null, "Founding Engineer", null, "Remote", RoleLevel.EngineeringManager),
+            NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Founders Meeting", Details: "Initial chat",
             EventType: null,
             Source: SourceType.LinkedIn, Direction: DirectionType.Inbound
@@ -313,12 +313,14 @@ public class EventEndpointsTests : IAsyncDisposable
         context.Events.Add(@event);
         await context.SaveChangesAsync();
 
+        var company = new CompanyUpdateDto("Test", null, null, null, null);
+
         var updateDto = new EventUpdateDto(
             CompanyId: null,
             UpdateCompany: new CompanyUpdateDto("Brand New Startup", null, null, null, null),
             ContactId: null, UpdateContact: null,
             RoleId: null,
-            UpdateRole: new RoleUpdateDto(null, "CTO", null, "Remote", RoleLevel.EngineeringManager),
+            UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
             EventType: null,
             Source: null, Direction: null

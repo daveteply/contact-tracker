@@ -220,6 +220,7 @@ public record ReminderUpdateDto(
 public record RoleReadDto(
     long Id,
     long? CompanyId,
+    CompanyReadDto? Company,
     string Title,
     string? JobPostingUrl,
     string? Location,
@@ -229,6 +230,7 @@ public record RoleReadDto(
 [ExportTsInterface]
 public record RoleCreateDto(
     long? CompanyId,
+    CompanyCreateDto? Company,
     string Title,
     string? JobPostingUrl,
     string? Location,
@@ -238,6 +240,7 @@ public record RoleCreateDto(
 [ExportTsInterface]
 public record RoleUpdateDto(
     long? CompanyId,
+    CompanyUpdateDto? Company,
     string? Title,
     string? JobPostingUrl,
     string? Location,

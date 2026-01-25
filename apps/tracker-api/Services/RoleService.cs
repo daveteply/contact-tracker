@@ -161,6 +161,14 @@ public class RoleService : IRoleService
         return new RoleReadDto(
             role.Id,
             role.CompanyId,
+            role.Company is not null ? new CompanyReadDto(
+                role.Company.Id,
+                role.Company.Name,
+                role.Company.Website ?? string.Empty,
+                role.Company.Industry ?? string.Empty,
+                role.Company.SizeRange ?? string.Empty,
+                role.Company.Notes ?? string.Empty
+            ) : null,
             role.Title,
             role.JobPostingUrl ?? string.Empty,
             role.Location ?? string.Empty,
