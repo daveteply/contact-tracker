@@ -49,12 +49,14 @@ public class RoleService : IRoleService
 
         var role = new Role
         {
-            CompanyId = dto.CompanyId,
             Title = dto.Title,
             JobPostingUrl = dto.JobPostingUrl,
             Location = dto.Location,
             Level = dto.Level
         };
+
+        // Resolve Company: either link existing ID or process "New" DTO
+        await ResolveCompanyAsync(dto, role);
 
         _context.Roles.Add(role);
 
@@ -67,12 +69,19 @@ public class RoleService : IRoleService
             DuplicateFound();
         }
 
+        // Reload company to return it in the response
+        if (role.CompanyId.HasValue)
+        {
+            await _context.Entry(role).Reference(r => r.Company).LoadAsync();
+        }
+
         return MapToReadDto(role);
     }
 
     public async Task<RoleReadDto> UpdateRoleAsync(long id, RoleUpdateDto dto)
     {
-        var existingRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == id);
+        var existingRole = await _context.Roles
+            .FirstOrDefaultAsync(r => r.Id == id);
 
         if (existingRole == null)
         {
@@ -95,12 +104,6 @@ public class RoleService : IRoleService
             existingRole.Title = dto.Title;
         }
 
-        if (dto.CompanyId.HasValue)
-            existingRole.CompanyId = dto.CompanyId;
-
-        if (dto.Title is not null)
-            existingRole.Title = dto.Title;
-
         if (dto.JobPostingUrl is not null)
             existingRole.JobPostingUrl = dto.JobPostingUrl;
 
@@ -109,6 +112,17 @@ public class RoleService : IRoleService
 
         if (dto.Level.HasValue)
             existingRole.Level = dto.Level.Value;
+
+        // Handle Company
+        if (dto.CompanyId.HasValue)
+        {
+            existingRole.CompanyId = dto.CompanyId;
+            existingRole.Company = null; // Clear navigation so EF doesn't try to insert
+        }
+        else if (dto.Company is not null)
+        {
+            await HandleInlineCompanyUpdate(existingRole, dto.Company);
+        }
 
         _context.Roles.Update(existingRole);
 
@@ -120,6 +134,9 @@ public class RoleService : IRoleService
         {
             DuplicateFound();
         }
+
+        // Reload company to return it in the response
+        await _context.Entry(existingRole).Reference(r => r.Company).LoadAsync();
 
         return MapToReadDto(existingRole);
     }
@@ -149,11 +166,56 @@ public class RoleService : IRoleService
         var searchTerm = q.Trim().ToLower();
 
         var roles = await _context.Roles
+            .Include(r => r.Company)
             .AsNoTracking()
             .Where(c => c.Title.ToLower().Contains(searchTerm))
             .ToListAsync();
 
         return roles.Select(MapToReadDto).ToList();
+    }
+
+    private async Task ResolveCompanyAsync(RoleCreateDto dto, Role role)
+    {
+        // Resolve Company
+        if (dto.CompanyId.HasValue)
+        {
+            role.CompanyId = dto.CompanyId;
+        }
+        else if (dto.Company is not null && !string.IsNullOrWhiteSpace(dto.Company.Name))
+        {
+            var normalizedName = dto.Company.Name.Trim();
+            var existingCompany = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name == normalizedName);
+
+            if (existingCompany is not null)
+                role.CompanyId = existingCompany.Id;
+            else
+                role.Company = new Company { Name = normalizedName };
+        }
+    }
+
+    private async Task HandleInlineCompanyUpdate(Role role, CompanyUpdateDto updateDto)
+    {
+        // Name is the only required field for Company
+        if (string.IsNullOrWhiteSpace(updateDto.Name)) return;
+
+        var newName = updateDto.Name.Trim();
+
+        // Check if a company with this name already exists
+        var existingCompany = await _context.Companies
+            .FirstOrDefaultAsync(c => c.Name == newName);
+
+        if (existingCompany is not null)
+        {
+            // Link to the existing company
+            role.CompanyId = existingCompany.Id;
+            role.Company = null;
+            return;
+        }
+
+        // Create a new company (don't update the existing one)
+        role.Company = new Company { Name = newName };
+        role.CompanyId = null; // Will be assigned by EF after insert
     }
 
     private static RoleReadDto MapToReadDto(Role role)
