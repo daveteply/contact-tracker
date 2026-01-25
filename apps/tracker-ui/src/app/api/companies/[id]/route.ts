@@ -1,15 +1,13 @@
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest) {
   try {
     const dotnetApiUrl = process.env.DOTNET_API_BASE_URL;
     if (!dotnetApiUrl) {
       throw new Error('DOTNET_API_BASE_URL environment variable is not set');
     }
 
-    const { id } = await params;
-
-    const response = await fetch(`${dotnetApiUrl}/api/companies/${id}`, {
+    const response = await fetch(`${dotnetApiUrl}${request.nextUrl.pathname}`, {
       cache: 'no-store',
     });
 
@@ -20,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.error('Error fetching company:', error);
+    console.error('Error fetching Company:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -41,10 +39,15 @@ export async function PATCH(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const result = await response.json();
-    return Response.json(result, { status: response.status });
+    if (!response.ok) {
+      const errorData = await response.json();
+      return Response.json(errorData, { status: response.status });
+    }
+
+    const data = await response.json();
+    return Response.json(data);
   } catch (error) {
-    console.error('Error updating company:', error);
+    console.error('Error updating Company:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -62,14 +65,14 @@ export async function DELETE(request: NextRequest) {
 
     if (!response.ok) {
       return Response.json(
-        { success: false, message: 'Failed to delete company' },
+        { success: false, message: 'Failed to delete Company' },
         { status: response.status },
       );
     }
 
     return Response.json({ success: true, message: 'Company deleted!' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting company:', error);
+    console.error('Error deleting Company:', error);
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
