@@ -11,11 +11,8 @@ public record RoleReadDto(
     long Id,
     long? CompanyId,
     CompanyReadDto? Company,
-    [MaxLength(100)]
     string Title,
-    [MaxLength(2048)]
     string? JobPostingUrl,
-    [MaxLength(100)]
     string? Location,
     RoleLevel Level
 );
@@ -24,12 +21,18 @@ public record RoleReadDto(
 public record RoleCreateDto(
     long? CompanyId,
     CompanyCreateDto? Company,
+
+    [Required]
     [MaxLength(100)]
     string Title,
+
+    [Url]
     [MaxLength(2048)]
     string? JobPostingUrl,
+
     [MaxLength(100)]
     string? Location,
+
     RoleLevel Level
 );
 
@@ -37,11 +40,16 @@ public record RoleCreateDto(
 public record RoleUpdateDto(
     long? CompanyId,
     CompanyUpdateDto? Company,
+
     [MaxLength(100)]
     string? Title,
+
+    [Url]
     [MaxLength(2048)]
     string? JobPostingUrl,
+
     [MaxLength(100)]
     string? Location,
+
     RoleLevel? Level
 );

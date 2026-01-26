@@ -6,6 +6,6 @@
 export interface EventTypeCreateDto {
     id: number;
     name: string;
-    category: string;
+    category?: string;
     isSystemDefined: boolean;
 }

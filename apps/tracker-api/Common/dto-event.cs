@@ -14,9 +14,7 @@ public record EventReadDto(
     long? RoleId,
     int EventTypeId,
     DateTime OccurredAt,
-    [MaxLength(256)]
     string? Summary,
-    [MaxLength(1024)]
     string? Details,
     SourceType Source,
     DirectionType Direction
@@ -33,10 +31,13 @@ public record EventCreateDto(
     int EventTypeId,
     EventTypeReadDto? EventType,
     DateTime OccurredAt,
+
     [MaxLength(256)]
     string? Summary,
+
     [MaxLength(1024)]
     string? Details,
+
     SourceType Source,
     DirectionType Direction
 );
@@ -52,10 +53,13 @@ public record EventUpdateDto(
     int? EventTypeId,
     EventTypeReadDto? EventType,
     DateTime? OccurredAt,
+
     [MaxLength(256)]
     string? Summary,
+
     [MaxLength(1024)]
     string? Details,
+
     SourceType? Source,
     DirectionType? Direction
 );
@@ -72,10 +76,13 @@ public record EventReadDtoWithRelations(
     int EventTypeId,
     EventTypeReadDto? EventType,
     DateTime OccurredAt,
+
     [MaxLength(256)]
     string? Summary,
+
     [MaxLength(1024)]
     string? Details,
+
     SourceType Source,
     DirectionType Direction
 );
@@ -86,9 +93,7 @@ public record EventReadDtoWithRelations(
 [ExportTsInterface]
 public record EventTypeReadDto(
     int Id,
-    [MaxLength(100)]
     string Name,
-    [MaxLength(100)]
     string Category,
     bool IsSystemDefined
 );
@@ -96,10 +101,14 @@ public record EventTypeReadDto(
 [ExportTsInterface]
 public record EventTypeCreateDto(
     int Id,
+
+    [Required]
     [MaxLength(100)]
     string Name,
+
     [MaxLength(100)]
-    string Category,
+    string? Category,
+
     bool IsSystemDefined
 );
 
@@ -107,7 +116,9 @@ public record EventTypeCreateDto(
 public record EventTypeUpdateDto(
     [MaxLength(100)]
     string? Name,
+
     [MaxLength(100)]
     string? Category,
+
     bool? IsSystemDefined
 );

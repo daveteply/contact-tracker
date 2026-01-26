@@ -9,27 +9,29 @@ namespace tracker_api.DTOs;
 [ExportTsInterface]
 public record CompanyReadDto(
     long Id,
-    [MaxLength(100)]
     string Name,
-    [MaxLength(2048)]
     string? Website,
-    [MaxLength(100)]
     string? Industry,
-    [MaxLength(100)]
     string? SizeRange,
     string? Notes
 );
 
 [ExportTsInterface]
 public record CompanyCreateDto(
+    [Required]
     [MaxLength(100)]
     string Name,
+
+    [Url]
     [MaxLength(2048)]
     string? Website,
+
     [MaxLength(100)]
     string? Industry,
+
     [MaxLength(100)]
     string? SizeRange,
+
     string? Notes
 );
 
@@ -37,11 +39,16 @@ public record CompanyCreateDto(
 public record CompanyUpdateDto(
     [MaxLength(100)]
     string? Name,
+
+    [Url]
     [MaxLength(2048)]
     string? Website,
+
     [MaxLength(100)]
     string? Industry,
+
     [MaxLength(100)]
     string? SizeRange,
+
     string? Notes
 );
