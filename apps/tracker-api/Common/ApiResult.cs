@@ -1,6 +1,3 @@
-using System.Collections.Concurrent;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using tracker_api.DTOs;
 
 namespace tracker_api.Common;
@@ -17,10 +14,6 @@ public class ApiResult<T>
 
     public PaginationMetadata? Pagination { get; set; }
 
-    public IReadOnlyList<FieldMetadata>? Schema { get; set; }
-
-    private static readonly ConcurrentDictionary<Type, IReadOnlyList<FieldMetadata>> _schemaCache = new();
-
     public static ApiResult<T> SuccessResult(T data, string message = "Operation successful", PaginationMetadata? pagination = null)
     {
         return new ApiResult<T>
@@ -28,8 +21,7 @@ public class ApiResult<T>
             Success = true,
             Data = data,
             Message = message,
-            Pagination = pagination,
-            Schema = GetSchemaMetadata() // Reflect metadata on success
+            Pagination = pagination
         };
     }
 
@@ -54,68 +46,6 @@ public class ApiResult<T>
             Errors = [error]
         };
     }
-
-    private static IReadOnlyList<FieldMetadata> GetSchemaMetadata()
-    {
-        var type = typeof(T);
-
-        // If T is a list, unwrap it
-        if (type.IsGenericType &&
-            (type.GetGenericTypeDefinition() == typeof(List<>)
-          || type.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
-        {
-            type = type.GetGenericArguments()[0];
-        }
-
-        // Cache lookup
-        return _schemaCache.GetOrAdd(type, BuildSchemaForType);
-    }
-
-    private static IReadOnlyList<FieldMetadata> BuildSchemaForType(Type type)
-    {
-        var metadataList = new List<FieldMetadata>();
-
-        // Collect constructor parameters (for records)
-        var ctorParams = type.GetConstructors()
-            .SelectMany(c => c.GetParameters())
-            .ToDictionary(p => p.Name!, p => p, StringComparer.OrdinalIgnoreCase);
-
-        foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-        {
-            ctorParams.TryGetValue(prop.Name, out var ctorParam);
-
-            var propType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-
-            var field = new FieldMetadata
-            {
-                FieldName = prop.Name,
-                DataType = propType.Name,
-
-                IsRequired =
-                    prop.GetCustomAttribute<RequiredAttribute>() != null ||
-                    ctorParam?.GetCustomAttribute<RequiredAttribute>() != null,
-
-                MaxLength =
-                    prop.GetCustomAttribute<MaxLengthAttribute>()?.Length
-                    ?? prop.GetCustomAttribute<StringLengthAttribute>()?.MaximumLength
-                    ?? ctorParam?.GetCustomAttribute<MaxLengthAttribute>()?.Length
-                    ?? ctorParam?.GetCustomAttribute<StringLengthAttribute>()?.MaximumLength,
-
-                MinValue =
-                    (double?)prop.GetCustomAttribute<RangeAttribute>()?.Minimum
-                    ?? (double?)ctorParam?.GetCustomAttribute<RangeAttribute>()?.Minimum,
-
-                MaxValue =
-                    (double?)prop.GetCustomAttribute<RangeAttribute>()?.Maximum
-                    ?? (double?)ctorParam?.GetCustomAttribute<RangeAttribute>()?.Maximum
-            };
-
-            metadataList.Add(field);
-        }
-
-        return metadataList;
-    }
-
 }
 
 
