@@ -69,8 +69,7 @@
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
       }
-    },
-    "@nx/dotnet"
+    }
   ],
   "targetDefaults": {
     "test": {
