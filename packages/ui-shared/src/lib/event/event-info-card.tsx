@@ -36,7 +36,7 @@ export function EventInfoCard({ event, showControls = true }: EventInfoCardProps
           </div>
         </div>
         <ul>
-          <li>{event.company?.name}</li>
+          <li className="truncate">{event.company?.name}</li>
           <li>{event.role?.title}</li>
           <li>{event.source}</li>
         </ul>
