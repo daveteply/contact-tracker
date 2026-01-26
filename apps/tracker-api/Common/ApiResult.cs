@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using tracker_api.DTOs;
@@ -16,7 +17,9 @@ public class ApiResult<T>
 
     public PaginationMetadata? Pagination { get; set; }
 
-    public List<FieldMetadata>? Schema { get; set; }
+    public IReadOnlyList<FieldMetadata>? Schema { get; set; }
+
+    private static readonly ConcurrentDictionary<Type, IReadOnlyList<FieldMetadata>> _schemaCache = new();
 
     public static ApiResult<T> SuccessResult(T data, string message = "Operation successful", PaginationMetadata? pagination = null)
     {
@@ -52,11 +55,11 @@ public class ApiResult<T>
         };
     }
 
-    private static List<FieldMetadata> GetSchemaMetadata()
+    private static IReadOnlyList<FieldMetadata> GetSchemaMetadata()
     {
-        var metadataList = new List<FieldMetadata>();
         var type = typeof(T);
 
+        // If T is a list, unwrap it
         if (type.IsGenericType &&
             (type.GetGenericTypeDefinition() == typeof(List<>)
           || type.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
@@ -64,7 +67,15 @@ public class ApiResult<T>
             type = type.GetGenericArguments()[0];
         }
 
-        // Map constructor parameters by name (for records)
+        // Cache lookup
+        return _schemaCache.GetOrAdd(type, BuildSchemaForType);
+    }
+
+    private static IReadOnlyList<FieldMetadata> BuildSchemaForType(Type type)
+    {
+        var metadataList = new List<FieldMetadata>();
+
+        // Collect constructor parameters (for records)
         var ctorParams = type.GetConstructors()
             .SelectMany(c => c.GetParameters())
             .ToDictionary(p => p.Name!, p => p, StringComparer.OrdinalIgnoreCase);
@@ -73,10 +84,12 @@ public class ApiResult<T>
         {
             ctorParams.TryGetValue(prop.Name, out var ctorParam);
 
+            var propType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+
             var field = new FieldMetadata
             {
                 FieldName = prop.Name,
-                DataType = (Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType).Name,
+                DataType = propType.Name,
 
                 IsRequired =
                     prop.GetCustomAttribute<RequiredAttribute>() != null ||
@@ -104,6 +117,7 @@ public class ApiResult<T>
     }
 
 }
+
 
 /// <summary>
 /// Custom exception for service layer to communicate errors to endpoints
