@@ -49,9 +49,7 @@ export function RoleInfoCard({ role, renderFull = true, showControls = true }: R
               )}
             </div>
             <ul>
-              <li>
-                <li>{role.company?.name}</li>
-              </li>
+              <li>{role.company?.name}</li>
               <li>{role.level}</li>
               <li>
                 <ExternalLink url={role.jobPostingUrl} iconOnly={!renderFull} />
