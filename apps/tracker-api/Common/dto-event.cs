@@ -1,0 +1,113 @@
+using System.ComponentModel.DataAnnotations;
+using TypeGen.Core.TypeAnnotations;
+
+namespace tracker_api.DTOs;
+
+// -----------------------------
+// Event DTOs
+// -----------------------------
+[ExportTsInterface]
+public record EventReadDto(
+    long Id,
+    long? CompanyId,
+    long? ContactId,
+    long? RoleId,
+    int EventTypeId,
+    DateTime OccurredAt,
+    [MaxLength(256)]
+    string? Summary,
+    [MaxLength(1024)]
+    string? Details,
+    SourceType Source,
+    DirectionType Direction
+);
+
+[ExportTsInterface]
+public record EventCreateDto(
+    long? CompanyId,
+    CompanyCreateDto? NewCompany,
+    long? ContactId,
+    ContactCreateDto? NewContact,
+    long? RoleId,
+    RoleCreateDto? NewRole,
+    int EventTypeId,
+    EventTypeReadDto? EventType,
+    DateTime OccurredAt,
+    [MaxLength(256)]
+    string? Summary,
+    [MaxLength(1024)]
+    string? Details,
+    SourceType Source,
+    DirectionType Direction
+);
+
+[ExportTsInterface]
+public record EventUpdateDto(
+    long? CompanyId,
+    CompanyUpdateDto? UpdateCompany,
+    long? ContactId,
+    ContactUpdateDto? UpdateContact,
+    long? RoleId,
+    RoleUpdateDto? UpdateRole,
+    int? EventTypeId,
+    EventTypeReadDto? EventType,
+    DateTime? OccurredAt,
+    [MaxLength(256)]
+    string? Summary,
+    [MaxLength(1024)]
+    string? Details,
+    SourceType? Source,
+    DirectionType? Direction
+);
+
+[ExportTsInterface]
+public record EventReadDtoWithRelations(
+    long Id,
+    long? CompanyId,
+    CompanyReadDto? Company,
+    long? ContactId,
+    ContactReadDto? Contact,
+    long? RoleId,
+    RoleReadDto? Role,
+    int EventTypeId,
+    EventTypeReadDto? EventType,
+    DateTime OccurredAt,
+    [MaxLength(256)]
+    string? Summary,
+    [MaxLength(1024)]
+    string? Details,
+    SourceType Source,
+    DirectionType Direction
+);
+
+// -----------------------------
+// EventType DTOs
+// -----------------------------
+[ExportTsInterface]
+public record EventTypeReadDto(
+    int Id,
+    [MaxLength(100)]
+    string Name,
+    [MaxLength(100)]
+    string Category,
+    bool IsSystemDefined
+);
+
+[ExportTsInterface]
+public record EventTypeCreateDto(
+    int Id,
+    [MaxLength(100)]
+    string Name,
+    [MaxLength(100)]
+    string Category,
+    bool IsSystemDefined
+);
+
+[ExportTsInterface]
+public record EventTypeUpdateDto(
+    [MaxLength(100)]
+    string? Name,
+    [MaxLength(100)]
+    string? Category,
+    bool? IsSystemDefined
+);
