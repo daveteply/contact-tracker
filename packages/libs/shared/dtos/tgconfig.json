@@ -1,0 +1,7 @@
+{
+  "outputPath": "../../../../packages/api-models/src/lib/dtos",
+  "fileNameConverters": ["PascalCaseToKebabCase"],
+  "csNullableTranslation": "optional",
+  "typeBlacklist": ["BaseEntity"],
+  "enumStringInitializers": true
+}
