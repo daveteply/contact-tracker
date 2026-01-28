@@ -14,6 +14,17 @@
         "assets": [],
         "spec": false
       }
+    },
+    "generate-zod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node scripts/generate-zod.mjs",
+          "npx prettier --write ./src/lib/zod/*.ts ./src/lib/index.ts"
+        ],
+        "parallel": false,
+        "cwd": "packages/validation"
+      }
     }
   }
 }

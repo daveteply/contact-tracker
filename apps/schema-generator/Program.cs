@@ -73,18 +73,6 @@ class Program
         {
             GenerateSchema(type, config, outputDir);
         }
-
-        // Readme
-        var readmeFile = Path.Combine(outputDir, "README.md");
-        File.WriteAllText(readmeFile, @"
-# JSON Schemas
-
-The files in this folder are auto-generated using JSON schema exporter.
-
-Any changes made to these files can be lost when this file is regenerated.
-");
-
-        Console.WriteLine($"✓ JSON Schemas generated successfully!");
     }
 
     static void GenerateSchema(Type type, SchemaGeneratorConfiguration config, string outputDir)
@@ -100,15 +88,6 @@ Any changes made to these files can be lost when this file is regenerated.
         var fileName = ToKebabCase(type.Name) + ".json";
         var filePath = Path.Combine(outputDir, fileName);
 
-        // // add file comments
-        // schemaJson = @"
-        // /**
-        // * This is a JSON schema exporter auto-generated file.
-        // * Any changes made to this file can be lost when this file is regenerated.
-        // */
-
-        // " + schemaJson;
-        
         File.WriteAllText(filePath, schemaJson);
         Console.WriteLine($"  Generated: {fileName}");
     }
