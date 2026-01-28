@@ -6,7 +6,8 @@
     "start:services": "docker-compose up -d postgres pgadmin",
     "start:api": "docker-compose up tracker-api",
     "start:ui": "docker-compose up tracker-ui",
-    "start:all": "docker-compose up"
+    "start:all": "docker-compose up",
+    "prepare": "nx g @nx-dotnet/core:restore"
   },
   "private": true,
   "devDependencies": {
@@ -14,6 +15,7 @@
     "@babel/preset-react": "^7.14.5",
     "@eslint/js": "^9.8.0",
     "@next/eslint-plugin-next": "^16.0.1",
+    "@nx-dotnet/core": "^3.0.2",
     "@nx/devkit": "22.1.1",
     "@nx/eslint": "22.1.1",
     "@nx/eslint-plugin": "22.1.1",
