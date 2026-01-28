@@ -13,27 +13,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.*">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.*" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.11.10" />
-    <PackageReference Include="TypeGen" Version="7.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.12.18" />
   </ItemGroup>
 
   <ItemGroup>
     <Watch Include="**\*.cs" Exclude="bin\**\*.cs;obj\**\*.cs;**\*.tmp" />
   </ItemGroup>
 
-  <Target Name="RestoreTypeGen" BeforeTargets="Build">
-    <Exec Command="dotnet tool restore" StandardOutputImportance="low" />
-  </Target>
-
-  <Target Name="GenerateTypeScript" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-    <Exec Command="dotnet typegen generate" />
-  </Target>
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\packages\libs\shared\dtos\shared-dtos.csproj" />
+  </ItemGroup>
 </Project>

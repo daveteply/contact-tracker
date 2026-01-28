@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace tracker_api;
+namespace ContactTracker.TrackerAPI;
 
 public class EventType
 {

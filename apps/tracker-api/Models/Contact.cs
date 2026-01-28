@@ -1,4 +1,4 @@
-﻿namespace tracker_api;
+﻿namespace ContactTracker.TrackerAPI;
 
 public class Contact : BaseEntity
 {

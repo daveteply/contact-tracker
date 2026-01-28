@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using tracker_api.Common;
-using tracker_api.DTOs;
+using ContactTracker.Libs.Shared.DTOs;
+using ContactTracker.TrackerAPI.Common;
 
-namespace tracker_api.Services;
+using Microsoft.EntityFrameworkCore;
+
+namespace ContactTracker.TrackerAPI.Services;
 
 public class EventService : IEventService
 {

@@ -1,14 +1,6 @@
-﻿using TypeGen.Core.TypeAnnotations;
-namespace tracker_api;
+﻿using ContactTracker.Libs.Shared.DTOs;
 
-// TODO: update packages/validation/src/lib/enum-schema.ts if this changes
-[ExportTsEnum]
-public enum RoleLevel
-{
-    EngineeringManager,
-    StaffEngineer
-}
-
+namespace ContactTracker.TrackerAPI;
 
 public class Role : BaseEntity
 {

@@ -1,6 +1,7 @@
+using ContactTracker.TrackerAPI.Endpoints;
+using ContactTracker.TrackerAPI.Services;
 using Microsoft.EntityFrameworkCore;
-using tracker_api.Services;
-using tracker_api.Endpoints;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

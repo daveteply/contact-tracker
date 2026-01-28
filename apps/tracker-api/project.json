@@ -12,6 +12,14 @@
         "cwd": "."
       }
     },
+    "generate-schemas": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build", "schema-generator:build"],
+      "options": {
+        "command": "dotnet run --project apps/schema-generator/schema-generator.csproj",
+        "cwd": "."
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
