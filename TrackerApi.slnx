@@ -3,4 +3,13 @@
     <Project Path="apps/tracker-api-tests/tracker-api-tests.csproj" />
     <Project Path="apps/tracker-api/tracker-api.csproj" />
   </Folder>
+  <Folder Name="/apps/schema-generator/">
+    <Project Path="apps/schema-generator/schema-generator.csproj" />
+  </Folder>
+  <Folder Name="/packages/" />
+  <Folder Name="/packages/libs/" />
+  <Folder Name="/packages/libs/shared/" />
+  <Folder Name="/packages/libs/shared/dtos/">
+    <Project Path="packages/libs/shared/dtos/shared-dtos.csproj" />
+  </Folder>
 </Solution>
