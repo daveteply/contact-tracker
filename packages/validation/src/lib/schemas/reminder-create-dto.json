@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "integer"
+    },
+    "remindAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

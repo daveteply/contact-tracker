@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "website": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 2048,
+      "format": "uri"
+    },
+    "industry": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "sizeRange": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "notes": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}

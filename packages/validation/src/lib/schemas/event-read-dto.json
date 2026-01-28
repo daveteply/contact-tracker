@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "companyId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "contactId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "roleId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "eventTypeId": {
+      "type": "integer"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "details": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "source": {
+      "enum": [
+        "Email",
+        "LinkedIn",
+        "Website",
+        "Recruiter",
+        "Referral"
+      ]
+    },
+    "direction": {
+      "enum": [
+        "Inbound",
+        "Outbound"
+      ]
+    }
+  }
+}

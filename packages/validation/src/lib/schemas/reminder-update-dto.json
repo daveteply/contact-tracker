@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "remindAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    }
+  }
+}

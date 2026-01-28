@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "properties": {
+    "companyId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "firstName": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "title": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "email": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "email",
+      "maxLength": 254
+    },
+    "phoneNumber": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 16
+    },
+    "linkedInUrl": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 2048,
+      "format": "uri"
+    },
+    "isPrimaryRecruiter": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "notes": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}

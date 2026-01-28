@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "category": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "isSystemDefined": {
+      "type": "boolean"
+    }
+  }
+}

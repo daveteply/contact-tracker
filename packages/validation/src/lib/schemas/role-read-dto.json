@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "companyId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "company": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "website": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "industry": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "sizeRange": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "notes": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "jobPostingUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "location": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "level": {
+      "enum": [
+        "EngineeringManager",
+        "StaffEngineer"
+      ]
+    }
+  }
+}

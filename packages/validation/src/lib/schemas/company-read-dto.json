@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "website": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "industry": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "sizeRange": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "notes": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}

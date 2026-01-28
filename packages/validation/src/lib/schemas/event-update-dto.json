@@ -1,0 +1,286 @@
+{
+  "type": "object",
+  "properties": {
+    "companyId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "updateCompany": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "website": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 2048,
+          "format": "uri"
+        },
+        "industry": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "sizeRange": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "notes": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "contactId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "updateContact": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "companyId": {
+          "type": [
+            "null",
+            "integer"
+          ]
+        },
+        "firstName": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "lastName": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "title": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "email": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "email",
+          "maxLength": 254
+        },
+        "phoneNumber": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 16
+        },
+        "linkedInUrl": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 2048,
+          "format": "uri"
+        },
+        "isPrimaryRecruiter": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "notes": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "roleId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "updateRole": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "companyId": {
+          "type": [
+            "null",
+            "integer"
+          ]
+        },
+        "company": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "name": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "maxLength": 100
+            },
+            "website": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "maxLength": 2048,
+              "format": "uri"
+            },
+            "industry": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "maxLength": 100
+            },
+            "sizeRange": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "maxLength": 100
+            },
+            "notes": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        },
+        "title": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "jobPostingUrl": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 2048,
+          "format": "uri"
+        },
+        "location": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "maxLength": 100
+        },
+        "level": {
+          "enum": [
+            "EngineeringManager",
+            "StaffEngineer",
+            null
+          ]
+        }
+      }
+    },
+    "eventTypeId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "eventType": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "isSystemDefined": {
+          "type": "boolean"
+        }
+      }
+    },
+    "occurredAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "summary": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 256
+    },
+    "details": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 1024
+    },
+    "source": {
+      "enum": [
+        "Email",
+        "LinkedIn",
+        "Website",
+        "Recruiter",
+        "Referral",
+        null
+      ]
+    },
+    "direction": {
+      "enum": [
+        "Inbound",
+        "Outbound",
+        null
+      ]
+    }
+  }
+}

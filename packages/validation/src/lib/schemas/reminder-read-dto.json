@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "eventId": {
+      "type": "integer"
+    },
+    "remindAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    }
+  }
+}

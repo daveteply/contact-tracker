@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "category": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "maxLength": 100
+    },
+    "isSystemDefined": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    }
+  }
+}
