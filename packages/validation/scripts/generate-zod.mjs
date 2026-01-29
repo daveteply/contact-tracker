@@ -35,7 +35,6 @@ files.forEach((file) => {
     execSync(`npx json-schema-to-zod -i ${inputPath} -o ${outputPath} --name ${variableName}`);
 
     // Post-Process: Append the Type Inference
-    // This allows you to do: import { CompanyCreateDto } from '...'
     const generatedCode = readFileSync(outputPath, 'utf8');
     const inferName = typeName.replace(/dto/gi, 'Input');
     const typeExport = `\nexport type ${inferName} = z.infer<typeof ${variableName}>;\n`;
@@ -54,6 +53,6 @@ exportLines.push('');
 exportLines.push("export * from './lib/mappers/event-mapper';");
 exportLines.push("export * from './lib/mappers/role-mapper';");
 
-// Write the barrel file so Nx and Next.js can find everything easily
+// Write the barrel file
 writeFileSync(indexFile, exportLines.join('\n'));
 console.log(`✨ Updated index.ts with ${exportLines.length} exports`);
