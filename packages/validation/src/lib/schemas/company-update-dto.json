@@ -2,39 +2,24 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "website": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 2048,
       "format": "uri"
     },
     "industry": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "sizeRange": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "notes": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     }
   }
 }

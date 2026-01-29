@@ -9,10 +9,7 @@
       "maxLength": 100
     },
     "category": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "isSystemDefined": {

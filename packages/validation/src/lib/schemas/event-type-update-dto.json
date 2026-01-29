@@ -2,24 +2,15 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "category": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "maxLength": 100
     },
     "isSystemDefined": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     }
   }
 }

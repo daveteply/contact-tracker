@@ -5,22 +5,13 @@
       "type": "integer"
     },
     "companyId": {
-      "type": [
-        "null",
-        "integer"
-      ]
+      "type": ["null", "integer"]
     },
     "contactId": {
-      "type": [
-        "null",
-        "integer"
-      ]
+      "type": ["null", "integer"]
     },
     "roleId": {
-      "type": [
-        "null",
-        "integer"
-      ]
+      "type": ["null", "integer"]
     },
     "eventTypeId": {
       "type": "integer"
@@ -30,31 +21,16 @@
       "format": "date-time"
     },
     "summary": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "details": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "source": {
-      "enum": [
-        "Email",
-        "LinkedIn",
-        "Website",
-        "Recruiter",
-        "Referral"
-      ]
+      "enum": ["Email", "LinkedIn", "Website", "Recruiter", "Referral"]
     },
     "direction": {
-      "enum": [
-        "Inbound",
-        "Outbound"
-      ]
+      "enum": ["Inbound", "Outbound"]
     }
   }
 }
