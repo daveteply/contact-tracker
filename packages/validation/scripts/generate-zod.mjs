@@ -9,7 +9,9 @@ const indexFile = './src/index.ts';
 // Ensure output dir exists
 mkdirSync(outputDir, { recursive: true });
 
-const files = readdirSync(inputDir).filter((f) => extname(f) === '.json');
+const files = readdirSync(inputDir)
+  .filter((f) => extname(f) === '.json')
+  .filter((f) => !basename(f).toLowerCase().includes('read'));
 console.log(`🚀 Converting ${files.length} schemas to Zod...`);
 
 const exportLines = [];
