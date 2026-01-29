@@ -12,3 +12,5 @@ export const EventReadDtoSchema = z.object({
   source: z.enum(['Email', 'LinkedIn', 'Website', 'Recruiter', 'Referral']).optional(),
   direction: z.enum(['Inbound', 'Outbound']).optional(),
 });
+
+export type EventReadInput = z.infer<typeof EventReadDtoSchema>;

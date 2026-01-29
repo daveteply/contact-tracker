@@ -7,3 +7,5 @@ export const CompanyCreateDtoSchema = z.object({
   sizeRange: z.union([z.null(), z.string().max(100)]).optional(),
   notes: z.union([z.null(), z.string()]).optional(),
 });
+
+export type CompanyCreateInput = z.infer<typeof CompanyCreateDtoSchema>;

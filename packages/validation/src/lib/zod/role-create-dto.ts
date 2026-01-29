@@ -19,3 +19,5 @@ export const RoleCreateDtoSchema = z.object({
   location: z.union([z.null(), z.string().max(100)]).optional(),
   level: z.enum(['EngineeringManager', 'StaffEngineer']).optional(),
 });
+
+export type RoleCreateInput = z.infer<typeof RoleCreateDtoSchema>;

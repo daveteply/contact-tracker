@@ -6,3 +6,5 @@ export const EventTypeReadDtoSchema = z.object({
   category: z.string().optional(),
   isSystemDefined: z.boolean().optional(),
 });
+
+export type EventTypeReadInput = z.infer<typeof EventTypeReadDtoSchema>;

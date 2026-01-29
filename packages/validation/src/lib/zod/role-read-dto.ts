@@ -21,3 +21,5 @@ export const RoleReadDtoSchema = z.object({
   location: z.union([z.null(), z.string()]).optional(),
   level: z.enum(['EngineeringManager', 'StaffEngineer']).optional(),
 });
+
+export type RoleReadInput = z.infer<typeof RoleReadDtoSchema>;

@@ -11,3 +11,5 @@ export const ContactUpdateDtoSchema = z.object({
   isPrimaryRecruiter: z.union([z.null(), z.boolean()]).optional(),
   notes: z.union([z.null(), z.string()]).optional(),
 });
+
+export type ContactUpdateInput = z.infer<typeof ContactUpdateDtoSchema>;

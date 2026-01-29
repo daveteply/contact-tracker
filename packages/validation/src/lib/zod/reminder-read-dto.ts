@@ -6,3 +6,5 @@ export const ReminderReadDtoSchema = z.object({
   remindAt: z.string().datetime({ offset: true }).optional(),
   completedAt: z.union([z.null(), z.string().datetime({ offset: true })]).optional(),
 });
+
+export type ReminderReadInput = z.infer<typeof ReminderReadDtoSchema>;

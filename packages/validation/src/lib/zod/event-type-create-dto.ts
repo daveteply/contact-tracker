@@ -6,3 +6,5 @@ export const EventTypeCreateDtoSchema = z.object({
   category: z.union([z.null(), z.string().max(100)]).optional(),
   isSystemDefined: z.boolean().optional(),
 });
+
+export type EventTypeCreateInput = z.infer<typeof EventTypeCreateDtoSchema>;

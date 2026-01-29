@@ -12,3 +12,5 @@ export const ContactReadDtoSchema = z.object({
   isPrimaryRecruiter: z.union([z.null(), z.boolean()]).optional(),
   notes: z.union([z.null(), z.string()]).optional(),
 });
+
+export type ContactReadInput = z.infer<typeof ContactReadDtoSchema>;

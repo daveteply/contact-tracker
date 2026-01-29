@@ -8,3 +8,5 @@ export const CompanyReadDtoSchema = z.object({
   sizeRange: z.union([z.null(), z.string()]).optional(),
   notes: z.union([z.null(), z.string()]).optional(),
 });
+
+export type CompanyReadInput = z.infer<typeof CompanyReadDtoSchema>;

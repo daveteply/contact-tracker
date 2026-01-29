@@ -1,17 +1,18 @@
 import { execSync } from 'node:child_process';
-import { readdirSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readdirSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, basename, extname } from 'node:path';
 
 const inputDir = './src/lib/schemas';
 const outputDir = './src/lib/zod';
+const indexFile = './src/index.ts';
 
-// 1. Ensure output dir exists
+// Ensure output dir exists
 mkdirSync(outputDir, { recursive: true });
 
 const files = readdirSync(inputDir).filter((f) => extname(f) === '.json');
 console.log(`🚀 Converting ${files.length} schemas to Zod...`);
 
-const exports = [];
+const exportLines = [];
 
 files.forEach((file) => {
   const inputPath = join(inputDir, file);
@@ -22,6 +23,8 @@ files.forEach((file) => {
       .split('-')
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join('') + 'Schema';
+
+  const typeName = variableName.replace('Schema', '');
   const outputPath = join(outputDir, `${name}.ts`);
 
   try {
@@ -29,21 +32,26 @@ files.forEach((file) => {
     // Note: --name parameter forces the exported variable name
     execSync(`npx json-schema-to-zod -i ${inputPath} -o ${outputPath} --name ${variableName}`);
 
-    exports.push(`export * from './zod/${name}';`);
+    // Post-Process: Append the Type Inference
+    // This allows you to do: import { CompanyCreateDto } from '...'
+    const generatedCode = readFileSync(outputPath, 'utf8');
+    const inferName = typeName.replace(/dto/gi, 'Input');
+    const typeExport = `\nexport type ${inferName} = z.infer<typeof ${variableName}>;\n`;
+
+    writeFileSync(outputPath, generatedCode + typeExport);
+
+    exportLines.push(`export * from './lib/zod/${name}';`);
+
     console.log(`  ✅ Generated ${name}.ts`);
   } catch (err) {
-    console.error(`  ❌ Failed to convert ${file}`);
+    console.error(`  ❌ Failed to convert ${file} - ${err}`);
   }
 });
 
-// 2. Generate the index.ts entry point in src/lib/
-const indexPath = './src/lib/index.ts';
-const indexContent = `// --------------------------------------------------------------------------
-// THIS FILE IS AUTO-GENERATED. DO NOT EDIT DIRECTLY.
-// --------------------------------------------------------------------------
+exportLines.push('');
+exportLines.push("export * from './lib/mappers/event-mapper';");
+exportLines.push("export * from './lib/mappers/role-mapper';");
 
-${exports.join('\n')}
-`;
-
-writeFileSync(indexPath, indexContent);
-console.log(`\n✨ Created index.ts with ${exports.length} exports.`);
+// Write the barrel file so Nx and Next.js can find everything easily
+writeFileSync(indexFile, exportLines.join('\n'));
+console.log(`✨ Updated index.ts with ${exportLines.length} exports`);

@@ -74,3 +74,5 @@ export const EventCreateDtoSchema = z.object({
   source: z.enum(['Email', 'LinkedIn', 'Website', 'Recruiter', 'Referral']).optional(),
   direction: z.enum(['Inbound', 'Outbound']).optional(),
 });
+
+export type EventCreateInput = z.infer<typeof EventCreateDtoSchema>;

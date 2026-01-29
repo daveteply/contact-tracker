@@ -85,3 +85,5 @@ export const EventUpdateDtoSchema = z.object({
     .optional(),
   direction: z.union([z.literal('Inbound'), z.literal('Outbound'), z.literal(null)]).optional(),
 });
+
+export type EventUpdateInput = z.infer<typeof EventUpdateDtoSchema>;

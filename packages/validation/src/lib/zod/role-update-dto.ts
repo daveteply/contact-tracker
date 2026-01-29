@@ -21,3 +21,5 @@ export const RoleUpdateDtoSchema = z.object({
     .union([z.literal('EngineeringManager'), z.literal('StaffEngineer'), z.literal(null)])
     .optional(),
 });
+
+export type RoleUpdateInput = z.infer<typeof RoleUpdateDtoSchema>;
