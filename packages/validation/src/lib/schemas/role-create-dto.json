@@ -45,5 +45,6 @@
     "level": {
       "enum": ["EngineeringManager", "StaffEngineer"]
     }
-  }
+  },
+  "required": ["title", "level"]
 }

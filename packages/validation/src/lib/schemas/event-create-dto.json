@@ -162,5 +162,6 @@
     "direction": {
       "enum": ["Inbound", "Outbound"]
     }
-  }
+  },
+  "required": ["eventTypeId", "occurredAt", "source", "direction"]
 }

@@ -56,7 +56,7 @@ export const EventCreateDtoSchema = z.object({
       }),
     ])
     .optional(),
-  eventTypeId: z.number().int().optional(),
+  eventTypeId: z.number().int(),
   eventType: z
     .union([
       z.null(),
@@ -68,11 +68,11 @@ export const EventCreateDtoSchema = z.object({
       }),
     ])
     .optional(),
-  occurredAt: z.string().datetime({ offset: true }).optional(),
+  occurredAt: z.string().datetime({ offset: true }),
   summary: z.union([z.null(), z.string().max(256)]).optional(),
   details: z.union([z.null(), z.string().max(1024)]).optional(),
-  source: z.enum(['Email', 'LinkedIn', 'Website', 'Recruiter', 'Referral']).optional(),
-  direction: z.enum(['Inbound', 'Outbound']).optional(),
+  source: z.enum(['Email', 'LinkedIn', 'Website', 'Recruiter', 'Referral']),
+  direction: z.enum(['Inbound', 'Outbound']),
 });
 
 export type EventCreateInput = z.infer<typeof EventCreateDtoSchema>;

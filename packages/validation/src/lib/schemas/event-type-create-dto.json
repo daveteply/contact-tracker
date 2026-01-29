@@ -15,5 +15,6 @@
     "isSystemDefined": {
       "type": "boolean"
     }
-  }
+  },
+  "required": ["id", "name", "isSystemDefined"]
 }

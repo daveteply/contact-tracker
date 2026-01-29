@@ -36,5 +36,6 @@
     "notes": {
       "type": ["null", "string"]
     }
-  }
+  },
+  "required": ["firstName", "lastName"]
 }

@@ -14,10 +14,10 @@ export const RoleCreateDtoSchema = z.object({
       }),
     ])
     .optional(),
-  title: z.string().max(100).optional(),
+  title: z.string().max(100),
   jobPostingUrl: z.union([z.null(), z.string().url().max(2048)]).optional(),
   location: z.union([z.null(), z.string().max(100)]).optional(),
-  level: z.enum(['EngineeringManager', 'StaffEngineer']).optional(),
+  level: z.enum(['EngineeringManager', 'StaffEngineer']),
 });
 
 export type RoleCreateInput = z.infer<typeof RoleCreateDtoSchema>;
