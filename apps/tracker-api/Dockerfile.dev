@@ -1,4 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+# Remove broken Yarn repo if present (Ubuntu 24.04 / Noble)
+RUN find /etc/apt/sources.list.d -type f -iname '*yarn*' -delete || true
+
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID

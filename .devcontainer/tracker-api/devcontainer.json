@@ -21,7 +21,9 @@
       "installSsl": true,
       "username": "vscode",
       "userUid": "automatic",
-      "userGid": "automatic"
+      "userGid": "automatic",
+      "installNode": "false",
+      "installYarn": "false"
     },
     "ghcr.io/devcontainers-extra/features/nx-npm:1": {
       "version": "latest"
