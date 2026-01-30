@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace tracker_api.Tests;
+namespace ContactTracker.TrackerAPI.Tests;
 
 /// <summary>
 /// Custom factory that uses a dedicated PostgreSQL test database.
@@ -14,7 +14,7 @@ namespace tracker_api.Tests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly DatabaseFixture _databaseFixture;
-    
+
     // IMPORTANT:
     // Tests must use these JsonSerializerOptions when calling ReadFromJsonAsync<T>.
     // The API serializes enums as strings, but HttpClient does NOT automatically
@@ -47,7 +47,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // Remove the existing DbContext registration
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<ContactTrackerDbContext>));
-            
+
             if (descriptor != null)
             {
                 services.Remove(descriptor);

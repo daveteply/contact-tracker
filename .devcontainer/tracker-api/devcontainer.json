@@ -4,7 +4,7 @@
   "service": "tracker-api",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5000],
-  "postCreateCommand": "dotnet restore TrackerApi.slnx && cat > ~/.zshrc << 'EOF'\n# Zsh configuration\nexport ZSH=\"$HOME/.oh-my-zsh\"\nZSH_THEME=\"robbyrussell\"\nplugins=(git)\nsource $ZSH/oh-my-zsh.sh\nexport PATH=$PATH\nEOF",
+  "postCreateCommand": "dotnet restore contact-tracker.slnx && cat > ~/.zshrc << 'EOF'\n# Zsh configuration\nexport ZSH=\"$HOME/.oh-my-zsh\"\nZSH_THEME=\"robbyrussell\"\nplugins=(git)\nsource $ZSH/oh-my-zsh.sh\nexport PATH=$PATH\nEOF",
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {

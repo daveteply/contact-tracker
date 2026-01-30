@@ -1,11 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using tracker_api.Common;
-using tracker_api.DTOs;
+using ContactTracker.TrackerAPI.Common;
 
-namespace tracker_api.Tests;
+namespace ContactTracker.TrackerAPI.Tests;
 
 /// <summary>
 /// Integration tests for Event Type API endpoints.
@@ -21,7 +19,7 @@ public class EventTypeEndpointsTests : IAsyncDisposable
     {
         _factory = new CustomWebApplicationFactory(databaseFixture);
         _client = _factory.CreateClient();
-        
+
         // Clean database before each test
         CleanDatabase().GetAwaiter().GetResult();
     }

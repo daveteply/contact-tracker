@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using tracker_api.Services;
-using tracker_api.Endpoints;
 using Scalar.AspNetCore;
+using ContactTracker.TrackerAPI.Services;
+using ContactTracker.TrackerAPI.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +46,3 @@ app.MapContactEndpoints();
 app.MapRoleEndpoints();
 
 app.Run();
-
-public partial class Program { }

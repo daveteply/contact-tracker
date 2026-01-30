@@ -1,9 +1,9 @@
-using tracker_api.Services;
-using tracker_api.Common;
-using tracker_api.DTOs;
+using ContactTracker.SharedDTOs;
+using ContactTracker.TrackerAPI.Common;
+using ContactTracker.TrackerAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace tracker_api.Endpoints;
+namespace ContactTracker.TrackerAPI.Endpoints;
 
 public static class RoleEndpoints
 {

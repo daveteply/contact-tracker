@@ -1,3 +1,3 @@
 services:
   tracker-api:
-    command: bash -c "dotnet restore /workspace/TrackerApi.slnx && dotnet watch run --project /workspace/apps/tracker-api/tracker-api.csproj --urls http://0.0.0.0:5000"
+    command: bash -c "dotnet restore /workspace/contact-tracker.slnx && dotnet watch run --project /workspace/apps/tracker-api/tracker-api.csproj --urls http://0.0.0.0:5000"

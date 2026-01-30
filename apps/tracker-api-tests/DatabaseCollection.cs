@@ -1,4 +1,4 @@
-namespace tracker_api.Tests;
+namespace ContactTracker.TrackerAPI.Tests;
 
 /// <summary>
 /// Defines a test collection that shares the DatabaseFixture across all test classes.

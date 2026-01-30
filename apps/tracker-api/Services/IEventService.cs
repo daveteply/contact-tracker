@@ -1,6 +1,6 @@
-using tracker_api.DTOs;
+using ContactTracker.SharedDTOs;
 
-namespace tracker_api.Services;
+namespace ContactTracker.TrackerAPI.Services;
 
 public interface IEventService
 {

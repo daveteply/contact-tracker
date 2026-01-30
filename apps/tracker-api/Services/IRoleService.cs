@@ -1,6 +1,7 @@
-using tracker_api.DTOs;
 
-namespace tracker_api.Services;
+using ContactTracker.SharedDTOs;
+
+namespace ContactTracker.TrackerAPI.Services;
 
 public interface IRoleService
 {

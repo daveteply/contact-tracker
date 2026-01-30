@@ -15,7 +15,10 @@
       "!{projectRoot}/**/bin/**/*",
       "!{projectRoot}/**/obj/**/*"
     ],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml", "{workspaceRoot}/TrackerApi.slnx"]
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/ci.yml",
+      "{workspaceRoot}/contact-tracker.slnx"
+    ]
   },
   "nxCloudId": null,
   "plugins": [
@@ -69,7 +72,8 @@
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
       }
-    }
+    },
+    "@nx/dotnet"
   ],
   "targetDefaults": {
     "test": {

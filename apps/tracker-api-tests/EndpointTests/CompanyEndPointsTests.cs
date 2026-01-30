@@ -1,10 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using tracker_api.Common;
+using ContactTracker.TrackerAPI.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using ContactTracker.SharedDTOs;
 
-namespace tracker_api.Tests;
+namespace ContactTracker.TrackerAPI.Tests;
 
 /// <summary>
 /// Integration tests for Company API endpoints.

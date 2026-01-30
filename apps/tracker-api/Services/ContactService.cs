@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tracker_api.Common;
-using tracker_api.DTOs;
+using ContactTracker.TrackerAPI.Common;
+using ContactTracker.SharedDTOs;
 
-namespace tracker_api.Services;
+namespace ContactTracker.TrackerAPI.Services;
 
 public class ContactService : IContactService
 {
@@ -124,7 +124,7 @@ public class ContactService : IContactService
             existingContact.Notes = dto.Notes;
 
         _context.Contacts.Update(existingContact);
-        
+
         try
         {
             await _context.SaveChangesAsync();

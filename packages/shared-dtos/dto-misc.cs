@@ -1,6 +1,6 @@
 using TypeGen.Core.TypeAnnotations;
 
-namespace tracker_api.DTOs;
+namespace ContactTracker.SharedDTOs;
 
 public class FieldMetadata
 {

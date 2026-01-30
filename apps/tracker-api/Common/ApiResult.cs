@@ -1,6 +1,6 @@
-using tracker_api.DTOs;
+using ContactTracker.SharedDTOs;
 
-namespace tracker_api.Common;
+namespace ContactTracker.TrackerAPI.Common;
 
 /// <summary>
 /// Standard result wrapper for API responses to provide consistent error handling

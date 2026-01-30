@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using tracker_api.Common;
-using tracker_api.DTOs;
+using ContactTracker.TrackerAPI.Common;
+using ContactTracker.SharedDTOs;
 
-namespace tracker_api.Services;
+namespace ContactTracker.TrackerAPI.Services;
 
 public class EventTypeService : IEventTypeService
 {
@@ -49,7 +49,7 @@ public class EventTypeService : IEventTypeService
         {
             Id = dto.Id,
             Name = dto.Name,
-            Category = dto.Category,
+            Category = dto.Category ?? "",
             IsSystemDefined = dto.IsSystemDefined
         };
 

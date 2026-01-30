@@ -4,7 +4,7 @@
   "service": "tracker-ui",
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000, 5000],
-  "postCreateCommand": "npm install && cat > ~/.zshrc << 'EOF'\n# Zsh configuration\nexport ZSH=\"$HOME/.oh-my-zsh\"\nZSH_THEME=\"robbyrussell\"\nplugins=(git)\nsource $ZSH/oh-my-zsh.sh\nexport PATH=$PATH\nEOF",
+  "postCreateCommand": "sudo npm install -g npm@latest && npm install && cat > ~/.zshrc << 'EOF'\n# Zsh configuration\nexport ZSH=\"$HOME/.oh-my-zsh\"\nZSH_THEME=\"robbyrussell\"\nplugins=(git)\nsource $ZSH/oh-my-zsh.sh\nexport PATH=$PATH\nEOF",
   "postStartCommand": "npx nx dev tracker-ui -- --hostname 0.0.0.0",
   "remoteUser": "vscode",
   "features": {
@@ -46,5 +46,8 @@
       }
     }
   },
-  "runServices": ["postgres", "pgadmin", "tracker-api", "tracker-ui"]
+  "runServices": ["postgres", "pgadmin", "tracker-api", "tracker-ui"],
+  "containerEnv": {
+    "NX_DOTNET_DISABLE": "true"
+  }
 }

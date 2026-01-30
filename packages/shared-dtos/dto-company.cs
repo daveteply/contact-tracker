@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TypeGen.Core.TypeAnnotations;
 
-namespace tracker_api.DTOs;
+namespace ContactTracker.SharedDTOs;
 
 // -----------------------------
 // Company DTOs
