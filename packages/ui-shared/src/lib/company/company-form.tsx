@@ -3,13 +3,19 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
+import { z } from 'zod';
+import { CompanyCreateDtoSchema, CompanyUpdateDtoSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 
+type CompanyCreateInput = z.infer<typeof CompanyCreateDtoSchema>;
+type CompanyUpdateInput = z.infer<typeof CompanyUpdateDtoSchema>;
+
 interface CompanyFormProps {
-  onSubmitAction: (data: CompanyInput) => Promise<{ success: boolean; message: string }>;
-  initialData?: CompanyInput;
+  onSubmitAction:
+    | ((data: CompanyCreateInput) => Promise<{ success: boolean; message: string }>)
+    | ((data: CompanyUpdateInput) => Promise<{ success: boolean; message: string }>);
+  initialData?: CompanyCreateInput | CompanyUpdateInput;
   isEdit?: boolean;
 }
 
@@ -17,26 +23,31 @@ export function CompanyForm({ onSubmitAction, initialData, isEdit = false }: Com
   const router = useRouter();
   const { showToast } = useToast();
 
+  const schema = isEdit ? CompanyUpdateDtoSchema : CompanyCreateDtoSchema;
+  type FormInput = typeof schema extends typeof CompanyCreateDtoSchema
+    ? CompanyCreateInput
+    : CompanyUpdateInput;
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<CompanyInput>({
-    resolver: zodResolver(CompanyInputSchema),
-    defaultValues: initialData,
+  } = useForm<FormInput>({
+    resolver: zodResolver(schema),
+    defaultValues: initialData as FormInput,
   });
 
   // Reset form when initialData changes
   useEffect(() => {
     if (initialData) {
-      reset(initialData);
+      reset(initialData as FormInput);
     }
   }, [initialData, reset]);
 
-  const onSubmit = async (data: CompanyInput) => {
+  const onSubmit = async (data: FormInput) => {
     try {
-      const result = await onSubmitAction(data);
+      const result = await onSubmitAction(data as never);
       if (result.success) {
         showToast(`Company ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
         router.push('/events/companies');

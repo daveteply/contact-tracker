@@ -1,11 +1,28 @@
 'use server';
 
-import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
+import {
+  CompanyCreateDtoSchema,
+  CompanyCreateInput,
+  CompanyUpdateDtoSchema,
+  CompanyUpdateInput,
+} from '@contact-tracker/validation';
 import { createCompany, updateCompany, deleteCompany } from '../clients/companies-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
+import {
+  ApiResult,
+  CompanyReadDto,
+  CompanyCreateDto,
+  CompanyUpdateDto,
+} from '@contact-tracker/api-models';
 
 const COMPANIES_PATH = '/events/companies';
+
+// Convert null values to undefined to match backend DTO expectations
+function sanitizeNulls<T extends Record<string, unknown>>(obj: T): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, value === null ? undefined : value]),
+  );
+}
 
 async function handleActionResult(
   request: Promise<ApiResult<CompanyReadDto>>,
@@ -29,18 +46,20 @@ async function handleActionResult(
   }
 }
 
-export async function createCompanyAction(data: CompanyInput) {
-  const validated = CompanyInputSchema.safeParse(data);
+export async function createCompanyAction(data: CompanyCreateInput) {
+  const validated = CompanyCreateDtoSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(createCompany(data), 'Company created!');
+  const sanitized = sanitizeNulls(validated.data) as unknown as CompanyCreateDto;
+  return handleActionResult(createCompany(sanitized), 'Company created!');
 }
 
-export async function updateCompanyAction(id: number, data: CompanyInput) {
-  const validated = CompanyInputSchema.safeParse(data);
+export async function updateCompanyAction(id: number, data: CompanyUpdateInput) {
+  const validated = CompanyUpdateDtoSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(updateCompany(id, data), 'Company updated!');
+  const sanitized = sanitizeNulls(validated.data) as unknown as CompanyUpdateDto;
+  return handleActionResult(updateCompany(id, sanitized), 'Company updated!');
 }
 
 export async function deleteCompanyAction(id: number) {
