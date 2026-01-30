@@ -24,17 +24,16 @@ export function CompanyForm({ onSubmitAction, initialData, isEdit = false }: Com
   const { showToast } = useToast();
 
   const schema = isEdit ? CompanyUpdateDtoSchema : CompanyCreateDtoSchema;
-  type FormInput = typeof schema extends typeof CompanyCreateDtoSchema
-    ? CompanyCreateInput
-    : CompanyUpdateInput;
+  type FormInput = CompanyCreateInput | CompanyUpdateInput;
 
   const {
     register,
     handleSubmit,
+    getValues,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormInput>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema as any),
     defaultValues: initialData as FormInput,
   });
 
@@ -46,8 +45,27 @@ export function CompanyForm({ onSubmitAction, initialData, isEdit = false }: Com
   }, [initialData, reset]);
 
   const onSubmit = async (data: FormInput) => {
+    // For update flows we need to detect intentionally-cleared fields.
+    // `data` is the parsed result from zod resolver (preprocess may have converted empty strings to undefined).
+    // Use raw values to detect empty-string clears and map them to `null` for PATCH semantics.
+    const raw = getValues();
+    const payload: any = { ...data };
+
+    if (isEdit) {
+      // Name must not be cleared on edit
+      if (raw.name === '' || payload.name === '' || payload.name === null || payload.name === undefined) {
+        showToast('Company name is required', 'error');
+        return;
+      }
+
+      // If website input was cleared (raw === ''), send explicit null to clear on backend
+      if (raw.website === '') {
+        payload.website = null;
+      }
+    }
+
     try {
-      const result = await onSubmitAction(data as never);
+      const result = await onSubmitAction(payload as never);
       if (result.success) {
         showToast(`Company ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
         router.push('/events/companies');

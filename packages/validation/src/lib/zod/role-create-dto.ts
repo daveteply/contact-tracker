@@ -7,15 +7,21 @@ export const RoleCreateDtoSchema = z.object({
       z.null(),
       z.object({
         name: z.string().max(100).optional(),
-        website: z.union([z.null(), z.string().url().max(2048)]).optional(),
+        website: z.preprocess(
+          (v) => (v === '' ? undefined : v),
+          z.union([z.null(), z.string().url().max(2048)]).optional(),
+        ),
         industry: z.union([z.null(), z.string().max(100)]).optional(),
         sizeRange: z.union([z.null(), z.string().max(100)]).optional(),
         notes: z.union([z.null(), z.string()]).optional(),
       }),
     ])
     .optional(),
-  title: z.string().max(100),
-  jobPostingUrl: z.union([z.null(), z.string().url().max(2048)]).optional(),
+  title: z.string().max(100).min(1),
+  jobPostingUrl: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.union([z.null(), z.string().url().max(2048)]).optional(),
+  ),
   location: z.union([z.null(), z.string().max(100)]).optional(),
   level: z.enum(['EngineeringManager', 'StaffEngineer']),
 });

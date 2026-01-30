@@ -2,12 +2,18 @@ import { z } from 'zod';
 
 export const ContactCreateDtoSchema = z.object({
   companyId: z.union([z.null(), z.number().int()]).optional(),
-  firstName: z.string().max(100),
-  lastName: z.string().max(100),
+  firstName: z.string().max(100).min(1),
+  lastName: z.string().max(100).min(1),
   title: z.union([z.null(), z.string().max(100)]).optional(),
-  email: z.union([z.null(), z.string().email().max(254)]).optional(),
+  email: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.union([z.null(), z.string().email().max(254)]).optional(),
+  ),
   phoneNumber: z.union([z.null(), z.string().max(16)]).optional(),
-  linkedInUrl: z.union([z.null(), z.string().url().max(2048)]).optional(),
+  linkedInUrl: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.union([z.null(), z.string().url().max(2048)]).optional(),
+  ),
   isPrimaryRecruiter: z.union([z.null(), z.boolean()]).optional(),
   notes: z.union([z.null(), z.string()]).optional(),
 });

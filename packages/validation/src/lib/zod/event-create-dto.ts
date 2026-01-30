@@ -7,7 +7,10 @@ export const EventCreateDtoSchema = z.object({
       z.null(),
       z.object({
         name: z.string().max(100).optional(),
-        website: z.union([z.null(), z.string().url().max(2048)]).optional(),
+        website: z.preprocess(
+          (v) => (v === '' ? undefined : v),
+          z.union([z.null(), z.string().url().max(2048)]).optional(),
+        ),
         industry: z.union([z.null(), z.string().max(100)]).optional(),
         sizeRange: z.union([z.null(), z.string().max(100)]).optional(),
         notes: z.union([z.null(), z.string()]).optional(),
@@ -23,9 +26,15 @@ export const EventCreateDtoSchema = z.object({
         firstName: z.string().max(100).optional(),
         lastName: z.string().max(100).optional(),
         title: z.union([z.null(), z.string().max(100)]).optional(),
-        email: z.union([z.null(), z.string().email().max(254)]).optional(),
+        email: z.preprocess(
+          (v) => (v === '' ? undefined : v),
+          z.union([z.null(), z.string().email().max(254)]).optional(),
+        ),
         phoneNumber: z.union([z.null(), z.string().max(16)]).optional(),
-        linkedInUrl: z.union([z.null(), z.string().url().max(2048)]).optional(),
+        linkedInUrl: z.preprocess(
+          (v) => (v === '' ? undefined : v),
+          z.union([z.null(), z.string().url().max(2048)]).optional(),
+        ),
         isPrimaryRecruiter: z.union([z.null(), z.boolean()]).optional(),
         notes: z.union([z.null(), z.string()]).optional(),
       }),
@@ -42,7 +51,10 @@ export const EventCreateDtoSchema = z.object({
             z.null(),
             z.object({
               name: z.string().max(100).optional(),
-              website: z.union([z.null(), z.string().url().max(2048)]).optional(),
+              website: z.preprocess(
+                (v) => (v === '' ? undefined : v),
+                z.union([z.null(), z.string().url().max(2048)]).optional(),
+              ),
               industry: z.union([z.null(), z.string().max(100)]).optional(),
               sizeRange: z.union([z.null(), z.string().max(100)]).optional(),
               notes: z.union([z.null(), z.string()]).optional(),
@@ -50,7 +62,10 @@ export const EventCreateDtoSchema = z.object({
           ])
           .optional(),
         title: z.string().max(100).optional(),
-        jobPostingUrl: z.union([z.null(), z.string().url().max(2048)]).optional(),
+        jobPostingUrl: z.preprocess(
+          (v) => (v === '' ? undefined : v),
+          z.union([z.null(), z.string().url().max(2048)]).optional(),
+        ),
         location: z.union([z.null(), z.string().max(100)]).optional(),
         level: z.enum(['EngineeringManager', 'StaffEngineer']).optional(),
       }),
@@ -68,7 +83,7 @@ export const EventCreateDtoSchema = z.object({
       }),
     ])
     .optional(),
-  occurredAt: z.string().datetime({ offset: true }),
+  occurredAt: z.string().datetime().min(1),
   summary: z.union([z.null(), z.string().max(256)]).optional(),
   details: z.union([z.null(), z.string().max(1024)]).optional(),
   source: z.enum(['Email', 'LinkedIn', 'Website', 'Recruiter', 'Referral']),

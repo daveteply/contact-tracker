@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const EventTypeCreateDtoSchema = z.object({
   id: z.number().int(),
-  name: z.string().max(100),
+  name: z.string().max(100).min(1),
   category: z.union([z.null(), z.string().max(100)]).optional(),
   isSystemDefined: z.boolean(),
 });
