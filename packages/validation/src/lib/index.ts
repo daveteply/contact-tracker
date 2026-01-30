@@ -1,3 +1,4 @@
+// This file is generated, manual changes will be overwritten
 export * from './zod/company-create-dto';
 export * from './zod/company-update-dto';
 export * from './zod/contact-create-dto';

@@ -14,7 +14,7 @@ const files = readdirSync(inputDir)
   .filter((f) => !basename(f).toLowerCase().includes('read'));
 console.log(`🚀 Converting ${files.length} schemas to Zod...`);
 
-const exportLines = [];
+const exportLines = ['// This file is generated, manual changes will be overwritten'];
 
 files.forEach((file) => {
   const inputPath = join(inputDir, file);
