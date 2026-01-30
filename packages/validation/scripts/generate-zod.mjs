@@ -4,7 +4,7 @@ import { join, basename, extname } from 'node:path';
 
 const inputDir = './src/lib/schemas';
 const outputDir = './src/lib/zod';
-const indexFile = './src/index.ts';
+const indexFile = './src/lib/index.ts';
 
 // Ensure output dir exists
 mkdirSync(outputDir, { recursive: true });
@@ -41,17 +41,13 @@ files.forEach((file) => {
 
     writeFileSync(outputPath, generatedCode + typeExport);
 
-    exportLines.push(`export * from './lib/zod/${name}';`);
+    exportLines.push(`export * from './zod/${name}';`);
 
     console.log(`  ✅ Generated ${name}.ts`);
   } catch (err) {
     console.error(`  ❌ Failed to convert ${file} - ${err}`);
   }
 });
-
-exportLines.push('');
-exportLines.push("export * from './lib/mappers/event-mapper';");
-exportLines.push("export * from './lib/mappers/role-mapper';");
 
 // Write the barrel file
 writeFileSync(indexFile, exportLines.join('\n'));
