@@ -96,16 +96,16 @@ public class CompanyService : ICompanyService
         }
 
         if (dto.Website is not null)
-            existingCompany.Website = dto.Website;
+            existingCompany.Website = string.IsNullOrEmpty(dto.Website) ? null : dto.Website;
 
         if (dto.Industry is not null)
-            existingCompany.Industry = dto.Industry;
+            existingCompany.Industry = string.IsNullOrEmpty(dto.Industry) ? null : dto.Industry;
 
         if (dto.SizeRange is not null)
-            existingCompany.SizeRange = dto.SizeRange;
+            existingCompany.SizeRange = string.IsNullOrEmpty(dto.SizeRange) ? null : dto.SizeRange;
 
         if (dto.Notes is not null)
-            existingCompany.Notes = dto.Notes;
+            existingCompany.Notes = string.IsNullOrEmpty(dto.Notes) ? null : dto.Notes;
 
         try
         {
@@ -156,10 +156,10 @@ public class CompanyService : ICompanyService
         return new CompanyReadDto(
             company.Id,
             company.Name,
-            company.Website ?? string.Empty,
-            company.Industry ?? string.Empty,
-            company.SizeRange ?? string.Empty,
-            company.Notes ?? string.Empty
+            company.Website,
+            company.Industry,
+            company.SizeRange,
+            company.Notes
         );
     }
 
