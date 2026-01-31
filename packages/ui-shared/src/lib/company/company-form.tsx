@@ -5,23 +5,22 @@ import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { z } from 'zod';
+import { CompanyCreateSchema, CompanyUpdateSchema } from '@contact-tracker/validation';
 
 interface CompanyFormProps<T extends FieldValues> {
-  schema: z.ZodType<T>;
   onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
   initialData?: DefaultValues<T>;
   isEdit?: boolean;
 }
 
 export function CompanyForm<T extends FieldValues>({
-  schema,
   onSubmitAction,
   initialData,
   isEdit = false,
 }: CompanyFormProps<T>) {
   const router = useRouter();
   const { showToast } = useToast();
+  const schema = isEdit ? CompanyUpdateSchema : CompanyCreateSchema;
 
   const {
     register,
