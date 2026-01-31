@@ -49,7 +49,7 @@ public class EventTypeService : IEventTypeService
         {
             Id = dto.Id,
             Name = dto.Name,
-            Category = dto.Category ?? "",
+            Category = dto.Category ?? string.Empty,
             IsSystemDefined = dto.IsSystemDefined
         };
 

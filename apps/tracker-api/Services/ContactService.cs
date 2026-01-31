@@ -106,22 +106,22 @@ public class ContactService : IContactService
             existingContact.LastName = dto.LastName;
 
         if (dto.Title is not null)
-            existingContact.Title = dto.Title;
+            existingContact.Title = string.IsNullOrEmpty(dto.Title) ? null : dto.Title;
 
         if (dto.Email is not null)
-            existingContact.Email = dto.Email;
+            existingContact.Email = string.IsNullOrEmpty(dto.Email) ? null : dto.Email;
 
         if (dto.PhoneNumber is not null)
-            existingContact.PhoneNumber = dto.PhoneNumber;
+            existingContact.PhoneNumber = string.IsNullOrEmpty(dto.PhoneNumber) ? null : dto.PhoneNumber;
 
         if (dto.LinkedInUrl is not null)
-            existingContact.LinkedInUrl = dto.LinkedInUrl;
+            existingContact.LinkedInUrl = string.IsNullOrEmpty(dto.LinkedInUrl) ? null : dto.LinkedInUrl;
 
         if (dto.IsPrimaryRecruiter.HasValue)
             existingContact.IsPrimaryRecruiter = dto.IsPrimaryRecruiter;
 
         if (dto.Notes is not null)
-            existingContact.Notes = dto.Notes;
+            existingContact.Notes = string.IsNullOrEmpty(dto.Notes) ? null : dto.Notes;
 
         _context.Contacts.Update(existingContact);
 
@@ -178,12 +178,12 @@ public class ContactService : IContactService
             contact.CompanyId,
             contact.FirstName,
             contact.LastName,
-            contact.Title ?? string.Empty,
-            contact.Email ?? string.Empty,
-            contact.PhoneNumber ?? string.Empty,
-            contact.LinkedInUrl ?? string.Empty,
-            contact.IsPrimaryRecruiter = false,
-            contact.Notes ?? string.Empty
+            contact.Title,
+            contact.Email,
+            contact.PhoneNumber,
+            contact.LinkedInUrl,
+            contact.IsPrimaryRecruiter,
+            contact.Notes
         );
     }
 

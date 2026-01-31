@@ -1,40 +1,43 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ContactInput, ContactInputSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
+import { ContactCreateSchema, ContactUpdateSchema } from '@contact-tracker/validation';
 
-interface ContactFormProps {
-  onSubmitAction: (data: ContactInput) => Promise<{ success: boolean; message: string }>;
-  initialData?: ContactInput;
+interface ContactFormProps<T extends FieldValues> {
+  onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
+  initialData?: DefaultValues<T>;
   isEdit?: boolean;
 }
 
-export function ContactForm({ onSubmitAction, initialData, isEdit = false }: ContactFormProps) {
+export function ContactForm<T extends FieldValues>({
+  onSubmitAction,
+  initialData,
+  isEdit = false,
+}: ContactFormProps<T>) {
   const router = useRouter();
   const { showToast } = useToast();
+  const schema = isEdit ? ContactUpdateSchema : ContactCreateSchema;
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ContactInput>({
-    resolver: zodResolver(ContactInputSchema),
+  } = useForm<T>({
+    resolver: zodResolver(schema as any),
     defaultValues: initialData,
   });
 
   // Reset form when initialData changes
   useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-    }
+    if (initialData) reset(initialData);
   }, [initialData, reset]);
 
-  const onSubmit = async (data: ContactInput) => {
+  const onSubmit = async (data: T) => {
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
@@ -42,7 +45,7 @@ export function ContactForm({ onSubmitAction, initialData, isEdit = false }: Con
         router.push('/events/contacts');
       } else {
         // TODO log this
-        showToast('Could not save Contact', 'error');
+        showToast(result.message || 'Could not save Contact', 'error');
       }
     } catch (error) {
       // TODO log this
@@ -50,50 +53,55 @@ export function ContactForm({ onSubmitAction, initialData, isEdit = false }: Con
     }
   };
 
+  // Helper to render error messages cleanly
+  const ErrorMsg = ({ name }: { name: Path<T> }) => {
+    const error = errors[name];
+    if (!error) return null;
+    return (
+      <p className="text-red-600">
+        <span>{error.message?.toString()}</span>
+      </p>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">First Name</legend>
-        <input className="input" {...register('firstName')} required />
+        <input className="input" {...register('firstName' as Path<T>)} />
         <p className="label">Required</p>
-        <p className="text-red-600">
-          {errors.firstName && <span>{errors.firstName.message}</span>}
-        </p>
+        <ErrorMsg name={'firstName' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Last Name</legend>
-        <input className="input" {...register('lastName')} required />
+        <input className="input" {...register('lastName' as Path<T>)} />
         <p className="label">Required</p>
-        <p className="text-red-600">{errors.lastName && <span>{errors.lastName.message}</span>}</p>
+        <ErrorMsg name={'lastName' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Title</legend>
-        <input className="input" {...register('title')} />
-        <p className="text-red-600">{errors.title && <span>{errors.title.message}</span>}</p>
+        <input className="input" {...register('title' as Path<T>)} />
+        <ErrorMsg name={'title' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Email</legend>
-        <input className="input" {...register('email')} />
-        <p className="text-red-600">{errors.email && <span>{errors.email.message}</span>}</p>
+        <input className="input" {...register('email' as Path<T>)} />
+        <ErrorMsg name={'email' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Phone</legend>
-        <input className="input" {...register('phoneNumber')} />
-        <p className="text-red-600">
-          {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
-        </p>
+        <input className="input" {...register('phoneNumber' as Path<T>)} />
+        <ErrorMsg name={'phoneNumber' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">LinkedIn URL</legend>
-        <input className="input" {...register('linkedInUrl')} />
-        <p className="text-red-600">
-          {errors.linkedInUrl && <span>{errors.linkedInUrl.message}</span>}
-        </p>
+        <input className="input" {...register('linkedInUrl' as Path<T>)} />
+        <ErrorMsg name={'linkedInUrl' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
@@ -102,20 +110,17 @@ export function ContactForm({ onSubmitAction, initialData, isEdit = false }: Con
           <input
             type="checkbox"
             className={`checkbox ${errors.isPrimaryRecruiter ? 'checkbox-error' : 'checkbox-primary'}`}
-            {...register('isPrimaryRecruiter')}
+            {...register('isPrimaryRecruiter' as Path<T>)}
           />
           <span className="label-text">Yes, this is the primary recruiter</span>
         </label>
-
-        {errors.isPrimaryRecruiter && (
-          <p className="fieldset-label text-error">{errors.isPrimaryRecruiter.message}</p>
-        )}
+        <ErrorMsg name={'isPrimaryRecruiter' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Notes</legend>
-        <textarea className="textarea" {...register('notes')} />
-        <p className="text-red-600">{errors.notes && <span>{errors.notes.message}</span>}</p>
+        <textarea className="textarea" {...register('notes' as Path<T>)} />
+        <ErrorMsg name={'notes' as Path<T>} />
       </fieldset>
 
       <button className="btn mt-4" type="submit" disabled={isSubmitting}>

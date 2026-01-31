@@ -128,10 +128,10 @@ public class EventService : IEventService
             @event.OccurredAt = dto.OccurredAt.Value;
 
         if (dto.Summary is not null)
-            @event.Summary = dto.Summary;
+            @event.Summary = string.IsNullOrEmpty(dto.Summary) ? null : dto.Summary;
 
         if (dto.Details is not null)
-            @event.Details = dto.Details;
+            @event.Details = string.IsNullOrEmpty(dto.Details) ? null : dto.Details;
 
         if (dto.Source.HasValue)
             @event.Source = dto.Source.Value;
@@ -205,10 +205,10 @@ public class EventService : IEventService
             @event.Company is not null ? new CompanyReadDto(
                 @event.Company.Id,
                 @event.Company.Name,
-                @event.Company.Website ?? string.Empty,
-                @event.Company.Industry ?? string.Empty,
-                @event.Company.SizeRange ?? string.Empty,
-                @event.Company.Notes ?? string.Empty
+                @event.Company.Website,
+                @event.Company.Industry,
+                @event.Company.SizeRange,
+                @event.Company.Notes
             ) : null,
             @event.ContactId,
             @event.Contact is not null ? new ContactReadDto(
@@ -216,12 +216,12 @@ public class EventService : IEventService
                 @event.Contact.CompanyId,
                 @event.Contact.FirstName,
                 @event.Contact.LastName,
-                @event.Contact.Title ?? string.Empty,
-                @event.Contact.Email ?? string.Empty,
-                @event.Contact.PhoneNumber ?? string.Empty,
-                @event.Contact.LinkedInUrl ?? string.Empty,
-                @event.Contact.IsPrimaryRecruiter = false,
-                @event.Contact.Notes ?? string.Empty
+                @event.Contact.Title,
+                @event.Contact.Email,
+                @event.Contact.PhoneNumber,
+                @event.Contact.LinkedInUrl,
+                @event.Contact.IsPrimaryRecruiter,
+                @event.Contact.Notes
             ) : null,
             @event.RoleId,
             @event.Role is not null ? new RoleReadDto(
@@ -230,14 +230,14 @@ public class EventService : IEventService
                 @event.Company is not null ? new CompanyReadDto(
                 @event.Company.Id,
                 @event.Company.Name,
-                @event.Company.Website ?? string.Empty,
-                @event.Company.Industry ?? string.Empty,
-                @event.Company.SizeRange ?? string.Empty,
-                @event.Company.Notes ?? string.Empty
+                @event.Company.Website,
+                @event.Company.Industry,
+                @event.Company.SizeRange,
+                @event.Company.Notes
             ) : null,
                 @event.Role.Title,
-                @event.Role.JobPostingUrl ?? string.Empty,
-                @event.Role.Location ?? string.Empty,
+                @event.Role.JobPostingUrl,
+                @event.Role.Location,
                 @event.Role.Level
             ) : null,
             @event.EventTypeId,
@@ -248,8 +248,8 @@ public class EventService : IEventService
                 @event.EventType.IsSystemDefined
             ) : null,
             @event.OccurredAt,
-            @event.Summary ?? string.Empty,
-            @event.Details ?? string.Empty,
+            @event.Summary,
+            @event.Details,
             @event.Source,
             @event.Direction
         );

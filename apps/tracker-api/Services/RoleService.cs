@@ -226,14 +226,14 @@ public class RoleService : IRoleService
             role.Company is not null ? new CompanyReadDto(
                 role.Company.Id,
                 role.Company.Name,
-                role.Company.Website ?? string.Empty,
-                role.Company.Industry ?? string.Empty,
-                role.Company.SizeRange ?? string.Empty,
-                role.Company.Notes ?? string.Empty
+                role.Company.Website,
+                role.Company.Industry,
+                role.Company.SizeRange,
+                role.Company.Notes
             ) : null,
             role.Title,
-            role.JobPostingUrl ?? string.Empty,
-            role.Location ?? string.Empty,
+            role.JobPostingUrl,
+            role.Location,
             role.Level
         );
     }

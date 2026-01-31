@@ -1,6 +1,11 @@
 'use server';
 
-import { ContactInput, ContactInputSchema } from '@contact-tracker/validation';
+import {
+  ContactCreate,
+  ContactCreateSchema,
+  ContactUpdate,
+  ContactUpdateSchema,
+} from '@contact-tracker/validation';
 import { createContact, deleteContact, updateContact } from '../clients/contacts-client';
 import { revalidatePath } from 'next/cache';
 import { ApiResult, ContactReadDto } from '@contact-tracker/api-models';
@@ -29,15 +34,15 @@ async function handleActionResult(
   }
 }
 
-export async function createContactAction(data: ContactInput) {
-  const validated = ContactInputSchema.safeParse(data);
+export async function createContactAction(data: ContactCreate) {
+  const validated = ContactCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
   return handleActionResult(createContact(data), 'Contact created!');
 }
 
-export async function updateContactAction(id: number, data: ContactInput) {
-  const validated = ContactInputSchema.safeParse(data);
+export async function updateContactAction(id: number, data: ContactUpdate) {
+  const validated = ContactUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
   return handleActionResult(updateContact(id, data), 'Contact updated!');
