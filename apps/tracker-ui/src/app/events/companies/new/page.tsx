@@ -1,11 +1,10 @@
-import { createCompanyAction } from '@/lib/server/actions/company-actions';
-import { CompanyForm } from '@contact-tracker/ui-shared';
+import { CreateCompanyClientPage } from './create-company-client';
 
 export default async function CreateCompanyPage() {
   return (
     <>
       <h1 className="text-xl mb-5">Companies - new Company</h1>
-      <CompanyForm onSubmitAction={createCompanyAction} />
+      return <CreateCompanyClientPage />;
     </>
   );
 }

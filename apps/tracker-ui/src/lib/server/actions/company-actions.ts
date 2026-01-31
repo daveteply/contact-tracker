@@ -1,6 +1,11 @@
 'use server';
 
-import { CompanyInput, CompanyInputSchema } from '@contact-tracker/validation';
+import {
+  CompanyCreate,
+  CompanyCreateSchema,
+  CompanyUpdate,
+  CompanyUpdateSchema,
+} from '@contact-tracker/validation';
 import { createCompany, updateCompany, deleteCompany } from '../clients/companies-client';
 import { revalidatePath } from 'next/cache';
 import { ApiResult, CompanyReadDto } from '@contact-tracker/api-models';
@@ -29,15 +34,15 @@ async function handleActionResult(
   }
 }
 
-export async function createCompanyAction(data: CompanyInput) {
-  const validated = CompanyInputSchema.safeParse(data);
+export async function createCompanyAction(data: CompanyCreate) {
+  const validated = CompanyCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
   return handleActionResult(createCompany(data), 'Company created!');
 }
 
-export async function updateCompanyAction(id: number, data: CompanyInput) {
-  const validated = CompanyInputSchema.safeParse(data);
+export async function updateCompanyAction(id: number, data: CompanyUpdate) {
+  const validated = CompanyUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
   return handleActionResult(updateCompany(id, data), 'Company updated!');

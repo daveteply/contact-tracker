@@ -1,4 +1,6 @@
-# api-models
+# TypeScript representations of DTOs
+
+These are generated using TypeGen
 
 This library was generated with [Nx](https://nx.dev).
 

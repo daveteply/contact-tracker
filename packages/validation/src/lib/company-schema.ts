@@ -1,12 +1,23 @@
 import { z } from 'zod';
 
-export const CompanyInputSchema = z.object({
-  name: z.string().min(1, 'Company name is required'),
-  website: z.url('Must be a valid URL').optional(),
-  industry: z.string().optional(),
-  sizeRange: z.string().optional(),
-  notes: z.string().optional(),
-});
-export const CompanyUpdateSchema = CompanyInputSchema.partial();
+// Helper to convert empty strings to undefined
+const emptyToUndefined = z.preprocess(
+  (val) => (val === '' ? undefined : val),
+  z.string().max(100).optional(),
+);
 
-export type CompanyInput = z.infer<typeof CompanyInputSchema>;
+export const CompanyCreateSchema = z.object({
+  name: z.string().min(1, 'Company name is required').max(100),
+  website: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z.string().url('Must be a valid URL').max(2048).optional(),
+  ),
+  industry: emptyToUndefined,
+  sizeRange: emptyToUndefined,
+  notes: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+});
+
+export const CompanyUpdateSchema = CompanyCreateSchema.partial();
+
+export type CompanyCreate = z.infer<typeof CompanyCreateSchema>;
+export type CompanyUpdate = z.infer<typeof CompanyUpdateSchema>;
