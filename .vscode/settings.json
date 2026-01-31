@@ -1,3 +1,5 @@
 {
-  "csharp.suppressDotnetInstallWarning": true
+  "csharp.suppressDotnetInstallWarning": true,
+  "dotnet.automaticallyCreateSolutionInWorkspace": false,
+  "dotnet.defaultSolution": "contact-tracker.slnx"
 }
