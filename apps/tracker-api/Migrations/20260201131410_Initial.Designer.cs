@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     [DbContext(typeof(ContactTrackerDbContext))]
-    [Migration("20260120122936_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260201131410_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace tracker_api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("tracker_api.Company", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Company", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace tracker_api.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("tracker_api.Contact", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Contact", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,7 +129,7 @@ namespace tracker_api.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("tracker_api.Event", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Event", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +191,7 @@ namespace tracker_api.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("tracker_api.EventType", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.EventType", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -263,7 +263,7 @@ namespace tracker_api.Migrations
                         });
                 });
 
-            modelBuilder.Entity("tracker_api.Reminder", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Reminder", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,7 +297,7 @@ namespace tracker_api.Migrations
                     b.ToTable("Reminders");
                 });
 
-            modelBuilder.Entity("tracker_api.Role", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Role", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -344,33 +344,33 @@ namespace tracker_api.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("tracker_api.Contact", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Contact", b =>
                 {
-                    b.HasOne("tracker_api.Company", "Company")
+                    b.HasOne("ContactTracker.TrackerAPI.Company", "Company")
                         .WithMany("Contacts")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("tracker_api.Event", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Event", b =>
                 {
-                    b.HasOne("tracker_api.Company", "Company")
+                    b.HasOne("ContactTracker.TrackerAPI.Company", "Company")
                         .WithMany("Events")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("tracker_api.Contact", "Contact")
+                    b.HasOne("ContactTracker.TrackerAPI.Contact", "Contact")
                         .WithMany("Events")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("tracker_api.EventType", "EventType")
+                    b.HasOne("ContactTracker.TrackerAPI.EventType", "EventType")
                         .WithMany("Events")
                         .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("tracker_api.Role", "Role")
+                    b.HasOne("ContactTracker.TrackerAPI.Role", "Role")
                         .WithMany("Events")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -384,9 +384,9 @@ namespace tracker_api.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("tracker_api.Reminder", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Reminder", b =>
                 {
-                    b.HasOne("tracker_api.Event", "Event")
+                    b.HasOne("ContactTracker.TrackerAPI.Event", "Event")
                         .WithMany("Reminders")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -395,16 +395,16 @@ namespace tracker_api.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("tracker_api.Role", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Role", b =>
                 {
-                    b.HasOne("tracker_api.Company", "Company")
+                    b.HasOne("ContactTracker.TrackerAPI.Company", "Company")
                         .WithMany("Roles")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("tracker_api.Company", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Company", b =>
                 {
                     b.Navigation("Contacts");
 
@@ -413,22 +413,22 @@ namespace tracker_api.Migrations
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("tracker_api.Contact", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Contact", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("tracker_api.Event", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Event", b =>
                 {
                     b.Navigation("Reminders");
                 });
 
-            modelBuilder.Entity("tracker_api.EventType", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.EventType", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("tracker_api.Role", b =>
+            modelBuilder.Entity("ContactTracker.TrackerAPI.Role", b =>
                 {
                     b.Navigation("Events");
                 });
