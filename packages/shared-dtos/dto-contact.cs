@@ -10,6 +10,7 @@ namespace ContactTracker.SharedDTOs;
 public record ContactReadDto(
     long Id,
     long? CompanyId,
+    CompanyReadDto? Company,
     string FirstName,
     string LastName,
     string? Title,
@@ -23,6 +24,7 @@ public record ContactReadDto(
 [ExportTsInterface]
 public record ContactCreateDto(
     long? CompanyId,
+    CompanyCreateDto? NewCompany,
 
     [Required]
     [MaxLength(100)]
@@ -55,6 +57,7 @@ public record ContactCreateDto(
 [ExportTsInterface]
 public record ContactUpdateDto(
     long? CompanyId,
+    CompanyUpdateDto? UpdateCompany,
 
     [MaxLength(100)]
     string? FirstName,

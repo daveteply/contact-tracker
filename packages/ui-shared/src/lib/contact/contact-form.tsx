@@ -6,15 +6,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 import { ContactCreateSchema, ContactUpdateSchema } from '@contact-tracker/validation';
+import CompanyCombobox from '../company/company-combobox';
+import { CompanyReadDto } from '@contact-tracker/api-models';
 
 interface ContactFormProps<T extends FieldValues> {
   onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
+  onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
   initialData?: DefaultValues<T>;
   isEdit?: boolean;
 }
 
 export function ContactForm<T extends FieldValues>({
   onSubmitAction,
+  onSearchCompany,
   initialData,
   isEdit = false,
 }: ContactFormProps<T>) {
@@ -26,6 +30,7 @@ export function ContactForm<T extends FieldValues>({
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<T>({
     resolver: zodResolver(schema as any),
@@ -38,6 +43,7 @@ export function ContactForm<T extends FieldValues>({
   }, [initialData, reset]);
 
   const onSubmit = async (data: T) => {
+    console.log('FORM DATA:', data);
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
@@ -84,6 +90,12 @@ export function ContactForm<T extends FieldValues>({
         <legend className="fieldset-legend">Title</legend>
         <input className="input" {...register('title' as Path<T>)} />
         <ErrorMsg name={'title' as Path<T>} />
+      </fieldset>
+
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend">Company</legend>
+        <CompanyCombobox control={control} name={'company' as Path<T>} onSearch={onSearchCompany} />
+        <ErrorMsg name={'company' as Path<T>} />
       </fieldset>
 
       <fieldset className="fieldset">

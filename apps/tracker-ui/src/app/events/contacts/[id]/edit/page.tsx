@@ -1,4 +1,5 @@
 import { updateContactAction } from '@/lib/server/actions/contact-actions';
+import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { fetchContactById } from '@/lib/server/clients/contacts-client';
 import { ContactForm } from '@contact-tracker/ui-shared';
 
@@ -16,7 +17,12 @@ export default async function ContactUpdatePage({ params }: { params: Promise<{ 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Edit Contact</h1>
-      <ContactForm onSubmitAction={boundUpdateAction} initialData={response.data} isEdit={true} />
+      <ContactForm
+        onSubmitAction={boundUpdateAction}
+        initialData={response.data}
+        onSearchCompany={searchCompanies}
+        isEdit={true}
+      />
     </div>
   );
 }

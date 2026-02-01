@@ -16,6 +16,7 @@ public class ContactService : IContactService
     public async Task<List<ContactReadDto>> GetAllContactsAsync()
     {
         var contacts = await _context.Contacts
+            .Include(e => e.Company)
             .AsNoTracking()
             .ToListAsync();
 
@@ -25,6 +26,7 @@ public class ContactService : IContactService
     public async Task<ContactReadDto> GetContactByIdAsync(long id)
     {
         var contact = await _context.Contacts
+             .Include(e => e.Company)
              .AsNoTracking()
              .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -42,7 +44,6 @@ public class ContactService : IContactService
 
         var contact = new Contact
         {
-            CompanyId = dto.CompanyId,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Title = dto.Title,
@@ -53,11 +54,19 @@ public class ContactService : IContactService
             Notes = dto.Notes
         };
 
+        await ResolveEntitiesAsync(dto, contact);
+
         _context.Contacts.Add(contact);
 
         try
         {
             await _context.SaveChangesAsync();
+
+            // Ensure the company is loaded for the response DTO
+            if (contact.CompanyId.HasValue && contact.Company == null)
+            {
+                await _context.Entry(contact).Reference(c => c.Company).LoadAsync();
+            }
         }
         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
@@ -80,30 +89,31 @@ public class ContactService : IContactService
         ValidateContactUpdate(dto);
 
         // Only update properties that are provided (not null)
-        if (dto.FirstName is not null && dto.LastName is not null)
+        if (dto.FirstName is not null || dto.LastName is not null)
         {
+            var newFirst = dto.FirstName ?? existingContact.FirstName;
+            var newLast = dto.LastName ?? existingContact.LastName;
+
             var exists = await _context.Contacts
-                .AnyAsync(c => c.Id != id && c.FirstName.ToLower() == dto.FirstName.ToLower()
-                    && c.LastName.ToLower() == dto.LastName.ToLower()
-                );
+                .AnyAsync(c => c.Id != id
+                    && c.FirstName.ToLower() == newFirst.ToLower()
+                    && c.LastName.ToLower() == newLast.ToLower());
 
-            if (exists)
-            {
-                DuplicateFound();
-            }
+            if (exists) DuplicateFound();
 
-            existingContact.FirstName = dto.FirstName;
-            existingContact.LastName = dto.LastName;
+            existingContact.FirstName = newFirst;
+            existingContact.LastName = newLast;
         }
 
         if (dto.CompanyId.HasValue)
+        {
             existingContact.CompanyId = dto.CompanyId;
-
-        if (dto.FirstName is not null)
-            existingContact.FirstName = dto.FirstName;
-
-        if (dto.LastName is not null)
-            existingContact.LastName = dto.LastName;
+            existingContact.Company = null; // Clear navigation so EF doesn't try to insert
+        }
+        else if (dto.UpdateCompany is not null)
+        {
+            await HandleInlineCompanyUpdate(existingContact, dto.UpdateCompany);
+        }
 
         if (dto.Title is not null)
             existingContact.Title = string.IsNullOrEmpty(dto.Title) ? null : dto.Title;
@@ -128,6 +138,7 @@ public class ContactService : IContactService
         try
         {
             await _context.SaveChangesAsync();
+            await _context.Entry(existingContact).Reference(c => c.Company).LoadAsync();
         }
         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
@@ -171,11 +182,43 @@ public class ContactService : IContactService
         return contacts.Select(MapToReadDto).ToList();
     }
 
+    private async Task HandleInlineCompanyUpdate(Contact contact, CompanyUpdateDto updateDto)
+    {
+        // Name is the only required field for Company
+        if (string.IsNullOrWhiteSpace(updateDto.Name)) return;
+
+        var newName = updateDto.Name.Trim();
+
+        // Check if a company with this name already exists
+        var existingCompany = await _context.Companies
+            .FirstOrDefaultAsync(c => c.Name == newName);
+
+        if (existingCompany is not null)
+        {
+            // Link to the existing company
+            contact.CompanyId = existingCompany.Id;
+            contact.Company = null;
+            return;
+        }
+
+        // Create a new company (don't update the existing one)
+        contact.Company = new Company { Name = newName };
+        contact.CompanyId = null; // Will be assigned by EF after insert
+    }
+
     private static ContactReadDto MapToReadDto(Contact contact)
     {
         return new ContactReadDto(
             contact.Id,
             contact.CompanyId,
+            contact.Company is not null ? new CompanyReadDto(
+                contact.Company.Id,
+                contact.Company.Name,
+                contact.Company.Website,
+                contact.Company.Industry,
+                contact.Company.SizeRange,
+                contact.Company.Notes
+            ) : null,
             contact.FirstName,
             contact.LastName,
             contact.Title,
@@ -185,6 +228,25 @@ public class ContactService : IContactService
             contact.IsPrimaryRecruiter,
             contact.Notes
         );
+    }
+
+    private async Task ResolveEntitiesAsync(ContactCreateDto dto, Contact contact)
+    {
+        if (dto.CompanyId.HasValue)
+        {
+            contact.CompanyId = dto.CompanyId;
+        }
+        else if (dto.NewCompany is not null && !string.IsNullOrWhiteSpace(dto.NewCompany.Name))
+        {
+            var normalizedName = dto.NewCompany.Name.Trim();
+            var existingCompany = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name == normalizedName);
+
+            if (existingCompany is not null)
+                contact.CompanyId = existingCompany.Id;
+            else
+                contact.Company = new Company { Name = normalizedName };
+        }
     }
 
     private void ValidateContactCreate(ContactCreateDto dto)

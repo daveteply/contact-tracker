@@ -55,6 +55,7 @@ export function ContactInfoCard({
             </div>
             <h2>{contact.title}</h2>
             <ul>
+              <li className="truncate">{contact.company?.name}</li>
               <li>
                 <ExternalLink
                   url={contact.email}

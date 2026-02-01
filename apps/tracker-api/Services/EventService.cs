@@ -110,8 +110,6 @@ public class EventService : IEventService
 
     public async Task<EventReadDtoWithRelations> UpdateEventAsync(long id, EventUpdateDto dto)
     {
-        ValidateEventUpdate(dto);
-
         var @event = await _context.Events
             .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -119,6 +117,8 @@ public class EventService : IEventService
         {
             throw new ResourceNotFoundException(nameof(Event), id);
         }
+
+        ValidateEventUpdate(dto);
 
         // Only update properties that are provided (not null)
         if (dto.EventTypeId.HasValue)
@@ -214,6 +214,14 @@ public class EventService : IEventService
             @event.Contact is not null ? new ContactReadDto(
                 @event.Contact.Id,
                 @event.Contact.CompanyId,
+                @event.Contact.Company is not null ? new CompanyReadDto(
+                    @event.Contact.Company.Id,
+                    @event.Contact.Company.Name,
+                    @event.Contact.Company.Website,
+                    @event.Contact.Company.Industry,
+                    @event.Contact.Company.SizeRange,
+                    @event.Contact.Company.Notes
+                ) : null,
                 @event.Contact.FirstName,
                 @event.Contact.LastName,
                 @event.Contact.Title,
