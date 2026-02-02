@@ -55,7 +55,17 @@ export async function updateContactAction(id: number, data: ContactUpdate) {
   const validated = ContactUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(updateContact(id, data), 'Contact updated!');
+  const { company, ...updateFields } = validated.data;
+
+  const dto = {
+    ...updateFields,
+    // Explicitly mapping the selection object to the DTO
+    companyId: company && !company.isNew ? company.id : undefined,
+    // Note: If your backend supports updating/replacing company info via Contact Patch:
+    updateCompany: company?.isNew ? { name: company.name } : undefined,
+  };
+
+  return handleActionResult(updateContact(id, dto), 'Contact updated!');
 }
 
 export async function deleteContactAction(id: number) {

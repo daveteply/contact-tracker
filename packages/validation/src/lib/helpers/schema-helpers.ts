@@ -65,3 +65,12 @@ export const EntitySelectionSchema = z.object({
 export const CompanySelectionSchema = EntitySelectionSchema.extend({
   name: z.string().min(1, 'Company name is required'),
 });
+
+export const updateName = (maxLength: number) =>
+  z
+    .string()
+    .min(1)
+    .max(maxLength)
+    .or(z.null())
+    .optional()
+    .transform((val) => (val === null ? undefined : val));
