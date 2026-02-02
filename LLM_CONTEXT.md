@@ -4,7 +4,6 @@ This context should be treated as authoritative.
 Rules:
 
 - Do not assume alternative architectures
-- Do not suggest regenerating schemas unless explicitly asked
 - If something is unclear, ask a single clarifying question
 
 --- BEGIN PROJECT CONTEXT ---
@@ -32,6 +31,7 @@ A full-stack job/contact tracking application with strong type safety.
   - Exposes REST endpoints
   - Uses DTOs for request/response models
   - Returns metadata (validation/schema info) when needed
+  - Uses PATCH and not PUT, backend uses EF Core to create a singular transaction
 
 ### DTOs
 
@@ -88,7 +88,7 @@ A full-stack job/contact tracking application with strong type safety.
 Flow:
 DTO (DataAnnotations)
 → TypeScript Types (TypeGen)
-→ Zod Schemas (manual, partial)
+→ Zod v4 Schemas (manual, partial)
 → React Hook Form
 
 ---

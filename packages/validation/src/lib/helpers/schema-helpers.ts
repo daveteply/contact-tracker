@@ -57,7 +57,8 @@ export const updateOptionalBoolean = z
 
 export const EntitySelectionSchema = z.object({
   id: z.number().optional(),
-  isNew: z.boolean(),
+  // Change: allow optional/null to handle data coming directly from the API
+  isNew: z.boolean().optional().default(false),
   displayValue: z.string().optional(),
 });
 

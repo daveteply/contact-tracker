@@ -4,9 +4,14 @@ import {
   emptyToUndefined,
   phoneRegex,
   updateName,
+  updateOptionalBoolean,
+  updateOptionalEmail,
+  updateOptionalPhone,
+  updateOptionalString,
+  updateOptionalUrl,
 } from './helpers/schema-helpers';
 
-const contactBase = {
+const contactCreateBase = {
   title: emptyToUndefined(z.string().max(100).optional()),
   email: emptyToUndefined(z.string().email('Must be a valid email').max(254).optional()),
   phoneNumber: emptyToUndefined(
@@ -25,13 +30,22 @@ const contactBase = {
 export const ContactCreateSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100),
   lastName: z.string().min(1, 'Last name is required').max(100),
-  ...contactBase,
+  ...contactCreateBase,
 });
 
-export const ContactUpdateSchema = ContactCreateSchema.partial().extend({
-  firstName: updateName(100),
-  lastName: updateName(100),
-});
+export const ContactUpdateSchema = z
+  .object({
+    firstName: updateName(100, 'First name is required'),
+    lastName: updateName(100, 'Last name is required'),
+    title: updateOptionalString(100),
+    email: updateOptionalEmail(254),
+    phoneNumber: updateOptionalPhone(16),
+    linkedInUrl: updateOptionalUrl(2048),
+    isPrimaryRecruiter: updateOptionalBoolean,
+    notes: updateOptionalString(500),
+    company: CompanySelectionSchema.or(z.null()).optional(),
+  })
+  .partial();
 
 export type ContactCreate = z.infer<typeof ContactCreateSchema>;
 export type ContactUpdate = z.infer<typeof ContactUpdateSchema>;

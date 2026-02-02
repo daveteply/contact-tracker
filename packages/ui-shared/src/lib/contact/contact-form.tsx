@@ -43,7 +43,6 @@ export function ContactForm<T extends FieldValues>({
   }, [initialData, reset]);
 
   const onSubmit = async (data: T) => {
-    console.log('FORM DATA:', data);
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
