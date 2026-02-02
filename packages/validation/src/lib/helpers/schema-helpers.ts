@@ -66,10 +66,10 @@ export const CompanySelectionSchema = EntitySelectionSchema.extend({
   name: z.string().min(1, 'Company name is required'),
 });
 
-export const updateName = (maxLength: number) =>
+export const updateName = (maxLength: number, message: string) =>
   z
     .string()
-    .min(1)
+    .min(1, message)
     .max(maxLength)
     .or(z.null())
     .optional()
