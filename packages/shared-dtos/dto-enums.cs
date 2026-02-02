@@ -1,4 +1,3 @@
-// TODO: update packages/validation/src/lib/enum-schema.ts if this changes
 using TypeGen.Core.TypeAnnotations;
 
 namespace ContactTracker.SharedDTOs;
@@ -6,8 +5,29 @@ namespace ContactTracker.SharedDTOs;
 [ExportTsEnum]
 public enum RoleLevel
 {
+    FrontendDeveloper,
+    BackendDeveloper,
+    FullStackDeveloper,
+    DevOpsEngineer,
+    QualityAssuranceEngineer,
+    DataEngineer,
+    SecurityEngineer,
+
+    // Technical Leadership & Architecture
+    SoftwareArchitect,
+    TechLead,
+    StaffEngineer,
+    PrincipalEngineer,
+
+    // Management & Product
     EngineeringManager,
-    StaffEngineer
+    ProductManager,
+    ProjectManager,
+    ScrumMaster,
+
+    // Executive Leadership
+    VPOfEngineering,
+    ChiefTechnologyOfficer
 }
 
 

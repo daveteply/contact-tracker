@@ -7,7 +7,6 @@ interface EnumSelectorProps<T extends Record<string, string | number>> {
   register: UseFormRegisterReturn;
   required?: boolean;
   useButtons?: boolean;
-  defaultVale?: string;
 }
 
 export function EnumSelector<T extends Record<string, string | number>>({
@@ -15,7 +14,6 @@ export function EnumSelector<T extends Record<string, string | number>>({
   register,
   required = false,
   useButtons = false,
-  defaultVale = '',
 }: EnumSelectorProps<T>) {
   const options = Object.entries(enumObject);
 

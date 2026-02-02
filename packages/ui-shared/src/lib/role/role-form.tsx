@@ -6,8 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RoleCreateSchema, RoleUpdateSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { CompanyReadDto, RoleLevel } from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
+import EnumSelector from '../common/enum-selector';
 
 interface RoleFormProps<T extends FieldValues> {
   onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
@@ -97,8 +98,12 @@ export function RoleForm<T extends FieldValues>({
       </fieldset>
 
       <fieldset className="fieldset">
-        <legend className="fieldset-legend">Level</legend>
-        <input className="input" {...register('level' as Path<T>)} />
+        <legend className="fieldset-legend">Direction</legend>
+        <EnumSelector
+          register={register('level' as Path<T>)}
+          enumObject={RoleLevel}
+          useButtons={false}
+        />
         <ErrorMsg name={'level' as Path<T>} />
       </fieldset>
 

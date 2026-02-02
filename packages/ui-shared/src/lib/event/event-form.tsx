@@ -103,8 +103,6 @@ export function EventForm({
             register={register('direction')}
             enumObject={DirectionType}
             useButtons={true}
-            required
-            defaultVale={DirectionType.Outbound}
           />
           <p className="text-red-600">
             {errors.direction && <span>{errors.direction.message}</span>}
@@ -113,7 +111,7 @@ export function EventForm({
 
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Source</legend>
-          <EnumSelector register={register('source')} enumObject={SourceType} required />
+          <EnumSelector register={register('source')} enumObject={SourceType} />
           <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
         </fieldset>
 
