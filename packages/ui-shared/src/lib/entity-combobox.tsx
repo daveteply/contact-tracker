@@ -150,13 +150,18 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
     setQuery(val);
     setIsOpen(true);
 
-    // Validate the input for new entity creation
+    // 1. If the input is cleared, set the form value to null
+    if (!val.trim()) {
+      setValidationError(null);
+      onChange(null); // This allows Zod's .nullable() to succeed
+      return;
+    }
+
+    // Otherwise, proceed with existing logic for new entity creation
     const validationErr = config.validateNewEntity?.(val) || null;
     setValidationError(validationErr);
 
-    // Parse the input into the form value
     const parsed = config.parseNewEntity(val);
-
     onChange({
       ...parsed,
       id: undefined,
