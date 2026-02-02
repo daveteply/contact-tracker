@@ -93,7 +93,7 @@ export async function updateEventAction(id: number, data: EventInput) {
           // CRITICAL: Link the new role to the same company info
           // If company is existing, pass its ID. If new, pass the new info.
           companyId: !data.company.isNew ? data.company.id : undefined,
-          company: sharedCompanyUpdate,
+          updateCompany: sharedCompanyUpdate,
         }
       : undefined,
 
