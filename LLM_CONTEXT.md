@@ -1,10 +1,9 @@
-I’m going to provide project context.
-This context should be treated as authoritative.
+This message is context only. Do not respond yet.
 
 Rules:
 
 - Do not assume alternative architectures
-- If something is unclear, ask a single clarifying question
+- If something is unclear, clarifying questions
 
 --- BEGIN PROJECT CONTEXT ---
 
