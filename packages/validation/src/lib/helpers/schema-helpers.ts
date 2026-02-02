@@ -54,3 +54,14 @@ export const updateOptionalBoolean = z
   .or(z.null())
   .optional()
   .transform((val) => (val === null ? undefined : val));
+
+export const EntitySelectionSchema = z.object({
+  id: z.number().optional(),
+  isNew: z.boolean(),
+  displayValue: z.string().optional(),
+});
+
+// Specific shape for Company in a selection context
+export const CompanySelectionSchema = EntitySelectionSchema.extend({
+  name: z.string().min(1, 'Company name is required'),
+});

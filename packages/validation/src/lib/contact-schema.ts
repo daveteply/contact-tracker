@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  CompanySelectionSchema,
   emptyToUndefined,
   phoneRegex,
   updateOptionalBoolean,
@@ -10,14 +11,6 @@ import {
 } from './helpers/schema-helpers';
 
 export const ContactCreateSchema = z.object({
-  companyId: z
-    .number()
-    .int()
-    .positive()
-    .or(z.null())
-    .optional()
-    .transform((val) => (val === null ? undefined : val)),
-
   firstName: z.string().min(1, 'First name is required').max(100),
   lastName: z.string().min(1, 'Last name is required').max(100),
 
@@ -38,6 +31,8 @@ export const ContactCreateSchema = z.object({
     .transform((val) => (val === null ? undefined : val)),
 
   notes: emptyToUndefined(z.string().optional()),
+
+  company: CompanySelectionSchema.or(z.null()).optional(),
 });
 
 /** For required-on-create string fields that become optional on update */

@@ -38,7 +38,17 @@ export async function createContactAction(data: ContactCreate) {
   const validated = ContactCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(createContact(data), 'Contact created!');
+  const { company, ...contactFields } = validated.data;
+
+  // Aligning with the Event logic:
+  // Map to ContactCreateDto expected by .NET
+  const dto = {
+    ...contactFields,
+    companyId: company && !company.isNew ? company.id : undefined,
+    newCompany: company?.isNew ? { name: company.name } : undefined,
+  };
+
+  return handleActionResult(createContact(dto), 'Contact created!');
 }
 
 export async function updateContactAction(id: number, data: ContactUpdate) {
