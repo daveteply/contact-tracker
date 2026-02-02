@@ -40,12 +40,13 @@ public class RoleService : IRoleService
 
     public async Task<RoleReadDto> CreateRoleAsync(RoleCreateDto dto)
     {
+        ValidateRoleCreate(dto);
+
         if (await _context.Roles.AnyAsync(c => c.Title.ToLower() == dto.Title.ToLower()))
         {
             throw new ValidationException("A Role with this name already exists.",
                  new List<string> { "Role title must be unique." });
         }
-        ValidateRoleCreate(dto);
 
         var role = new Role
         {
@@ -55,24 +56,23 @@ public class RoleService : IRoleService
             Level = dto.Level
         };
 
-        // Resolve Company: either link existing ID or process "New" DTO
-        await ResolveCompanyAsync(dto, role);
+        await ResolveEntitiesAsync(dto, role);
 
         _context.Roles.Add(role);
 
         try
         {
             await _context.SaveChangesAsync();
+
+            // Ensure the company is loaded for the response DTO
+            if (role.CompanyId.HasValue && role.Company == null)
+            {
+                await _context.Entry(role).Reference(c => c.Company).LoadAsync();
+            }
         }
         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
             DuplicateFound();
-        }
-
-        // Reload company to return it in the response
-        if (role.CompanyId.HasValue)
-        {
-            await _context.Entry(role).Reference(r => r.Company).LoadAsync();
         }
 
         return MapToReadDto(role);
@@ -96,47 +96,42 @@ public class RoleService : IRoleService
             var exists = await _context.Roles
                 .AnyAsync(c => c.Id != id && c.Title.ToLower() == dto.Title.ToLower());
 
-            if (exists)
-            {
-                DuplicateFound();
-            }
+            if (exists) DuplicateFound();
+
 
             existingRole.Title = dto.Title;
         }
 
-        if (dto.JobPostingUrl is not null)
-            existingRole.JobPostingUrl = dto.JobPostingUrl;
-
-        if (dto.Location is not null)
-            existingRole.Location = dto.Location;
-
-        if (dto.Level.HasValue)
-            existingRole.Level = dto.Level.Value;
-
-        // Handle Company
         if (dto.CompanyId.HasValue)
         {
             existingRole.CompanyId = dto.CompanyId;
             existingRole.Company = null; // Clear navigation so EF doesn't try to insert
         }
-        else if (dto.Company is not null)
+        else if (dto.UpdateCompany is not null)
         {
-            await HandleInlineCompanyUpdate(existingRole, dto.Company);
+            await HandleInlineCompanyUpdate(existingRole, dto.UpdateCompany);
         }
+
+        if (dto.JobPostingUrl is not null)
+            existingRole.JobPostingUrl = string.IsNullOrEmpty(dto.JobPostingUrl) ? null : dto.JobPostingUrl;
+
+        if (dto.Location is not null)
+            existingRole.Location = string.IsNullOrEmpty(dto.Location) ? null : dto.Location;
+
+        if (dto.Level.HasValue)
+            existingRole.Level = dto.Level.Value;
 
         _context.Roles.Update(existingRole);
 
         try
         {
             await _context.SaveChangesAsync();
+            await _context.Entry(existingRole).Reference(c => c.Company).LoadAsync();
         }
         catch (DbUpdateException ex) when (ContactTrackerDbContext.IsUniqueViolation(ex))
         {
             DuplicateFound();
         }
-
-        // Reload company to return it in the response
-        await _context.Entry(existingRole).Reference(r => r.Company).LoadAsync();
 
         return MapToReadDto(existingRole);
     }
@@ -172,26 +167,6 @@ public class RoleService : IRoleService
             .ToListAsync();
 
         return roles.Select(MapToReadDto).ToList();
-    }
-
-    private async Task ResolveCompanyAsync(RoleCreateDto dto, Role role)
-    {
-        // Resolve Company
-        if (dto.CompanyId.HasValue)
-        {
-            role.CompanyId = dto.CompanyId;
-        }
-        else if (dto.Company is not null && !string.IsNullOrWhiteSpace(dto.Company.Name))
-        {
-            var normalizedName = dto.Company.Name.Trim();
-            var existingCompany = await _context.Companies
-                .FirstOrDefaultAsync(c => c.Name == normalizedName);
-
-            if (existingCompany is not null)
-                role.CompanyId = existingCompany.Id;
-            else
-                role.Company = new Company { Name = normalizedName };
-        }
     }
 
     private async Task HandleInlineCompanyUpdate(Role role, CompanyUpdateDto updateDto)
@@ -236,6 +211,25 @@ public class RoleService : IRoleService
             role.Location,
             role.Level
         );
+    }
+
+    private async Task ResolveEntitiesAsync(RoleCreateDto dto, Role role)
+    {
+        if (dto.CompanyId.HasValue)
+        {
+            role.CompanyId = dto.CompanyId;
+        }
+        else if (dto.NewCompany is not null && !string.IsNullOrWhiteSpace(dto.NewCompany.Name))
+        {
+            var normalizedName = dto.NewCompany.Name.Trim();
+            var existingCompany = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name == normalizedName);
+
+            if (existingCompany is not null)
+                role.CompanyId = existingCompany.Id;
+            else
+                role.Company = new Company { Name = normalizedName };
+        }
     }
 
     private void ValidateRoleCreate(RoleCreateDto dto)

@@ -8,7 +8,7 @@ export default async function ContactUpdatePage({ params }: { params: Promise<{ 
   const contactId = parseInt(id);
   const response = await fetchContactById(contactId);
 
-  if (!response.success) {
+  if (!response.data) {
     return <div>Contact not found</div>;
   }
 

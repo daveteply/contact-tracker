@@ -8,7 +8,7 @@ import { RoleLevel } from "./role-level";
 
 export interface RoleUpdateDto {
     companyId?: number;
-    company?: CompanyUpdateDto;
+    updateCompany?: CompanyUpdateDto;
     title?: string;
     jobPostingUrl?: string;
     location?: string;

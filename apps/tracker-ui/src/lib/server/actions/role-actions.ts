@@ -1,6 +1,11 @@
 'use server';
 
-import { RoleInput, RoleInputSchema } from '@contact-tracker/validation';
+import {
+  RoleCreate,
+  RoleCreateSchema,
+  RoleUpdate,
+  RoleUpdateSchema,
+} from '@contact-tracker/validation';
 import { createRole, updateRole, deleteRole } from '../clients/roles-client';
 import { revalidatePath } from 'next/cache';
 import { ApiResult, RoleReadDto } from '@contact-tracker/api-models';
@@ -29,18 +34,37 @@ async function handleActionResult(
   }
 }
 
-export async function createRoleAction(data: RoleInput) {
-  const validated = RoleInputSchema.safeParse(data);
+export async function createRoleAction(data: RoleCreate) {
+  const validated = RoleCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(createRole(data), 'Role created!');
+  const { company, ...contactFields } = validated.data;
+
+  // Aligning with the Event logic:
+  // Map to ContactCreateDto expected by .NET
+  const dto = {
+    ...contactFields,
+    companyId: company && !company.isNew ? company.id : undefined,
+    newCompany: company?.isNew ? { name: company.name } : undefined,
+  };
+
+  return handleActionResult(createRole(dto), 'Role created!');
 }
 
-export async function updateRoleAction(id: number, data: RoleInput) {
-  const validated = RoleInputSchema.safeParse(data);
+export async function updateRoleAction(id: number, data: RoleUpdate) {
+  const validated = RoleUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  return handleActionResult(updateRole(id, data), 'Role updated!');
+  const { company, ...updateFields } = validated.data;
+
+  const dto = {
+    ...updateFields,
+    // Explicitly mapping the selection object to the DTO
+    companyId: company && !company.isNew ? company.id : undefined,
+    // Note: If your backend supports updating/replacing company info via Contact Patch:
+    updateCompany: company?.isNew ? { name: company.name } : undefined,
+  };
+  return handleActionResult(updateRole(id, dto), 'Role updated!');
 }
 
 export async function deleteRoleAction(id: number) {

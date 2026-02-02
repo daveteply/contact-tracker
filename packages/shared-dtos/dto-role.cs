@@ -20,7 +20,7 @@ public record RoleReadDto(
 [ExportTsInterface]
 public record RoleCreateDto(
     long? CompanyId,
-    CompanyCreateDto? Company,
+    CompanyCreateDto? NewCompany,
 
     [Required]
     [MaxLength(100)]
@@ -39,7 +39,7 @@ public record RoleCreateDto(
 [ExportTsInterface]
 public record RoleUpdateDto(
     long? CompanyId,
-    CompanyUpdateDto? Company,
+    CompanyUpdateDto? UpdateCompany,
 
     [MaxLength(100)]
     string? Title,

@@ -18,7 +18,7 @@ export const updateOptionalUrl = (maxLength: number) =>
   z
     .preprocess(
       (val) => val,
-      z.literal('').or(z.string().url('Must be a valid URL').max(maxLength)).or(z.null()),
+      z.literal('').or(z.url('Must be a valid URL').max(maxLength)).or(z.null()),
     )
     .optional()
     .transform((val) => (val === null ? undefined : val));
@@ -28,7 +28,7 @@ export const updateOptionalEmail = (maxLength: number) =>
   z
     .preprocess(
       (val) => val,
-      z.literal('').or(z.string().email('Must be a valid email').max(maxLength)).or(z.null()),
+      z.literal('').or(z.email('Must be a valid email').max(maxLength)).or(z.null()),
     )
     .optional()
     .transform((val) => (val === null ? undefined : val));
@@ -67,7 +67,7 @@ export const CompanySelectionSchema = EntitySelectionSchema.extend({
   name: z.string().min(1, 'Company name is required'),
 });
 
-export const updateName = (maxLength: number, message: string) =>
+export const updateRequiredString = (maxLength: number, message: string) =>
   z
     .string()
     .min(1, message)

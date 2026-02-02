@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { updateName, updateOptionalString, updateOptionalUrl } from './helpers/schema-helpers';
+import {
+  updateRequiredString,
+  updateOptionalString,
+  updateOptionalUrl,
+} from './helpers/schema-helpers';
 
 // Helper to convert empty strings to undefined (for create)
 const emptyToUndefined = z.preprocess(
@@ -11,7 +15,7 @@ export const CompanyCreateSchema = z.object({
   name: z.string().min(1, 'Company name is required').max(100),
   website: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.string().url('Must be a valid URL').max(2048).optional(),
+    z.url('Must be a valid URL').max(2048).optional(),
   ),
   industry: emptyToUndefined,
   sizeRange: emptyToUndefined,
@@ -20,7 +24,7 @@ export const CompanyCreateSchema = z.object({
 
 export const CompanyUpdateSchema = z
   .object({
-    name: updateName(100, 'Company name is required'),
+    name: updateRequiredString(100, 'Company name is required'),
     website: updateOptionalUrl(2048),
     industry: updateOptionalString(100),
     sizeRange: updateOptionalString(100),

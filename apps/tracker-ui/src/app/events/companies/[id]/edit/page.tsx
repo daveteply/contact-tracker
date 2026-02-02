@@ -7,7 +7,7 @@ export default async function CompanyUpdatePage({ params }: { params: Promise<{ 
   const companyId = parseInt(id);
   const response = await fetchCompanyById(companyId);
 
-  if (!response.success) {
+  if (!response.data) {
     return <div>Company not found</div>;
   }
 

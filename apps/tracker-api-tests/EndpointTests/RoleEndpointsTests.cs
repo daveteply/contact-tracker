@@ -44,7 +44,7 @@ public class RoleEndpointsTests : IAsyncDisposable
 
         var newRole = new RoleCreateDto(
             CompanyId: company.Id,
-            Company: null,
+            NewCompany: null,
             Title: "Staff Engineer",
             JobPostingUrl: null,
             Location: "Remote",
@@ -72,7 +72,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         // Arrange
         var newRole = new RoleCreateDto(
             CompanyId: null,
-            Company: new CompanyCreateDto(
+            NewCompany: new CompanyCreateDto(
                 Name: "Startup Inc",
                 Website: null,
                 Industry: null,
@@ -118,7 +118,7 @@ public class RoleEndpointsTests : IAsyncDisposable
 
         var newRole = new RoleCreateDto(
             CompanyId: null,
-            Company: new CompanyCreateDto(
+            NewCompany: new CompanyCreateDto(
                 Name: "Tech Giant", // Same name as existing
                 Website: null,
                 Industry: null,
@@ -166,7 +166,7 @@ public class RoleEndpointsTests : IAsyncDisposable
 
         var updateDto = new RoleUpdateDto(
             CompanyId: null,
-            Company: new CompanyUpdateDto(
+            UpdateCompany: new CompanyUpdateDto(
                 Name: "New Corp",
                 Website: null,
                 Industry: null,
@@ -214,7 +214,7 @@ public class RoleEndpointsTests : IAsyncDisposable
 
         var updateDto = new RoleUpdateDto(
             CompanyId: company2.Id,
-            Company: null,
+            UpdateCompany: null,
             Title: null,
             JobPostingUrl: null,
             Location: null,
@@ -240,7 +240,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         // Arrange
         var invalidRole = new RoleCreateDto(
             CompanyId: null,
-            Company: null,
+            NewCompany: null,
             Title: "",
             JobPostingUrl: null,
             Location: null,
