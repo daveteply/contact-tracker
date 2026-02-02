@@ -150,10 +150,14 @@ export function EntityCombobox<TEntity extends { id: number }, T extends FieldVa
     setQuery(val);
     setIsOpen(true);
 
-    // 1. If the input is cleared, set the form value to null
+    // If the input is cleared, use the sentinel flag instead of null
     if (!val.trim()) {
       setValidationError(null);
-      onChange(null); // This allows Zod's .nullable() to succeed
+      onChange({
+        shouldRemove: true,
+        isNew: false,
+        name: '',
+      });
       return;
     }
 

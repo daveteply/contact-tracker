@@ -105,10 +105,16 @@ public class ContactService : IContactService
             existingContact.LastName = newLast;
         }
 
-        if (dto.CompanyId.HasValue)
+        // Company
+        if (dto.CompanyId == -1) 
+        {
+            existingContact.CompanyId = null;
+            existingContact.Company = null;
+        }
+        else if (dto.CompanyId.HasValue)
         {
             existingContact.CompanyId = dto.CompanyId;
-            existingContact.Company = null; // Clear navigation so EF doesn't try to insert
+            existingContact.Company = null; 
         }
         else if (dto.UpdateCompany is not null)
         {

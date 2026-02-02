@@ -6,6 +6,7 @@ export interface CompanyFormValue {
   id?: number;
   name: string;
   isNew: boolean;
+  shouldRemove?: boolean;
   displayValue?: string;
 }
 
@@ -14,6 +15,7 @@ export interface ContactFormValue {
   firstName: string;
   lastName: string;
   isNew: boolean;
+  shouldRemove?: boolean;
   displayValue?: string;
 }
 
@@ -21,6 +23,7 @@ export interface RoleFormValue {
   id?: number;
   title: string;
   isNew: boolean;
+  shouldRemove?: boolean;
   displayValue?: string;
 }
 

@@ -8,7 +8,7 @@ import {
 } from '@contact-tracker/validation';
 import { createRole, updateRole, deleteRole } from '../clients/roles-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, RoleReadDto } from '@contact-tracker/api-models';
+import { ApiResult, RoleCreateDto, RoleReadDto } from '@contact-tracker/api-models';
 
 const ROLES_PATH = '/events/roles';
 
@@ -40,12 +40,15 @@ export async function createRoleAction(data: RoleCreate) {
 
   const { company, ...contactFields } = validated.data;
 
+  // Use type narrowing to ensure name is a string before building the nested DTO
+  const isCreation = company?.isNew && typeof company.name === 'string';
+
   // Aligning with the Event logic:
   // Map to ContactCreateDto expected by .NET
-  const dto = {
+  const dto: RoleCreateDto = {
     ...contactFields,
     companyId: company && !company.isNew ? company.id : undefined,
-    newCompany: company?.isNew ? { name: company.name } : undefined,
+    newCompany: isCreation ? { name: company.name as string } : undefined,
   };
 
   return handleActionResult(createRole(dto), 'Role created!');
@@ -60,10 +63,11 @@ export async function updateRoleAction(id: number, data: RoleUpdate) {
   const dto = {
     ...updateFields,
     // Explicitly mapping the selection object to the DTO
-    companyId: company && !company.isNew ? company.id : undefined,
+    companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
     // Note: If your backend supports updating/replacing company info via Contact Patch:
     updateCompany: company?.isNew ? { name: company.name } : undefined,
   };
+
   return handleActionResult(updateRole(id, dto), 'Role updated!');
 }
 

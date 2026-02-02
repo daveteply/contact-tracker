@@ -8,7 +8,7 @@ import {
 } from '@contact-tracker/validation';
 import { createContact, deleteContact, updateContact } from '../clients/contacts-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, ContactReadDto } from '@contact-tracker/api-models';
+import { ApiResult, ContactCreateDto, ContactReadDto } from '@contact-tracker/api-models';
 
 const CONTACTS_PATH = '/events/contacts';
 
@@ -40,12 +40,15 @@ export async function createContactAction(data: ContactCreate) {
 
   const { company, ...contactFields } = validated.data;
 
+  // Use type narrowing to ensure name is a string before building the nested DTO
+  const isCreation = company?.isNew && typeof company.name === 'string';
+
   // Aligning with the Event logic:
   // Map to ContactCreateDto expected by .NET
-  const dto = {
+  const dto: ContactCreateDto = {
     ...contactFields,
     companyId: company && !company.isNew ? company.id : undefined,
-    newCompany: company?.isNew ? { name: company.name } : undefined,
+    newCompany: isCreation ? { name: company.name as string } : undefined,
   };
 
   return handleActionResult(createContact(dto), 'Contact created!');
@@ -60,7 +63,7 @@ export async function updateContactAction(id: number, data: ContactUpdate) {
   const dto = {
     ...updateFields,
     // Explicitly mapping the selection object to the DTO
-    companyId: company && !company.isNew ? company.id : undefined,
+    companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
     // Note: If your backend supports updating/replacing company info via Contact Patch:
     updateCompany: company?.isNew ? { name: company.name } : undefined,
   };

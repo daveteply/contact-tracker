@@ -21,9 +21,12 @@ export function ContactInfoCard({
         {renderFull ? (
           <>
             <div className="flex justify-between">
-              <h2 className="card-title">
-                {contact.firstName} {contact.lastName}
-              </h2>
+              <div className="flex justify-center items-center">
+                <h2 className="card-title mr-2">
+                  {contact.firstName} {contact.lastName}
+                </h2>
+                {contact.isPrimaryRecruiter && <span className="text-sm">(Primary Recruiter)</span>}
+              </div>
               {showControls && (
                 <div className="flex gap-1">
                   <Link href={`/events/contacts/${contact.id}/edit`}>

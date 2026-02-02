@@ -102,7 +102,13 @@ public class RoleService : IRoleService
             existingRole.Title = dto.Title;
         }
 
-        if (dto.CompanyId.HasValue)
+        // Company
+        if (dto.CompanyId == -1) 
+        {
+            existingRole.CompanyId = null;
+            existingRole.Company = null;
+        }
+        else if (dto.CompanyId.HasValue)
         {
             existingRole.CompanyId = dto.CompanyId;
             existingRole.Company = null; // Clear navigation so EF doesn't try to insert

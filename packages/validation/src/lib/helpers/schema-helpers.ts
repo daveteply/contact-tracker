@@ -1,10 +1,8 @@
 import z from 'zod';
 
-/** Collapse empty string → undefined for create schemas */
 export const emptyToUndefined = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess((val) => (val === '' ? undefined : val), schema);
 
-/** Update: allow '' | string(min 1) | null, collapse null → undefined */
 export const updateOptionalString = (maxLength: number) =>
   z
     .literal('')
@@ -13,7 +11,6 @@ export const updateOptionalString = (maxLength: number) =>
     .optional()
     .transform((val) => (val === null ? undefined : val));
 
-/** Update: allow '' | valid-url | null, collapse null → undefined */
 export const updateOptionalUrl = (maxLength: number) =>
   z
     .preprocess(
@@ -23,7 +20,6 @@ export const updateOptionalUrl = (maxLength: number) =>
     .optional()
     .transform((val) => (val === null ? undefined : val));
 
-/** Update: allow '' | valid-email | null, collapse null → undefined */
 export const updateOptionalEmail = (maxLength: number) =>
   z
     .preprocess(
@@ -33,8 +29,6 @@ export const updateOptionalEmail = (maxLength: number) =>
     .optional()
     .transform((val) => (val === null ? undefined : val));
 
-/** Update: allow '' | valid-phone | null, collapse null → undefined.
- *  Uses a simple E.164-ish regex; tighten as needed for your audience. */
 export const phoneRegex = /^\+?[\d\s\-().]{1,16}$/;
 export const updateOptionalPhone = (maxLength: number) =>
   z
@@ -48,7 +42,6 @@ export const updateOptionalPhone = (maxLength: number) =>
     .optional()
     .transform((val) => (val === null ? undefined : val));
 
-/** Update: allow true | false | null, collapse null → undefined */
 export const updateOptionalBoolean = z
   .boolean()
   .or(z.null())
@@ -57,14 +50,18 @@ export const updateOptionalBoolean = z
 
 export const EntitySelectionSchema = z.object({
   id: z.number().optional(),
-  // Change: allow optional/null to handle data coming directly from the API
   isNew: z.boolean().optional().default(false),
+  shouldRemove: z.boolean().optional().default(false),
   displayValue: z.string().optional(),
 });
 
-// Specific shape for Company in a selection context
 export const CompanySelectionSchema = EntitySelectionSchema.extend({
-  name: z.string().min(1, 'Company name is required'),
+  // Make name optional at the schema level,
+  // then refine it to be required if NOT removing.
+  name: z.string().optional(),
+}).refine((data) => data.shouldRemove || (data.name && data.name.length > 0), {
+  message: 'Company name is required',
+  path: ['name'],
 });
 
 export const updateRequiredString = (maxLength: number, message: string) =>
