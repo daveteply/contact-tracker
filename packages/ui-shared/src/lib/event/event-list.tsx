@@ -1,8 +1,8 @@
-import { EventReadDtoWithRelations } from '@contact-tracker/api-models';
+import { EventReadDto } from '@contact-tracker/api-models';
 import EventInfoCard from './event-info-card';
 
 export interface EventListProps {
-  events: EventReadDtoWithRelations[];
+  events: EventReadDto[];
 }
 
 export function EventList(props: EventListProps) {
@@ -10,7 +10,7 @@ export function EventList(props: EventListProps) {
     <div className="flex flex-wrap">
       {props.events && props.events.length ? (
         <>
-          {props.events.map((event: EventReadDtoWithRelations) => (
+          {props.events.map((event: EventReadDto) => (
             <EventInfoCard key={event.id} event={event} />
           ))}
         </>

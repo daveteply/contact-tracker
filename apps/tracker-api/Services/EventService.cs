@@ -13,7 +13,7 @@ public class EventService : IEventService
         _context = context;
     }
 
-    public async Task<(List<EventReadDtoWithRelations> Items, PaginationMetadata Metadata)> GetAllEventsAsync(
+    public async Task<(List<EventReadDto> Items, PaginationMetadata Metadata)> GetAllEventsAsync(
         int page,
         int pageSize,
         HashSet<string> includeRelations)
@@ -56,7 +56,7 @@ public class EventService : IEventService
         return (eventDtos, metadata);
     }
 
-    public async Task<EventReadDtoWithRelations> GetEventByIdAsync(long id, HashSet<string> includeRelations)
+    public async Task<EventReadDto> GetEventByIdAsync(long id, HashSet<string> includeRelations)
     {
         var query = _context.Events.AsQueryable();
 
@@ -82,7 +82,7 @@ public class EventService : IEventService
         return MapToReadDto(@event);
     }
 
-    public async Task<EventReadDtoWithRelations> CreateEventAsync(EventCreateDto dto)
+    public async Task<EventReadDto> CreateEventAsync(EventCreateDto dto)
     {
         ValidateEventCreate(dto);
 
@@ -108,7 +108,7 @@ public class EventService : IEventService
         return MapToReadDto(@event);
     }
 
-    public async Task<EventReadDtoWithRelations> UpdateEventAsync(long id, EventUpdateDto dto)
+    public async Task<EventReadDto> UpdateEventAsync(long id, EventUpdateDto dto)
     {
         var @event = await _context.Events
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -197,9 +197,9 @@ public class EventService : IEventService
         await _context.SaveChangesAsync();
     }
 
-    private static EventReadDtoWithRelations MapToReadDto(Event @event)
+    private static EventReadDto MapToReadDto(Event @event)
     {
-        return new EventReadDtoWithRelations(
+        return new EventReadDto(
             @event.Id,
             @event.CompanyId,
             @event.Company is not null ? new CompanyReadDto(

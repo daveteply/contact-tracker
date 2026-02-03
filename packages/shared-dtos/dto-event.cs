@@ -9,10 +9,19 @@ namespace ContactTracker.SharedDTOs;
 [ExportTsInterface]
 public record EventReadDto(
     long Id,
+
     long? CompanyId,
+    CompanyReadDto? Company,
+
     long? ContactId,
+    ContactReadDto? Contact,
+
     long? RoleId,
+    RoleReadDto? Role,
+
     int EventTypeId,
+    EventTypeReadDto? EventType,
+
     DateTime OccurredAt,
     string? Summary,
     string? Details,
@@ -24,12 +33,16 @@ public record EventReadDto(
 public record EventCreateDto(
     long? CompanyId,
     CompanyCreateDto? NewCompany,
+
     long? ContactId,
     ContactCreateDto? NewContact,
+
     long? RoleId,
     RoleCreateDto? NewRole,
+
     int EventTypeId,
-    EventTypeReadDto? EventType,
+    EventTypeCreateDto NewEventType,
+
     DateTime OccurredAt,
 
     [MaxLength(256)]
@@ -46,12 +59,16 @@ public record EventCreateDto(
 public record EventUpdateDto(
     long? CompanyId,
     CompanyUpdateDto? UpdateCompany,
+
     long? ContactId,
     ContactUpdateDto? UpdateContact,
+
     long? RoleId,
     RoleUpdateDto? UpdateRole,
+
     int? EventTypeId,
-    EventTypeReadDto? EventType,
+    EventTypeUpdateDto? UpdateEventType,
+
     DateTime? OccurredAt,
 
     [MaxLength(256)]
@@ -62,29 +79,6 @@ public record EventUpdateDto(
 
     SourceType? Source,
     DirectionType? Direction
-);
-
-[ExportTsInterface]
-public record EventReadDtoWithRelations(
-    long Id,
-    long? CompanyId,
-    CompanyReadDto? Company,
-    long? ContactId,
-    ContactReadDto? Contact,
-    long? RoleId,
-    RoleReadDto? Role,
-    int EventTypeId,
-    EventTypeReadDto? EventType,
-    DateTime OccurredAt,
-
-    [MaxLength(256)]
-    string? Summary,
-
-    [MaxLength(1024)]
-    string? Details,
-
-    SourceType Source,
-    DirectionType Direction
 );
 
 // -----------------------------

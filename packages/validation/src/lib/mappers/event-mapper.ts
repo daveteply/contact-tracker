@@ -1,7 +1,7 @@
-import { EventReadDtoWithRelations } from '@contact-tracker/api-models';
+import { EventReadDto } from '@contact-tracker/api-models';
 import { EventFormValues } from '../event-schema';
 
-export function mapEventDtoToFormValues(dto: EventReadDtoWithRelations): EventFormValues {
+export function mapEventDtoToFormValues(dto: EventReadDto): EventFormValues {
   return {
     ...dto,
     occurredAt: dto.occurredAt ? new Date(dto.occurredAt).toISOString().split('T')[0] : '',

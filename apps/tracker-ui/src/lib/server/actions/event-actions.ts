@@ -54,6 +54,9 @@ export async function createEventAction(data: EventInput) {
       : undefined,
 
     eventTypeId: data.eventTypeId,
+    // TODO: update this when logic changes
+    newEventType: { id: 1, name: 'temp', isSystemDefined: true },
+
     occurredAt: data.occurredAt,
     summary: data.summary,
     details: data.details,

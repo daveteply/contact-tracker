@@ -113,7 +113,7 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Existing Corp", null, null, null, null), // Matches existing name
             ContactId: null, NewContact: null, RoleId: null, NewRole: null,
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Test", Details: "Test",
-            EventType: null,
+            NewEventType: new EventTypeCreateDto(1, "Type1", string.Empty, true),
             Source: SourceType.Email, Direction: DirectionType.Inbound
         );
 
@@ -154,7 +154,7 @@ public class EventEndpointsTests : IAsyncDisposable
             RoleId: null,
             NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Founders Meeting", Details: "Initial chat",
-            EventType: null,
+            NewEventType: new EventTypeCreateDto(1, "Type1", string.Empty, true),
             Source: SourceType.LinkedIn, Direction: DirectionType.Inbound
         );
 
@@ -219,7 +219,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("Target Corp", null, null, null, null), // Match existing
             ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
             EventTypeId: null, OccurredAt: null, Summary: "Updated Summary", Details: null,
-            EventType: null,
+            UpdateEventType: null,
             Source: null, Direction: null
         );
 
@@ -273,7 +273,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("New Name", null, null, null, null), // Only name provided
             ContactId: null, UpdateContact: null, RoleId: null, UpdateRole: null,
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
-            EventType: null,
+            UpdateEventType: null,
             Source: null, Direction: null
         );
 
@@ -322,7 +322,7 @@ public class EventEndpointsTests : IAsyncDisposable
             RoleId: null,
             UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevel.EngineeringManager),
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
-            EventType: null,
+            UpdateEventType: null,
             Source: null, Direction: null
         );
 

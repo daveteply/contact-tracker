@@ -1,13 +1,13 @@
 'use client';
 
-import { DirectionType, EventReadDtoWithRelations } from '@contact-tracker/api-models';
+import { DirectionType, EventReadDto } from '@contact-tracker/api-models';
 import FormattedDate from '../common/formatted-date';
 import DirectionInfo from '../common/direction-info';
 import EventActionMenu from './event-action-menu';
 import Link from 'next/link';
 
 export interface EventInfoCardProps {
-  event: EventReadDtoWithRelations;
+  event: EventReadDto;
   showControls?: boolean;
 }
 

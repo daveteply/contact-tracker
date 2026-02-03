@@ -57,7 +57,7 @@ public static class EventEndpoints
 
         var (items, metadata) = await service.GetAllEventsAsync(page, pageSize, includeRelations);
 
-        var result = ApiResult<List<EventReadDtoWithRelations>>.SuccessResult(items, "Events retrieved", metadata);
+        var result = ApiResult<List<EventReadDto>>.SuccessResult(items, "Events retrieved", metadata);
 
         return Results.Ok(result);
     }
@@ -82,11 +82,11 @@ public static class EventEndpoints
         try
         {
             var @event = await service.GetEventByIdAsync(id, includeRelations);
-            return Results.Ok(ApiResult<EventReadDtoWithRelations>.SuccessResult(@event));
+            return Results.Ok(ApiResult<EventReadDto>.SuccessResult(@event));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<EventReadDtoWithRelations>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
     }
 
@@ -96,7 +96,7 @@ public static class EventEndpoints
         {
             var createdEvent = await service.CreateEventAsync(@event);
             return Results.Created($"/api/events/{createdEvent.Id}",
-                ApiResult<EventReadDtoWithRelations>.SuccessResult(createdEvent));
+                ApiResult<EventReadDto>.SuccessResult(createdEvent));
         }
         catch (ValidationException ex)
         {
@@ -109,15 +109,15 @@ public static class EventEndpoints
         try
         {
             var updated = await service.UpdateEventAsync(id, @event);
-            return Results.Ok(ApiResult<EventReadDtoWithRelations>.SuccessResult(updated));
+            return Results.Ok(ApiResult<EventReadDto>.SuccessResult(updated));
         }
         catch (ResourceNotFoundException ex)
         {
-            return Results.NotFound(ApiResult<EventReadDtoWithRelations>.FailureResult(ex.UserFriendlyMessage!));
+            return Results.NotFound(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!));
         }
         catch (ValidationException ex)
         {
-            return Results.BadRequest(ApiResult<EventReadDtoWithRelations>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
+            return Results.BadRequest(ApiResult<EventReadDto>.FailureResult(ex.UserFriendlyMessage!, ex.Errors));
         }
     }
 
