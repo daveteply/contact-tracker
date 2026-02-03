@@ -25,6 +25,7 @@ export const RoleUpdateSchema = z
     title: updateRequiredString(100, 'Title is required'),
     jobPostingUrl: updateOptionalUrl(2048),
     location: updateOptionalString(100),
+    level: RoleLevelSchema,
     company: CompanySelectionSchema.or(z.null()).optional(),
   })
   .partial();
