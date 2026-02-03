@@ -51,7 +51,11 @@ export function EventTypeSelect({
         className={`select w-full ${error ? 'select-error' : ''}`}
         required={required}
         value={value ?? ''}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => {
+          const val = e.target.value;
+          // If user selects the placeholder, send undefined/null to satisfy Zod .nullable()
+          onChange(val === '' ? undefined : Number(val));
+        }}
       >
         <option value="">{isLoading ? 'Loading event types...' : 'Select an event type'}</option>
 

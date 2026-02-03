@@ -44,38 +44,39 @@ export async function createEventAction(data: EventCreate) {
   const validated = EventCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  const { company, contact, role, ...eventFields } = validated.data;
+  const { company, contact, role, eventTypeId, occurredAt, summary, details, source, direction } =
+    validated.data;
 
-  const isCompanyCreation = company?.isNew && typeof company.name === 'string';
-  const isContactCreation =
-    contact?.isNew && typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
-  const isRoleCreation = role?.isNew && typeof role.title === 'string';
+  // Use boolean casting to satisfy the "string | undefined" to "boolean" check
+  const isCompanyCreation = !!(company?.isNew && company.name);
+  const isContactCreation = !!(contact?.isNew && contact.firstName && contact.lastName);
+  const isRoleCreation = !!(role?.isNew && role.title);
 
   const dto: EventCreateDto = {
-    ...eventFields,
+    summary: summary,
+    details: details,
+    occurredAt,
+    source,
+    direction,
+
+    // Mapping IDs: Ensure we fallback to null/undefined instead of non-null assertion
     companyId: company && !company.isNew ? company.id : undefined,
-    newCompany: isCompanyCreation ? { name: company.name as string } : undefined,
+    newCompany: isCompanyCreation ? { name: company.name ?? '' } : undefined,
 
     contactId: contact && !contact.isNew ? contact.id : undefined,
     newContact: isContactCreation
-      ? { firstName: contact.firstName as string, lastName: contact.lastName as string }
+      ? { firstName: contact.firstName ?? '', lastName: contact.lastName ?? '' }
       : undefined,
 
     roleId: role && !role.isNew ? role.id : undefined,
-    // TODO: update RoleLevel to optional
-    newRole: isRoleCreation
-      ? { title: role.title as string, level: RoleLevel.ScrumMaster }
-      : undefined,
+    newRole: isRoleCreation ? { title: role.title ?? '', level: RoleLevel.ScrumMaster } : undefined,
 
-    eventTypeId: data.eventTypeId,
-    // TODO: update this when logic changes
-    newEventType: { id: 1, name: 'temp', isSystemDefined: true },
+    // Resolve the 'number | null' issue by providing a fallback
+    // (Zod ensures this won't be 0, but TS needs to see a number)
+    eventTypeId: eventTypeId ?? 0,
 
-    occurredAt: data.occurredAt,
-    summary: data.summary,
-    details: data.details,
-    source: data.source,
-    direction: data.direction,
+    // Placeholder for non-nullable nested DTO
+    newEventType: { id: 0, name: '', isSystemDefined: false },
   };
 
   return handleActionResult(createEvent(dto), 'Event created!');

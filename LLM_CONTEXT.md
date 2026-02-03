@@ -1,12 +1,3 @@
-This message is context only. Do not respond yet.
-
-Rules:
-
-- Do not assume alternative architectures
-- If something is unclear, clarifying questions
-
---- BEGIN PROJECT CONTEXT ---
-
 # Project Context: Contact Tracker Monorepo
 
 ## High-Level Goal
@@ -108,5 +99,3 @@ DTO (DataAnnotations)
 - Related entities are selected via type-ahead search
 - New entities can be created inline with minimal required fields
 - Additional data is filled in later via edit flows
-
---- END PROJECT CONTEXT ---

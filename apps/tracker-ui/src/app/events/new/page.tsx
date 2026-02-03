@@ -3,27 +3,33 @@ import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
-//import { DirectionType } from '@contact-tracker/api-models';
+import { DirectionType } from '@contact-tracker/api-models';
 import { EventForm } from '@contact-tracker/ui-shared';
+import { EventCreate, EventFormValues } from '@contact-tracker/validation';
 
 export default async function EventsNewPage() {
-  // const getNewEventDefaults = (): EventFormValues => ({
-  //   occurredAt: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-  //   direction: DirectionType.Outbound,
-  //   source: '',
-  //   company: { name: '', isNew: true },
-  //   contact: { firstName: '', lastName: '', isNew: true },
-  //   role: { title: '', isNew: true },
-  //   eventTypeId: 0,
-  // });
+  const newEventDefaults: EventFormValues = {
+    occurredAt: new Date().toISOString().split('T')[0],
+    direction: DirectionType.Outbound,
+    source: null,
+
+    // Set these to null/undefined to bypass SelectionSchema refinements
+    eventTypeId: null,
+    company: null,
+    contact: null,
+    role: null,
+
+    summary: '',
+    details: '',
+  };
 
   return (
     <>
       <h1 className="text-xl">Events - new Event</h1>
       <p className="mb-5 italic">Note: most fields are required</p>
 
-      <EventForm
-        //initialData={getNewEventDefaults()}
+      <EventForm<EventFormValues, EventCreate>
+        initialData={newEventDefaults}
         onSubmitAction={createEventAction}
         onSearchCompany={searchCompanies}
         onSearchContact={searchContacts}

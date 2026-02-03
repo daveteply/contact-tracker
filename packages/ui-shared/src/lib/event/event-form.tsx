@@ -20,9 +20,9 @@ import RoleCombobox from '../role/role-combobox';
 import { EventTypeSelect } from './event-type-select';
 import { EnumSelector } from '../common/enum-selector';
 
-interface EventFormProps<T extends FieldValues> {
-  onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
-  initialData?: DefaultValues<T>;
+interface EventFormProps<TFieldValues extends FieldValues, TOutput = any> {
+  onSubmitAction: (data: TOutput) => Promise<{ success: boolean; message: string }>;
+  initialData?: DefaultValues<TFieldValues>;
   isEdit?: boolean;
   onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
   onSearchContact: (query: string) => Promise<ContactReadDto[]>;
@@ -30,7 +30,7 @@ interface EventFormProps<T extends FieldValues> {
   onFetchEventTypes: () => Promise<EventTypeReadDto[]>;
 }
 
-export function EventForm<T extends FieldValues>({
+export function EventForm<TFieldValues extends FieldValues, TOutput = any>({
   onSubmitAction,
   initialData,
   isEdit = false,
@@ -38,7 +38,7 @@ export function EventForm<T extends FieldValues>({
   onSearchContact,
   onSearchRole,
   onFetchEventTypes,
-}: EventFormProps<T>) {
+}: EventFormProps<TFieldValues, TOutput>) {
   const router = useRouter();
   const { showToast } = useToast();
   const schema = isEdit ? EventUpdateSchema : EventCreateSchema;
@@ -49,7 +49,7 @@ export function EventForm<T extends FieldValues>({
     reset,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<T>({
+  } = useForm<TFieldValues>({
     resolver: zodResolver(schema as any),
     defaultValues: initialData,
     mode: 'onChange',
@@ -60,7 +60,7 @@ export function EventForm<T extends FieldValues>({
     if (initialData) reset(initialData);
   }, [initialData, reset]);
 
-  const onSubmit = async (data: T) => {
+  const onSubmit = async (data: any) => {
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
@@ -77,7 +77,7 @@ export function EventForm<T extends FieldValues>({
   };
 
   // Helper to render error messages cleanly
-  const ErrorMsg = ({ name }: { name: Path<T> }) => {
+  const ErrorMsg = ({ name }: { name: Path<TFieldValues> }) => {
     const error = errors[name];
     if (!error) return null;
     return (
@@ -93,14 +93,14 @@ export function EventForm<T extends FieldValues>({
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Event Type</legend>
           <Controller
-            name={'eventTypeId' as Path<T>}
+            name={'eventTypeId' as Path<TFieldValues>}
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <EventTypeSelect
                 value={field.value}
                 onChange={field.onChange}
                 onFetchEventTypes={onFetchEventTypes}
-                // error={errors.eventTypeId?.message}
+                error={fieldState.error?.message} // fieldState automatically finds the error for this name
               />
             )}
           />
@@ -109,44 +109,51 @@ export function EventForm<T extends FieldValues>({
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Direction</legend>
           <EnumSelector
-            register={register('direction' as Path<T>)}
+            register={register('direction' as Path<TFieldValues>)}
             enumObject={DirectionType}
             useButtons={true}
           />
-          <ErrorMsg name={'direction' as Path<T>} />
+          <ErrorMsg name={'direction' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Source</legend>
-          <EnumSelector register={register('source' as Path<T>)} enumObject={SourceType} />
-          <ErrorMsg name={'source' as Path<T>} />
+          <EnumSelector
+            register={register('source' as Path<TFieldValues>)}
+            enumObject={SourceType}
+          />
+          <ErrorMsg name={'source' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Company</legend>
           <CompanyCombobox
             control={control}
-            name={'company' as Path<T>}
+            name={'company' as Path<TFieldValues>}
             onSearch={onSearchCompany}
           />
-          <ErrorMsg name={'company' as Path<T>} />
+          <ErrorMsg name={'company' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Contact</legend>
           <ContactCombobox
             control={control}
-            name={'contact' as Path<T>}
+            name={'contact' as Path<TFieldValues>}
             onSearch={onSearchContact}
           />
-          <ErrorMsg name={'firstName' as Path<T>} />
-          <ErrorMsg name={'lastName' as Path<T>} />
+          <ErrorMsg name={'contact.firstName' as Path<TFieldValues>} />
+          <ErrorMsg name={'contact.lastName' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Role</legend>
-          <RoleCombobox control={control} name={'role' as Path<T>} onSearch={onSearchRole} />
-          <ErrorMsg name={'title' as Path<T>} />
+          <RoleCombobox
+            control={control}
+            name={'role' as Path<TFieldValues>}
+            onSearch={onSearchRole}
+          />
+          <ErrorMsg name={'title' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
@@ -154,21 +161,21 @@ export function EventForm<T extends FieldValues>({
           <input
             type="date"
             className="input"
-            {...register('occurredAt' as Path<T>, { valueAsDate: true })}
+            {...register('occurredAt' as Path<TFieldValues>, { valueAsDate: true })}
           />
-          <ErrorMsg name={'occurredAt' as Path<T>} />
+          <ErrorMsg name={'occurredAt' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Summary (optional)</legend>
-          <input className="input" {...register('summary' as Path<T>)} />
-          <ErrorMsg name={'summary' as Path<T>} />
+          <input className="input" {...register('summary' as Path<TFieldValues>)} />
+          <ErrorMsg name={'summary' as Path<TFieldValues>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Details (optional)</legend>
-          <textarea className="textarea" {...register('details' as Path<T>)} />
-          <ErrorMsg name={'details' as Path<T>} />
+          <textarea className="textarea" {...register('details' as Path<TFieldValues>)} />
+          <ErrorMsg name={'details' as Path<TFieldValues>} />
         </fieldset>
 
         <div className="mt-4">
