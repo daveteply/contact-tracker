@@ -3,6 +3,7 @@
 import { RoleReadDto } from '@contact-tracker/api-models';
 import ExternalLink from '../common/external-link';
 import Link from 'next/link';
+import { spaceDelimitCamelCase } from '../common/helpers';
 
 export interface RoleCardProps {
   role: RoleReadDto;
@@ -16,7 +17,6 @@ export function RoleInfoCard({ role, renderFull = true, showControls = true }: R
       <div className="card-body">
         {renderFull ? (
           <>
-            {' '}
             <div className="flex justify-between">
               <h2 className="card-title">{role.title}</h2>
               {showControls && (
@@ -50,7 +50,7 @@ export function RoleInfoCard({ role, renderFull = true, showControls = true }: R
             </div>
             <ul>
               <li>{role.company?.name}</li>
-              <li>{role.level}</li>
+              <li>{spaceDelimitCamelCase(role.level)}</li>
               <li>
                 <ExternalLink url={role.jobPostingUrl} iconOnly={!renderFull} />
               </li>

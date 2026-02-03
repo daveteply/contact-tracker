@@ -1,6 +1,7 @@
 'use client';
 
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { spaceDelimitCamelCase } from './helpers';
 
 interface EnumSelectorProps<T extends Record<string, string | number>> {
   enumObject: T;
@@ -16,8 +17,8 @@ export function EnumSelector<T extends Record<string, string | number>>({
   useButtons = false,
 }: EnumSelectorProps<T>) {
   const options = Object.entries(enumObject);
-
   return (
+
     <div>
       {useButtons ? (
         <div className="join">
@@ -28,7 +29,7 @@ export function EnumSelector<T extends Record<string, string | number>>({
               type="radio"
               value={value}
               required={required}
-              aria-label={key}
+              aria-label={spaceDelimitCamelCase(key)}
               {...register}
             />
           ))}
@@ -38,7 +39,7 @@ export function EnumSelector<T extends Record<string, string | number>>({
           <option value="">Select an option</option>
           {options.map(([key, value]) => (
             <option key={key} value={value}>
-              {key}
+              {spaceDelimitCamelCase(key)}
             </option>
           ))}
         </select>
