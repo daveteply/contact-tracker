@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EventFormValues, EventInput, EventInputSchema } from '@contact-tracker/validation';
+import { EventCreateSchema, EventUpdateSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 import {
@@ -20,9 +20,9 @@ import RoleCombobox from '../role/role-combobox';
 import { EventTypeSelect } from './event-type-select';
 import { EnumSelector } from '../common/enum-selector';
 
-interface EventFormProps {
-  onSubmitAction: (data: EventInput) => Promise<{ success: boolean; message: string }>;
-  initialData?: EventFormValues;
+interface EventFormProps<T extends FieldValues> {
+  onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
+  initialData?: DefaultValues<T>;
   isEdit?: boolean;
   onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
   onSearchContact: (query: string) => Promise<ContactReadDto[]>;
@@ -30,7 +30,7 @@ interface EventFormProps {
   onFetchEventTypes: () => Promise<EventTypeReadDto[]>;
 }
 
-export function EventForm({
+export function EventForm<T extends FieldValues>({
   onSubmitAction,
   initialData,
   isEdit = false,
@@ -38,9 +38,10 @@ export function EventForm({
   onSearchContact,
   onSearchRole,
   onFetchEventTypes,
-}: EventFormProps) {
+}: EventFormProps<T>) {
   const router = useRouter();
   const { showToast } = useToast();
+  const schema = isEdit ? EventUpdateSchema : EventCreateSchema;
 
   const {
     register,
@@ -48,22 +49,20 @@ export function EventForm({
     reset,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<EventFormValues>({
-    resolver: zodResolver(EventInputSchema),
+  } = useForm<T>({
+    resolver: zodResolver(schema as any),
     defaultValues: initialData,
     mode: 'onChange',
   });
 
   // Reset form when initialData changes
   useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-    }
+    if (initialData) reset(initialData);
   }, [initialData, reset]);
 
-  const onSubmit = async (data: EventFormValues) => {
+  const onSubmit = async (data: T) => {
     try {
-      const result = await onSubmitAction(data as EventInput);
+      const result = await onSubmitAction(data);
       if (result.success) {
         showToast(`Event ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
         router.push('/events');
@@ -77,21 +76,31 @@ export function EventForm({
     }
   };
 
+  // Helper to render error messages cleanly
+  const ErrorMsg = ({ name }: { name: Path<T> }) => {
+    const error = errors[name];
+    if (!error) return null;
+    return (
+      <p className="text-red-600">
+        <span>{error.message?.toString()}</span>
+      </p>
+    );
+  };
+
   return (
     <div className="px-12pt-6 pb-8 mb-4 max-w-md mx-auto">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Event Type</legend>
           <Controller
-            name="eventTypeId"
+            name={'eventTypeId' as Path<T>}
             control={control}
             render={({ field }) => (
               <EventTypeSelect
                 value={field.value}
                 onChange={field.onChange}
                 onFetchEventTypes={onFetchEventTypes}
-                error={errors.eventTypeId?.message}
-                required
+                // error={errors.eventTypeId?.message}
               />
             )}
           />
@@ -100,62 +109,66 @@ export function EventForm({
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Direction</legend>
           <EnumSelector
-            register={register('direction')}
+            register={register('direction' as Path<T>)}
             enumObject={DirectionType}
             useButtons={true}
           />
-          <p className="text-red-600">
-            {errors.direction && <span>{errors.direction.message}</span>}
-          </p>
+          <ErrorMsg name={'direction' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset w-full">
           <legend className="fieldset-legend">Source</legend>
-          <EnumSelector register={register('source')} enumObject={SourceType} />
-          <p className="text-red-600">{errors.source && <span>{errors.source.message}</span>}</p>
+          <EnumSelector register={register('source' as Path<T>)} enumObject={SourceType} />
+          <ErrorMsg name={'source' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Company</legend>
-          <CompanyCombobox control={control} name="company" onSearch={onSearchCompany} required />
-          {errors.company?.name && <p className="text-red-600">{errors.company.name.message}</p>}
+          <CompanyCombobox
+            control={control}
+            name={'company' as Path<T>}
+            onSearch={onSearchCompany}
+          />
+          <ErrorMsg name={'company' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Contact</legend>
-          <ContactCombobox control={control} name="contact" onSearch={onSearchContact} required />
-          {errors.contact?.firstName && (
-            <p className="text-red-600">{errors.contact.firstName.message}</p>
-          )}
-          {errors.contact?.lastName && (
-            <p className="text-red-600">{errors.contact.lastName.message}</p>
-          )}
+          <ContactCombobox
+            control={control}
+            name={'contact' as Path<T>}
+            onSearch={onSearchContact}
+          />
+          <ErrorMsg name={'firstName' as Path<T>} />
+          <ErrorMsg name={'lastName' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Role</legend>
-          <RoleCombobox control={control} name="role" onSearch={onSearchRole} required />
-          {errors.role?.title && <p className="text-red-600">{errors.role.title.message}</p>}
+          <RoleCombobox control={control} name={'role' as Path<T>} onSearch={onSearchRole} />
+          <ErrorMsg name={'title' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Date</legend>
-          <input type="date" className="input" {...register('occurredAt', { valueAsDate: true })} />
-          <p className="text-red-600">
-            {errors.occurredAt && <span>{errors.occurredAt.message}</span>}
-          </p>
+          <input
+            type="date"
+            className="input"
+            {...register('occurredAt' as Path<T>, { valueAsDate: true })}
+          />
+          <ErrorMsg name={'occurredAt' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Summary (optional)</legend>
-          <input className="input" {...register('summary')} />
-          <p className="text-red-600">{errors.summary && <span>{errors.summary.message}</span>}</p>
+          <input className="input" {...register('summary' as Path<T>)} />
+          <ErrorMsg name={'summary' as Path<T>} />
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Details (optional)</legend>
-          <textarea className="textarea" {...register('details')} />
-          <p className="text-red-600">{errors.details && <span>{errors.details.message}</span>}</p>
+          <textarea className="textarea" {...register('details' as Path<T>)} />
+          <ErrorMsg name={'details' as Path<T>} />
         </fieldset>
 
         <div className="mt-4">

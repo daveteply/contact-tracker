@@ -6,7 +6,7 @@ import { fetchEventById } from '@/lib/server/clients/events-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
 
 import { EventForm } from '@contact-tracker/ui-shared';
-import { mapEventDtoToFormValues } from '@contact-tracker/validation';
+// import { mapEventDtoToFormValues } from '@contact-tracker/validation';
 
 export default async function EventUpdatePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -18,7 +18,7 @@ export default async function EventUpdatePage({ params }: { params: Promise<{ id
   }
 
   // Transform the data here before passing it to the client component
-  const initialData = mapEventDtoToFormValues(response.data);
+  // const initialData = mapEventDtoToFormValues(response.data);
 
   const boundUpdateAction = updateEventAction.bind(null, eventId);
 
@@ -26,7 +26,7 @@ export default async function EventUpdatePage({ params }: { params: Promise<{ id
     <div>
       <h1 className="text-2xl font-bold mb-4">Edit Event</h1>
       <EventForm
-        initialData={initialData}
+        // initialData={initialData}
         isEdit={true}
         onSubmitAction={boundUpdateAction}
         onSearchCompany={searchCompanies}

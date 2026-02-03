@@ -1,32 +1,16 @@
 import { z } from 'zod';
 import { DirectionTypeSchema, SourceTypeSchema } from './enum-schema';
+import {
+  CompanySelectionSchema,
+  ContactSelectionSchema,
+  RoleSelectionSchema,
+  updateOptionalString,
+} from './helpers/schema-helpers';
 
-export const EventInputSchema = z.object({
-  company: z.object(
-    {
-      id: z.number().optional(),
-      name: z.string().min(1),
-      isNew: z.boolean(),
-    },
-    "Company can't be empty",
-  ),
-  contact: z.object(
-    {
-      id: z.number().optional(),
-      firstName: z.string("First name can't be empty").min(1),
-      lastName: z.string("Last name can't be empty").min(1),
-      isNew: z.boolean(),
-    },
-    "Contact first and last name can't be empty",
-  ),
-  role: z.object(
-    {
-      id: z.number().optional(),
-      title: z.string().min(1),
-      isNew: z.boolean(),
-    },
-    "Role can't be empty",
-  ),
+export const EventCreateSchema = z.object({
+  company: CompanySelectionSchema.or(z.null()).optional(),
+  contact: ContactSelectionSchema.or(z.null()).optional(),
+  role: RoleSelectionSchema.or(z.null()).optional(),
   eventTypeId: z.number('Select an event type'),
   occurredAt: z.coerce.date('Must be a valid date'),
   summary: z.string().optional(),
@@ -35,8 +19,21 @@ export const EventInputSchema = z.object({
   direction: DirectionTypeSchema,
 });
 
-export const EventUpdateSchema = EventInputSchema.partial();
+export const EventUpdateSchema = z
+  .object({
+    company: CompanySelectionSchema.or(z.null()).optional(),
+    contact: ContactSelectionSchema.or(z.null()).optional(),
+    role: RoleSelectionSchema.or(z.null()).optional(),
+    eventTypeId: z.number('Select an event type'),
+    occurredAt: z.coerce.date('Must be a valid date'),
+    summary: updateOptionalString(256),
+    details: updateOptionalString(1024),
+    source: SourceTypeSchema,
+    direction: DirectionTypeSchema,
+  })
+  .partial();
 
-export type EventInput = z.infer<typeof EventInputSchema>;
+export type EventCreate = z.infer<typeof EventCreateSchema>;
+export type EventUpdate = z.infer<typeof EventUpdateSchema>;
 
-export type EventFormValues = z.input<typeof EventInputSchema>;
+// export type EventFormValues = z.input<typeof EventInputSchema>;

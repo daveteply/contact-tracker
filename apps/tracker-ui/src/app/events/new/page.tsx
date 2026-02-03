@@ -3,20 +3,19 @@ import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
-import { DirectionType } from '@contact-tracker/api-models';
+//import { DirectionType } from '@contact-tracker/api-models';
 import { EventForm } from '@contact-tracker/ui-shared';
-import { EventFormValues } from '@contact-tracker/validation';
 
 export default async function EventsNewPage() {
-  const getNewEventDefaults = (): EventFormValues => ({
-    occurredAt: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-    direction: DirectionType.Outbound,
-    source: '',
-    company: { name: '', isNew: true },
-    contact: { firstName: '', lastName: '', isNew: true },
-    role: { title: '', isNew: true },
-    eventTypeId: 0,
-  });
+  // const getNewEventDefaults = (): EventFormValues => ({
+  //   occurredAt: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+  //   direction: DirectionType.Outbound,
+  //   source: '',
+  //   company: { name: '', isNew: true },
+  //   contact: { firstName: '', lastName: '', isNew: true },
+  //   role: { title: '', isNew: true },
+  //   eventTypeId: 0,
+  // });
 
   return (
     <>
@@ -24,7 +23,7 @@ export default async function EventsNewPage() {
       <p className="mb-5 italic">Note: most fields are required</p>
 
       <EventForm
-        initialData={getNewEventDefaults()}
+        //initialData={getNewEventDefaults()}
         onSubmitAction={createEventAction}
         onSearchCompany={searchCompanies}
         onSearchContact={searchContacts}

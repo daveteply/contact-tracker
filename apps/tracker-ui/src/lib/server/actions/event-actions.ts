@@ -1,6 +1,11 @@
 'use server';
 
-import { EventInput, EventInputSchema } from '@contact-tracker/validation';
+import {
+  EventCreate,
+  EventCreateSchema,
+  EventUpdate,
+  EventUpdateSchema,
+} from '@contact-tracker/validation';
 import { createEvent, deleteEvent, updateEvent } from '../clients/events-client';
 import { revalidatePath } from 'next/cache';
 import {
@@ -35,22 +40,31 @@ async function handleActionResult(
   }
 }
 
-export async function createEventAction(data: EventInput) {
-  const validated = EventInputSchema.safeParse(data);
+export async function createEventAction(data: EventCreate) {
+  const validated = EventCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  const dto: EventCreateDto = {
-    companyId: !data.company.isNew ? data.company.id : undefined,
-    newCompany: data.company.isNew ? { name: data.company.name } : undefined,
+  const { company, contact, role, ...eventFields } = validated.data;
 
-    contactId: !data.contact.isNew ? data.contact.id : undefined,
-    newContact: data.contact.isNew
-      ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
+  const isCompanyCreation = company?.isNew && typeof company.name === 'string';
+  const isContactCreation =
+    contact?.isNew && typeof contact.firstName === 'string' && typeof contact.lastName === 'string';
+  const isRoleCreation = role?.isNew && typeof role.title === 'string';
+
+  const dto: EventCreateDto = {
+    ...eventFields,
+    companyId: company && !company.isNew ? company.id : undefined,
+    newCompany: isCompanyCreation ? { name: company.name as string } : undefined,
+
+    contactId: contact && !contact.isNew ? contact.id : undefined,
+    newContact: isContactCreation
+      ? { firstName: contact.firstName as string, lastName: contact.lastName as string }
       : undefined,
 
-    roleId: !data.role.isNew ? data.role.id : undefined,
-    newRole: data.role.isNew
-      ? { title: data.role.title, level: RoleLevel.EngineeringManager }
+    roleId: role && !role.isNew ? role.id : undefined,
+    // TODO: update RoleLevel to optional
+    newRole: isRoleCreation
+      ? { title: role.title as string, level: RoleLevel.ScrumMaster }
       : undefined,
 
     eventTypeId: data.eventTypeId,
@@ -67,38 +81,40 @@ export async function createEventAction(data: EventInput) {
   return handleActionResult(createEvent(dto), 'Event created!');
 }
 
-export async function updateEventAction(id: number, data: EventInput) {
-  const validated = EventInputSchema.safeParse(data);
+export async function updateEventAction(id: number, data: EventUpdate) {
+  const validated = EventUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
+  // const { company, contact, role, ...eventFields } = validated.data;
+
   // Prepare the Company (shared by Event and Role)
-  const sharedCompanyUpdate = data.company.isNew ? { name: data.company.name } : undefined;
+  // const sharedCompanyUpdate = company && company.isNew ? { name: company.name } : undefined;
 
   // Logic Change: If it's new, the ID must be undefined/null
   // to prevent EF from updating the existing linked entity.
   const dto: EventUpdateDto = {
     // Top-level Event -> Company Link
-    companyId: !data.company.isNew ? data.company.id : undefined,
-    updateCompany: sharedCompanyUpdate,
+    // companyId: !data.company.isNew ? data.company.id : undefined,
+    // updateCompany: sharedCompanyUpdate,
 
-    // Top-level Event -> Contact Link
-    contactId: !data.contact.isNew ? data.contact.id : undefined,
-    updateContact: data.contact.isNew
-      ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
-      : undefined,
+    // // Top-level Event -> Contact Link
+    // contactId: !data.contact.isNew ? data.contact.id : undefined,
+    // updateContact: data.contact.isNew
+    //   ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
+    //   : undefined,
 
-    // Top-level Event -> Role Link
-    roleId: !data.role.isNew ? data.role.id : undefined,
-    updateRole: data.role.isNew
-      ? {
-          title: data.role.title,
-          level: RoleLevel.EngineeringManager,
-          // CRITICAL: Link the new role to the same company info
-          // If company is existing, pass its ID. If new, pass the new info.
-          companyId: !data.company.isNew ? data.company.id : undefined,
-          updateCompany: sharedCompanyUpdate,
-        }
-      : undefined,
+    // // Top-level Event -> Role Link
+    // roleId: !data.role.isNew ? data.role.id : undefined,
+    // updateRole: data.role.isNew
+    //   ? {
+    //       title: data.role.title,
+    //       level: RoleLevel.EngineeringManager,
+    //       // CRITICAL: Link the new role to the same company info
+    //       // If company is existing, pass its ID. If new, pass the new info.
+    //       companyId: !data.company.isNew ? data.company.id : undefined,
+    //       updateCompany: sharedCompanyUpdate,
+    //     }
+    //   : undefined,
 
     eventTypeId: data.eventTypeId,
     occurredAt: data.occurredAt,

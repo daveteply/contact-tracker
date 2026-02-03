@@ -56,12 +56,30 @@ export const EntitySelectionSchema = z.object({
 });
 
 export const CompanySelectionSchema = EntitySelectionSchema.extend({
-  // Make name optional at the schema level,
-  // then refine it to be required if NOT removing.
   name: z.string().optional(),
 }).refine((data) => data.shouldRemove || (data.name && data.name.length > 0), {
   message: 'Company name is required',
   path: ['name'],
+});
+
+export const ContactSelectionSchema = EntitySelectionSchema.extend({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+}).refine(
+  (data) =>
+    data.shouldRemove ||
+    (data.firstName && data.firstName.length > 0 && data.lastName && data.lastName.length > 0),
+  {
+    message: 'Contact first & last name is required',
+    path: ['firstName', 'lastName'],
+  },
+);
+
+export const RoleSelectionSchema = EntitySelectionSchema.extend({
+  title: z.string().optional(),
+}).refine((data) => data.shouldRemove || (data.title && data.title.length > 0), {
+  message: 'Role title is required',
+  path: ['title'],
 });
 
 export const updateRequiredString = (maxLength: number, message: string) =>
