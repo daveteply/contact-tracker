@@ -40,17 +40,13 @@ export const EventUpdateSchema = z
     company: CompanySelectionSchema.or(z.null()).optional(),
     contact: ContactSelectionSchema.or(z.null()).optional(),
     role: RoleSelectionSchema.or(z.null()).optional(),
-    eventTypeId: z
-      .number({ message: 'Select an event type' })
-      .nullable()
-      .refine((val): val is number => val !== null && val > 0, {
-        message: 'Select an event type',
-      }),
-    occurredAt: z.coerce.date('Must be a valid date'),
+
+    eventTypeId: z.number().nullable().optional(),
+    occurredAt: z.coerce.date().optional(),
     summary: updateOptionalString(256),
     details: updateOptionalString(1024),
-    source: SourceTypeSchema,
-    direction: DirectionTypeSchema,
+    source: SourceTypeSchema.optional(),
+    direction: DirectionTypeSchema.optional(),
   })
   .partial();
 

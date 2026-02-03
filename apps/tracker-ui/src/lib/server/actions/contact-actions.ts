@@ -8,7 +8,12 @@ import {
 } from '@contact-tracker/validation';
 import { createContact, deleteContact, updateContact } from '../clients/contacts-client';
 import { revalidatePath } from 'next/cache';
-import { ApiResult, ContactCreateDto, ContactReadDto } from '@contact-tracker/api-models';
+import {
+  ApiResult,
+  ContactCreateDto,
+  ContactReadDto,
+  ContactUpdateDto,
+} from '@contact-tracker/api-models';
 
 const CONTACTS_PATH = '/events/contacts';
 
@@ -60,7 +65,7 @@ export async function updateContactAction(id: number, data: ContactUpdate) {
 
   const { company, ...updateFields } = validated.data;
 
-  const dto = {
+  const dto: ContactUpdateDto = {
     ...updateFields,
     // Explicitly mapping the selection object to the DTO
     companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,

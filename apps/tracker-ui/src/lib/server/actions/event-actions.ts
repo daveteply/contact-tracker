@@ -86,43 +86,28 @@ export async function updateEventAction(id: number, data: EventUpdate) {
   const validated = EventUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  // const { company, contact, role, ...eventFields } = validated.data;
+  const { company, contact, role, eventTypeId, ...fields } = validated.data;
 
-  // Prepare the Company (shared by Event and Role)
-  // const sharedCompanyUpdate = company && company.isNew ? { name: company.name } : undefined;
-
-  // Logic Change: If it's new, the ID must be undefined/null
-  // to prevent EF from updating the existing linked entity.
   const dto: EventUpdateDto = {
-    // Top-level Event -> Company Link
-    // companyId: !data.company.isNew ? data.company.id : undefined,
-    // updateCompany: sharedCompanyUpdate,
+    ...fields,
+    eventTypeId: eventTypeId ?? 0,
 
-    // // Top-level Event -> Contact Link
-    // contactId: !data.contact.isNew ? data.contact.id : undefined,
-    // updateContact: data.contact.isNew
-    //   ? { firstName: data.contact.firstName, lastName: data.contact.lastName }
-    //   : undefined,
+    // Company Relation
+    companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
+    updateCompany: company?.isNew ? { name: company.name } : undefined,
 
-    // // Top-level Event -> Role Link
-    // roleId: !data.role.isNew ? data.role.id : undefined,
-    // updateRole: data.role.isNew
-    //   ? {
-    //       title: data.role.title,
-    //       level: RoleLevel.EngineeringManager,
-    //       // CRITICAL: Link the new role to the same company info
-    //       // If company is existing, pass its ID. If new, pass the new info.
-    //       companyId: !data.company.isNew ? data.company.id : undefined,
-    //       updateCompany: sharedCompanyUpdate,
-    //     }
-    //   : undefined,
+    // Contact Relation
+    contactId: contact?.shouldRemove ? -1 : contact?.isNew ? undefined : contact?.id,
+    updateContact: contact?.isNew
+      ? {
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+        }
+      : undefined,
 
-    eventTypeId: data.eventTypeId,
-    occurredAt: data.occurredAt,
-    summary: data.summary,
-    details: data.details,
-    source: data.source,
-    direction: data.direction,
+    // Role Relation
+    roleId: role?.shouldRemove ? -1 : role?.isNew ? undefined : role?.id,
+    updateRole: role?.isNew ? { title: role.title } : undefined,
   };
 
   return handleActionResult(updateEvent(id, dto), 'Event updated!');

@@ -139,39 +139,54 @@ public class EventService : IEventService
         if (dto.Direction.HasValue)
             @event.Direction = dto.Direction.Value;
 
-        // Company
-        if (dto.CompanyId.HasValue)
+        // Company Logic
+        if (dto.CompanyId == -1) // Removal Sentinel
+        {
+            @event.CompanyId = null;
+            @event.Company = null;
+        }
+        else if (dto.CompanyId.HasValue)
         {
             @event.CompanyId = dto.CompanyId;
-            @event.Company = null; // Clear navigation so EF doesn't try to insert
+            @event.Company = null; 
         }
         else if (dto.UpdateCompany is not null)
         {
             await HandleInlineCompanyUpdate(@event, dto.UpdateCompany);
         }
 
-        // Role
-        if (dto.RoleId.HasValue)
+        // Role Logic
+        if (dto.RoleId == -1) // Removal Sentinel
+        {
+            @event.RoleId = null;
+            @event.Role = null;
+        }
+        else if (dto.RoleId.HasValue)
         {
             @event.RoleId = dto.RoleId;
-            @event.Role = null;  // Clear navigation so EF doesn't try to insert
+            @event.Role = null;
         }
         else if (dto.UpdateRole is not null)
         {
             await HandleInlineRoleUpdate(@event, dto.UpdateRole);
         }
 
-        // Contact
-        if (dto.ContactId.HasValue)
+        // Contact Logic
+        if (dto.ContactId == -1) // Removal Sentinel
+        {
+            @event.ContactId = null;
+            @event.Contact = null;
+        }
+        else if (dto.ContactId.HasValue)
         {
             @event.ContactId = dto.ContactId;
-            @event.Contact = null; // Clear navigation so EF doesn't try to insert
+            @event.Contact = null;
         }
         else if (dto.UpdateContact is not null)
         {
             await HandleInlineContactUpdate(@event, dto.UpdateContact);
         }
-
+        
         _context.Events.Update(@event);
         await _context.SaveChangesAsync();
 
