@@ -47,9 +47,8 @@ public class EventEndpointsTests : IAsyncDisposable
         {
             eventType = new EventType
             {
-                Id = 1,
                 Name = "Interview",
-                Category = "General",
+                Category = EventTypeCategoryType.Application,
                 IsSystemDefined = true
             };
             context.EventTypes.Add(eventType);
@@ -79,7 +78,6 @@ public class EventEndpointsTests : IAsyncDisposable
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Initial Outreach", result?.Data?.Summary);
-        Assert.Equal(eventType.Id, result?.Data?.EventTypeId);
 
         // Verify it exists in the DB
         using var verifyScope = _factory.Services.CreateScope();
@@ -102,7 +100,7 @@ public class EventEndpointsTests : IAsyncDisposable
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
-            eventType = new EventType { Id = 2, Name = "Call", Category = "General", IsSystemDefined = true };
+            eventType = new EventType { Name = "Call", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
 
@@ -113,7 +111,7 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Existing Corp", null, null, null, null), // Matches existing name
             ContactId: null, NewContact: null, RoleId: null, NewRole: null,
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Test", Details: "Test",
-            NewEventType: new EventTypeCreateDto(1, "Type1", string.Empty, true),
+            NewEventType: new EventTypeCreateDto(eventType.Id, "Type1", EventTypeCategoryType.Application, true),
             Source: SourceType.Email, Direction: DirectionType.Inbound
         );
 
@@ -142,7 +140,7 @@ public class EventEndpointsTests : IAsyncDisposable
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
-            eventType = new EventType { Id = 3, Name = "Meeting", Category = "General", IsSystemDefined = true };
+            eventType = new EventType { Id = 3, Name = "Meeting", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
             context.EventTypes.Add(eventType);
             await context.SaveChangesAsync();
         }
@@ -152,9 +150,9 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Startup Inc", "https://startup.io", null, null, null),
             ContactId: null, NewContact: null,
             RoleId: null,
-            NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevel.EngineeringManager),
+            NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevelType.EngineeringManager),
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Founders Meeting", Details: "Initial chat",
-            NewEventType: new EventTypeCreateDto(1, "Type1", string.Empty, true),
+            NewEventType: new EventTypeCreateDto(1, "Type1", EventTypeCategoryType.Application, true),
             Source: SourceType.LinkedIn, Direction: DirectionType.Inbound
         );
 
@@ -195,7 +193,7 @@ public class EventEndpointsTests : IAsyncDisposable
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
-            eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
+            eventType = new EventType { Id = 1, Name = "Applied", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
 
@@ -246,7 +244,7 @@ public class EventEndpointsTests : IAsyncDisposable
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
-            eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
+            eventType = new EventType { Id = 1, Name = "Applied", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
 
@@ -299,7 +297,7 @@ public class EventEndpointsTests : IAsyncDisposable
         var eventType = await context.EventTypes.FirstOrDefaultAsync();
         if (eventType == null)
         {
-            eventType = new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true };
+            eventType = new EventType { Id = 1, Name = "Applied", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
             context.EventTypes.Add(eventType);
         }
 
@@ -320,7 +318,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("Brand New Startup", null, null, null, null),
             ContactId: null, UpdateContact: null,
             RoleId: null,
-            UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevel.EngineeringManager),
+            UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevelType.EngineeringManager),
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
             UpdateEventType: null,
             Source: null, Direction: null

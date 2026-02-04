@@ -10,7 +10,7 @@ public class Role : BaseEntity
     public required string Title { get; set; }
     public string? JobPostingUrl { get; set; }
     public string? Location { get; set; }
-    public RoleLevel Level { get; set; }
+    public RoleLevelType Level { get; set; }
 
     public ICollection<Event> Events { get; set; } = new List<Event>();
 }

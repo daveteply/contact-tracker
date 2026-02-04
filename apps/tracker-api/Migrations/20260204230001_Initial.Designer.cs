@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace tracker_api.Migrations
 {
     [DbContext(typeof(ContactTrackerDbContext))]
-    [Migration("20260201131410_Initial")]
+    [Migration("20260204230001_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -155,8 +155,8 @@ namespace tracker_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("EventTypeId")
-                        .HasColumnType("integer");
+                    b.Property<long>("EventTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("OccurredAt")
                         .HasColumnType("timestamp with time zone");
@@ -193,12 +193,19 @@ namespace tracker_api.Migrations
 
             modelBuilder.Entity("ContactTracker.TrackerAPI.EventType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Category")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<bool>("IsSystemDefined")
                         .HasColumnType("boolean");
@@ -207,6 +214,11 @@ namespace tracker_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
                     b.HasKey("Id");
 
                     b.ToTable("EventTypes");
@@ -214,52 +226,120 @@ namespace tracker_api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Category = "Application",
+                            Id = -1L,
+                            Category = 0,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Applied"
+                            Name = "Job Lead",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 2,
-                            Category = "Communication",
+                            Id = -2L,
+                            Category = 2,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Recruiter Outreach"
+                            Name = "Applied",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 3,
-                            Category = "Interview",
+                            Id = -3L,
+                            Category = 3,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Interview Scheduled"
+                            Name = "Recruiter Outreach",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 4,
-                            Category = "Interview",
+                            Id = -4L,
+                            Category = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Interview Completed"
+                            Name = "Networking/Coffee Chat",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 5,
-                            Category = "Communication",
+                            Id = -5L,
+                            Category = 3,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Follow-up Sent"
+                            Name = "Follow-up Sent",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 6,
-                            Category = "Outcome",
+                            Id = -6L,
+                            Category = 4,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Rejected"
+                            Name = "Technical Assessment",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 7,
-                            Category = "Outcome",
+                            Id = -7L,
+                            Category = 5,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsSystemDefined = true,
-                            Name = "Offer Received"
+                            Name = "Screening Call",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -8L,
+                            Category = 5,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Technical Interview",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -9L,
+                            Category = 5,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Onsite Interview",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -10L,
+                            Category = 6,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Offer Received",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -11L,
+                            Category = 7,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Offer Accepted",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -12L,
+                            Category = 7,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Rejected",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -13L,
+                            Category = 7,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsSystemDefined = true,
+                            Name = "Withdrew Application",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

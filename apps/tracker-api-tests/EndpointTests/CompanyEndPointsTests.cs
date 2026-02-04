@@ -334,7 +334,7 @@ public class CompanyEndpointsTests : IAsyncDisposable
             {
                 Id = 1,
                 Name = "Meeting",
-                Category = "Testing Category",
+                Category = EventTypeCategoryType.Application,
                 IsSystemDefined = true
             };
             context.EventTypes.Add(eventType);

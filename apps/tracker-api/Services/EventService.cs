@@ -148,7 +148,7 @@ public class EventService : IEventService
         else if (dto.CompanyId.HasValue)
         {
             @event.CompanyId = dto.CompanyId;
-            @event.Company = null; 
+            @event.Company = null;
         }
         else if (dto.UpdateCompany is not null)
         {
@@ -186,7 +186,7 @@ public class EventService : IEventService
         {
             await HandleInlineContactUpdate(@event, dto.UpdateContact);
         }
-        
+
         _context.Events.Update(@event);
         await _context.SaveChangesAsync();
 
@@ -415,7 +415,7 @@ public class EventService : IEventService
             CompanyId = compId,
             Company = @event.Company,
             Location = updateDto.Location,
-            Level = updateDto.Level ?? RoleLevel.EngineeringManager,
+            Level = updateDto.Level ?? RoleLevelType.EngineeringManager,
             JobPostingUrl = updateDto.JobPostingUrl
         };
         @event.RoleId = null; // Will be assigned by EF after insert
@@ -459,11 +459,6 @@ public class EventService : IEventService
             errors.Add("Event occurrence date is required");
         }
 
-        if (dto.EventTypeId <= 0)
-        {
-            errors.Add("Valid Event Type is required");
-        }
-
         if (errors.Count > 0)
         {
             throw new ValidationException("Event validation failed", errors);
@@ -479,11 +474,6 @@ public class EventService : IEventService
         if (dto.OccurredAt.HasValue && dto.OccurredAt.Value == default)
         {
             errors.Add("Event occurrence date cannot be default value");
-        }
-
-        if (dto.EventTypeId.HasValue && dto.EventTypeId.Value <= 0)
-        {
-            errors.Add("Event Type must be valid if provided");
         }
 
         if (errors.Count > 0)

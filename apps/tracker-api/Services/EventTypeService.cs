@@ -22,7 +22,7 @@ public class EventTypeService : IEventTypeService
         return eventTypes.Select(MapToReadDto).ToList();
     }
 
-    public async Task<EventTypeReadDto> GetEventTypeByIdAsync(int id)
+    public async Task<EventTypeReadDto> GetEventTypeByIdAsync(long id)
     {
         var eventType = await _context.EventTypes
             .AsNoTracking()
@@ -49,7 +49,7 @@ public class EventTypeService : IEventTypeService
         {
             Id = dto.Id,
             Name = dto.Name,
-            Category = dto.Category ?? string.Empty,
+            Category = dto.Category,
             IsSystemDefined = dto.IsSystemDefined
         };
 
@@ -59,7 +59,7 @@ public class EventTypeService : IEventTypeService
         return MapToReadDto(eventType);
     }
 
-    public async Task<EventTypeReadDto> UpdateEventTypeAsync(int id, EventTypeUpdateDto dto)
+    public async Task<EventTypeReadDto> UpdateEventTypeAsync(long id, EventTypeUpdateDto dto)
     {
         var existingEventType = await _context.EventTypes.FindAsync(id);
 
@@ -80,8 +80,7 @@ public class EventTypeService : IEventTypeService
         if (dto.Name is not null)
             existingEventType.Name = dto.Name;
 
-        if (dto.Category is not null)
-            existingEventType.Category = dto.Category;
+        existingEventType.Category = dto.Category;
 
         // Note: We usually don't allow changing IsSystemDefined via API
         // But if you want to allow it, uncomment:
@@ -94,7 +93,7 @@ public class EventTypeService : IEventTypeService
         return MapToReadDto(existingEventType);
     }
 
-    public async Task DeleteEventTypeAsync(int id)
+    public async Task DeleteEventTypeAsync(long id)
     {
         var eventType = await _context.EventTypes.FindAsync(id);
 
@@ -126,19 +125,9 @@ public class EventTypeService : IEventTypeService
     {
         var errors = new List<string>();
 
-        if (dto.Id <= 0)
-        {
-            errors.Add("Id must be greater than 0");
-        }
-
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
             errors.Add("Name is required");
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.Category))
-        {
-            errors.Add("Category is required");
         }
 
         if (errors.Count > 0)
@@ -156,11 +145,6 @@ public class EventTypeService : IEventTypeService
         if (dto.Name is not null && string.IsNullOrWhiteSpace(dto.Name))
         {
             errors.Add("Name cannot be empty");
-        }
-
-        if (dto.Category is not null && string.IsNullOrWhiteSpace(dto.Category))
-        {
-            errors.Add("Category cannot be empty");
         }
 
         if (errors.Count > 0)

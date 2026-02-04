@@ -13,7 +13,7 @@ public class Event : BaseEntity
     public long? RoleId { get; set; }
     public Role? Role { get; set; }
 
-    public int EventTypeId { get; set; }
+    public long EventTypeId { get; set; }
     public EventType? EventType { get; set; }
 
     public required DateTime OccurredAt { get; set; }

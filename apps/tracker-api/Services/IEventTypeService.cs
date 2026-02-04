@@ -5,8 +5,8 @@ namespace ContactTracker.TrackerAPI.Services;
 public interface IEventTypeService
 {
     Task<List<EventTypeReadDto>> GetAllEventTypesAsync();
-    Task<EventTypeReadDto> GetEventTypeByIdAsync(int id);
+    Task<EventTypeReadDto> GetEventTypeByIdAsync(long id);
     Task<EventTypeReadDto> CreateEventTypeAsync(EventTypeCreateDto eventType);
-    Task<EventTypeReadDto> UpdateEventTypeAsync(int id, EventTypeUpdateDto eventType);
-    Task DeleteEventTypeAsync(int id);
+    Task<EventTypeReadDto> UpdateEventTypeAsync(long id, EventTypeUpdateDto eventType);
+    Task DeleteEventTypeAsync(long id);
 }

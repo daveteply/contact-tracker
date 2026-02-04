@@ -4,7 +4,7 @@
  */
 
 import { CompanyCreateDto } from "./company-create-dto";
-import { RoleLevel } from "./role-level";
+import { RoleLevelType } from "./role-level-type";
 
 export interface RoleCreateDto {
     companyId?: number;
@@ -12,5 +12,5 @@ export interface RoleCreateDto {
     title: string;
     jobPostingUrl?: string;
     location?: string;
-    level: RoleLevel;
+    level: RoleLevelType;
 }

@@ -3,7 +3,7 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-export enum RoleLevel {
+export enum RoleLevelType {
     FrontendDeveloper = "FrontendDeveloper",
     BackendDeveloper = "BackendDeveloper",
     FullStackDeveloper = "FullStackDeveloper",

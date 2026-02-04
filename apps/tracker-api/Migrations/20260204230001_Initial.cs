@@ -40,10 +40,13 @@ namespace tracker_api.Migrations
                 name: "EventTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Category = table.Column<string>(type: "text", nullable: false),
-                    IsSystemDefined = table.Column<bool>(type: "boolean", nullable: false)
+                    Category = table.Column<int>(type: "integer", nullable: false),
+                    IsSystemDefined = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'")
                 },
                 constraints: table =>
                 {
@@ -111,7 +114,7 @@ namespace tracker_api.Migrations
                     CompanyId = table.Column<long>(type: "bigint", nullable: true),
                     ContactId = table.Column<long>(type: "bigint", nullable: true),
                     RoleId = table.Column<long>(type: "bigint", nullable: true),
-                    EventTypeId = table.Column<int>(type: "integer", nullable: false),
+                    EventTypeId = table.Column<long>(type: "bigint", nullable: false),
                     OccurredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Summary = table.Column<string>(type: "text", nullable: true),
                     Details = table.Column<string>(type: "text", nullable: true),
@@ -177,13 +180,19 @@ namespace tracker_api.Migrations
                 columns: new[] { "Id", "Category", "IsSystemDefined", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Application", true, "Applied" },
-                    { 2, "Communication", true, "Recruiter Outreach" },
-                    { 3, "Interview", true, "Interview Scheduled" },
-                    { 4, "Interview", true, "Interview Completed" },
-                    { 5, "Communication", true, "Follow-up Sent" },
-                    { 6, "Outcome", true, "Rejected" },
-                    { 7, "Outcome", true, "Offer Received" }
+                    { -13L, 7, true, "Withdrew Application" },
+                    { -12L, 7, true, "Rejected" },
+                    { -11L, 7, true, "Offer Accepted" },
+                    { -10L, 6, true, "Offer Received" },
+                    { -9L, 5, true, "Onsite Interview" },
+                    { -8L, 5, true, "Technical Interview" },
+                    { -7L, 5, true, "Screening Call" },
+                    { -6L, 4, true, "Technical Assessment" },
+                    { -5L, 3, true, "Follow-up Sent" },
+                    { -4L, 1, true, "Networking/Coffee Chat" },
+                    { -3L, 3, true, "Recruiter Outreach" },
+                    { -2L, 2, true, "Applied" },
+                    { -1L, 0, true, "Job Lead" }
                 });
 
             migrationBuilder.CreateIndex(

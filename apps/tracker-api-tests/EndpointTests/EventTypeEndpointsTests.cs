@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using ContactTracker.TrackerAPI.Common;
+using ContactTracker.SharedDTOs;
 
 namespace ContactTracker.TrackerAPI.Tests;
 
@@ -61,11 +62,11 @@ public class EventTypeEndpointsTests : IAsyncDisposable
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
 
-        var existing = new EventType { Id = 50, Name = "Existing", Category = "Test", IsSystemDefined = true };
+        var existing = new EventType { Id = 50, Name = "Existing", Category = EventTypeCategoryType.Application, IsSystemDefined = true };
         context.EventTypes.Add(existing);
         await context.SaveChangesAsync();
 
-        var duplicate = new { Id = 50, Name = "New", Category = "Test", IsSystemDefined = false };
+        var duplicate = new { Id = 50, Name = "New", Category = EventTypeCategoryType.Application, IsSystemDefined = false };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/event-types", duplicate);

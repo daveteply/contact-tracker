@@ -48,7 +48,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Staff Engineer",
             JobPostingUrl: null,
             Location: "Remote",
-            Level: RoleLevel.StaffEngineer
+            Level: RoleLevelType.StaffEngineer
         );
 
         // Act
@@ -82,7 +82,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Engineering Manager",
             JobPostingUrl: null,
             Location: "San Francisco",
-            Level: RoleLevel.EngineeringManager
+            Level: RoleLevelType.EngineeringManager
         );
 
         // Act
@@ -128,7 +128,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Senior Engineer",
             JobPostingUrl: null,
             Location: "New York",
-            Level: RoleLevel.StaffEngineer
+            Level: RoleLevelType.StaffEngineer
         );
 
         // Act
@@ -158,7 +158,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         var role = new Role
         {
             Title = "Developer",
-            Level = RoleLevel.StaffEngineer,
+            Level = RoleLevelType.StaffEngineer,
             Company = oldCompany
         };
         context.Roles.Add(role);
@@ -205,7 +205,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         var role = new Role
         {
             Title = "Developer",
-            Level = RoleLevel.StaffEngineer,
+            Level = RoleLevelType.StaffEngineer,
             Company = company1
         };
         context.Companies.Add(company2);
@@ -244,7 +244,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "",
             JobPostingUrl: null,
             Location: null,
-            Level: RoleLevel.StaffEngineer
+            Level: RoleLevelType.StaffEngineer
         );
 
         // Act
@@ -264,7 +264,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         var role = new Role
         {
             Title = "Staff Software Engineer",
-            Level = RoleLevel.StaffEngineer
+            Level = RoleLevelType.StaffEngineer
         };
 
         context.Roles.Add(role);
@@ -298,9 +298,9 @@ public class RoleEndpointsTests : IAsyncDisposable
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ContactTrackerDbContext>();
 
-        context.Roles.Add(new Role { Title = "Staff Software Engineer", Level = RoleLevel.StaffEngineer });
-        context.Roles.Add(new Role { Title = "Tech Writer", Level = RoleLevel.StaffEngineer });
-        context.Roles.Add(new Role { Title = "Jr Software Engineer", Level = RoleLevel.StaffEngineer });
+        context.Roles.Add(new Role { Title = "Staff Software Engineer", Level = RoleLevelType.StaffEngineer });
+        context.Roles.Add(new Role { Title = "Tech Writer", Level = RoleLevelType.StaffEngineer });
+        context.Roles.Add(new Role { Title = "Jr Software Engineer", Level = RoleLevelType.StaffEngineer });
         await context.SaveChangesAsync();
 
         // Act
@@ -328,7 +328,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         var role = new Role
         {
             Title = "Software Tester",
-            Level = RoleLevel.StaffEngineer
+            Level = RoleLevelType.StaffEngineer
         };
         context.Roles.Add(role);
         await context.SaveChangesAsync();
@@ -352,7 +352,7 @@ public class RoleEndpointsTests : IAsyncDisposable
         var role = new Role
         {
             Title = "Software Tester",
-            Level = RoleLevel.StaffEngineer
+            Level = RoleLevelType.StaffEngineer
         };
         context.Roles.Add(role);
         await context.SaveChangesAsync();
@@ -365,7 +365,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             {
                 Id = 1,
                 Name = "Meeting",
-                Category = "Testing Category",
+                Category = EventTypeCategoryType.Application,
                 IsSystemDefined = true
             };
             context.EventTypes.Add(eventType);

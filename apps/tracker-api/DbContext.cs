@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ContactTracker.SharedDTOs;
 using ContactTracker.TrackerAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -90,14 +91,26 @@ public class ContactTrackerDbContext : DbContext
 
         // Seed data for event types
         modelBuilder.Entity<EventType>().HasData(
-            new EventType { Id = 1, Name = "Applied", Category = "Application", IsSystemDefined = true },
-            new EventType { Id = 2, Name = "Recruiter Outreach", Category = "Communication", IsSystemDefined = true },
-            new EventType { Id = 3, Name = "Interview Scheduled", Category = "Interview", IsSystemDefined = true },
-            new EventType { Id = 4, Name = "Interview Completed", Category = "Interview", IsSystemDefined = true },
-            new EventType { Id = 5, Name = "Follow-up Sent", Category = "Communication", IsSystemDefined = true },
-            new EventType { Id = 6, Name = "Rejected", Category = "Outcome", IsSystemDefined = true },
-            new EventType { Id = 7, Name = "Offer Received", Category = "Outcome", IsSystemDefined = true },
-            new EventType { Id = 8, Name = "Networking", Category = "Communication", IsSystemDefined = true }
+            // Application & Discovery (Assign manual IDs)
+            new EventType { Id = -1, Name = "Job Lead", Category = EventTypeCategoryType.Discovery, IsSystemDefined = true },
+            new EventType { Id = -2, Name = "Applied", Category = EventTypeCategoryType.Application, IsSystemDefined = true },
+
+            // Communication & Networking
+            new EventType { Id = -3, Name = "Recruiter Outreach", Category = EventTypeCategoryType.Communication, IsSystemDefined = true },
+            new EventType { Id = -4, Name = "Networking/Coffee Chat", Category = EventTypeCategoryType.Networking, IsSystemDefined = true },
+            new EventType { Id = -5, Name = "Follow-up Sent", Category = EventTypeCategoryType.Communication, IsSystemDefined = true },
+
+            // Assessments & Interviews
+            new EventType { Id = -6, Name = "Technical Assessment", Category = EventTypeCategoryType.Assessment, IsSystemDefined = true },
+            new EventType { Id = -7, Name = "Screening Call", Category = EventTypeCategoryType.Interview, IsSystemDefined = true },
+            new EventType { Id = -8, Name = "Technical Interview", Category = EventTypeCategoryType.Interview, IsSystemDefined = true },
+            new EventType { Id = -9, Name = "Onsite Interview", Category = EventTypeCategoryType.Interview, IsSystemDefined = true },
+
+            // Outcomes
+            new EventType { Id = -10, Name = "Offer Received", Category = EventTypeCategoryType.Offer, IsSystemDefined = true },
+            new EventType { Id = -11, Name = "Offer Accepted", Category = EventTypeCategoryType.Outcome, IsSystemDefined = true },
+            new EventType { Id = -12, Name = "Rejected", Category = EventTypeCategoryType.Outcome, IsSystemDefined = true },
+            new EventType { Id = -13, Name = "Withdrew Application", Category = EventTypeCategoryType.Outcome, IsSystemDefined = true }
         );
     }
 
