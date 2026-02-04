@@ -3,7 +3,6 @@ export * from './lib/common/enum-selector';
 export * from './lib/common/bread-crumbs';
 export * from './lib/common/external-link';
 export * from './lib/common/formatted-date';
-export * from './lib/common/direction-info';
 export * from './lib/common/entity-delete';
 export * from './lib/common/page-loading';
 

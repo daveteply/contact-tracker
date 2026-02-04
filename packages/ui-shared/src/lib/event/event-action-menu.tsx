@@ -1,5 +1,6 @@
 'use client';
 
+import { EllipsisVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
@@ -49,18 +50,7 @@ export function EventActionMenu({ id }: EventActionMenuProps) {
           }
         }}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="size-6"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <EllipsisVerticalIcon className="size-5" />
       </summary>
 
       <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-40 p-2 shadow-lg border border-base-200">
@@ -70,6 +60,7 @@ export function EventActionMenu({ id }: EventActionMenuProps) {
             className="flex items-center gap-2 hover:bg-base-200"
             onClick={() => setIsOpen(false)} // Close menu after clicking action
           >
+            <PencilIcon className="size-5" />
             Edit
           </Link>
         </li>
@@ -79,6 +70,7 @@ export function EventActionMenu({ id }: EventActionMenuProps) {
             className="flex items-center gap-2 text-error hover:bg-error/10"
             onClick={() => setIsOpen(false)} // Close menu after clicking link
           >
+            <TrashIcon className="size-5" />
             Delete
           </Link>
         </li>

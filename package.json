@@ -73,6 +73,7 @@
     "shared/*"
   ],
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "daisyui": "^5.5.14",
     "next": "^16.1.6",
