@@ -9,7 +9,7 @@ import {
   updateOptionalString,
   updateOptionalUrl,
   updateRequiredString,
-} from './helpers/schema-helpers';
+} from '../helpers/schema-helpers';
 
 const contactCreateBase = {
   title: emptyToUndefined(z.string().max(100).optional()),

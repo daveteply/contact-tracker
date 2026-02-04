@@ -3,7 +3,7 @@ import {
   updateRequiredString,
   updateOptionalString,
   updateOptionalUrl,
-} from './helpers/schema-helpers';
+} from '../helpers/schema-helpers';
 
 // Helper to convert empty strings to undefined (for create)
 const emptyToUndefined = z.preprocess(

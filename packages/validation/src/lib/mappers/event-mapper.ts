@@ -1,6 +1,6 @@
 // packages/validation/src/lib/mappers/event-mapper.ts
 import { EventReadDto } from '@contact-tracker/api-models';
-import { EventFormValues } from '../event-schema';
+import { EventFormValues } from '../zod/event-schema';
 
 export function mapEventDtoToFormValues(dto: EventReadDto): EventFormValues {
   return {

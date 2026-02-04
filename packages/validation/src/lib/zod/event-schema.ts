@@ -6,7 +6,7 @@ import {
   emptyToUndefined,
   RoleSelectionSchema,
   updateOptionalString,
-} from './helpers/schema-helpers';
+} from '../helpers/schema-helpers';
 
 export const EventCreateSchema = z.object({
   // Relations: Optional and Composable to match Role/Contact patterns

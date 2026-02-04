@@ -6,7 +6,7 @@ import {
   updateRequiredString,
   updateOptionalUrl,
   updateOptionalString,
-} from './helpers/schema-helpers';
+} from '../helpers/schema-helpers';
 
 const roleCreateBase = {
   jobPostingUrl: emptyToUndefined(z.url('Must be a valid URL').max(2048).optional()),
