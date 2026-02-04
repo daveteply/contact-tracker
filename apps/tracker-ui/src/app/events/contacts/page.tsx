@@ -8,14 +8,11 @@ export default async function Index() {
 
   return (
     <>
-      <div className="flex mb-3">
+      <div className="flex mb-3 justify-between">
         <h1 className="text-xl pr-1">Contacts</h1>
-        <Link
-          className="btn btn-circle btn-sm text-primary"
-          href="contacts/new"
-          title="Add new Contact"
-        >
+        <Link className="btn btn-sm text-primary" href="contacts/new" title="Add Contact">
           <PlusCircleIcon className="size-5" />
+          Add Contact
         </Link>
       </div>
       <ContactList contacts={contacts} />

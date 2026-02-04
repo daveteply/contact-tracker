@@ -8,14 +8,11 @@ export default async function CompanyListPage() {
 
   return (
     <>
-      <div className="flex mb-3">
+      <div className="flex mb-3 justify-between">
         <h1 className="text-xl pr-1">Companies</h1>
-        <Link
-          className="btn btn-circle btn-sm text-primary"
-          href="companies/new"
-          title="Add new Event"
-        >
+        <Link className="btn btn-sm text-primary" href="companies/new" title="Add Company">
           <PlusCircleIcon className="size-5" />
+          Add Company
         </Link>
       </div>
 

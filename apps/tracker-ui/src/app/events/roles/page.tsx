@@ -8,10 +8,11 @@ export default async function RoleListPage() {
 
   return (
     <>
-      <div className="flex mb-3">
+      <div className="flex mb-3 justify-between">
         <h1 className="text-xl pr-1">Roles</h1>
-        <Link className="btn btn-circle btn-sm text-primary" href="roles/new" title="Add new Role">
+        <Link className="btn btn-sm text-primary" href="roles/new" title="Add Role">
           <PlusCircleIcon className="size-5" />
+          Add Role
         </Link>
       </div>
 
