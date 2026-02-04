@@ -11,9 +11,20 @@ export interface EventInfoCardProps {
   showControls?: boolean;
 }
 
+const EVENT_CATEGORY_COLOR_MAP: Record<string, string> = {
+  Application: 'border-l-primary',
+  Communication: 'border-l-info',
+  Interview: 'border-l-success',
+  Outcome: 'border-l-accent',
+};
+
 export function EventInfoCard({ event, showControls = true }: EventInfoCardProps) {
+  const borderClass =
+    EVENT_CATEGORY_COLOR_MAP[event.eventType?.category || ''] || EVENT_CATEGORY_COLOR_MAP.default;
   return (
-    <div className="relative card bg-neutral text-neutral-content w-full shadow-sm mb-3 mr-3">
+    <div
+      className={`relative card bg-neutral text-neutral-content w-full shadow-md mb-3 mr-3 border-l-5 ${borderClass}`}
+    >
       {/* The invisible primary link */}
       <Link
         href={`/events/${event.id}`}
