@@ -96,7 +96,8 @@ public class ContactTrackerDbContext : DbContext
             new EventType { Id = 4, Name = "Interview Completed", Category = "Interview", IsSystemDefined = true },
             new EventType { Id = 5, Name = "Follow-up Sent", Category = "Communication", IsSystemDefined = true },
             new EventType { Id = 6, Name = "Rejected", Category = "Outcome", IsSystemDefined = true },
-            new EventType { Id = 7, Name = "Offer Received", Category = "Outcome", IsSystemDefined = true }
+            new EventType { Id = 7, Name = "Offer Received", Category = "Outcome", IsSystemDefined = true },
+            new EventType { Id = 8, Name = "Networking", Category = "Communication", IsSystemDefined = true }
         );
     }
 
