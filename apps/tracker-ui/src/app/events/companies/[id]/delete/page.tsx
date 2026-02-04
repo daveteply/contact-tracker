@@ -30,7 +30,7 @@ export default async function CompanyDeletePage({ params }: { params: Promise<{ 
             />
           ) : (
             <>
-              <p>This Company is associated with Events and cannot be deleted</p>
+              <p>This Company is associated with Events, Contacts or Roles and cannot be deleted</p>
               <Link className="btn" href="../">
                 Back to Companies
               </Link>

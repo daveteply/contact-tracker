@@ -135,8 +135,19 @@ public class CompanyService : ICompanyService
 
     public async Task<bool> CanDeleteCompany(long companyId)
     {
-        var eventCount = await _context.Events.Where(e => e.CompanyId == companyId).CountAsync();
-        return eventCount == 0;
+        var validation = await _context.Companies
+                .Where(c => c.Id == companyId)
+                .Select(_ => new
+                {
+                    HasEvents = _context.Events.Any(e => e.CompanyId == companyId),
+                    HasContacts = _context.Contacts.Any(c => c.CompanyId == companyId),
+                    HasRoles = _context.Roles.Any(r => r.CompanyId == companyId)
+                })
+                .FirstOrDefaultAsync();
+
+            // If validation is null, the company itself doesn't exist.
+            // If not null, return true only if all counts are false.
+            return validation != null && !validation.HasEvents && !validation.HasContacts && !validation.HasRoles;
     }
 
     public async Task<List<CompanyReadDto>> SearchCompaniesAsync(string q)
