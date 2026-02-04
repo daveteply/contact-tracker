@@ -50,7 +50,9 @@ export function EventActionMenu({ id }: EventActionMenuProps) {
           }
         }}
       >
-        <EllipsisVerticalIcon className="size-5" />
+        <span className="w-10 h-10 flex items-center justify-center active:bg-base-200 rounded-full transition">
+          <EllipsisVerticalIcon className="size-5" />
+        </span>
       </summary>
 
       <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-40 p-2 shadow-lg border border-base-200">
