@@ -5,6 +5,7 @@ export * from './lib/common/external-link';
 export * from './lib/common/formatted-date';
 export * from './lib/common/direction-info';
 export * from './lib/common/entity-delete';
+export * from './lib/common/page-loading';
 
 export * from './lib/company/company-form';
 export * from './lib/company/company-list';

@@ -1,10 +1,5 @@
+import { PageLoading } from '@contact-tracker/ui-shared';
+
 export default function EventsLoading() {
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <div>
-        <span className="mr-2">Loading Events</span>
-        <span className="loading loading-bars loading-xs text-primary"></span>
-      </div>
-    </div>
-  );
+  return <PageLoading entityName="events" />;
 }
