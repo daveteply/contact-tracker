@@ -12,8 +12,9 @@ import {
   ApiResult,
   EventCreateDto,
   EventReadDto,
+  EventTypeCategoryType,
   EventUpdateDto,
-  RoleLevel,
+  RoleLevelType,
 } from '@contact-tracker/api-models';
 
 const EVENTS_PATH = '/events';
@@ -69,14 +70,21 @@ export async function createEventAction(data: EventCreate) {
       : undefined,
 
     roleId: role && !role.isNew ? role.id : undefined,
-    newRole: isRoleCreation ? { title: role.title ?? '', level: RoleLevel.ScrumMaster } : undefined,
+    newRole: isRoleCreation
+      ? { title: role.title ?? '', level: RoleLevelType.ScrumMaster }
+      : undefined,
 
     // Resolve the 'number | null' issue by providing a fallback
     // (Zod ensures this won't be 0, but TS needs to see a number)
     eventTypeId: eventTypeId ?? 0,
 
     // Placeholder for non-nullable nested DTO
-    newEventType: { id: 0, name: '', isSystemDefined: false },
+    newEventType: {
+      id: 0,
+      name: '',
+      category: EventTypeCategoryType.Application,
+      isSystemDefined: false,
+    },
   };
 
   return handleActionResult(createEvent(dto), 'Event created!');
