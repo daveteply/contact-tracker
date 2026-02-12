@@ -38,15 +38,13 @@ export async function createRoleAction(data: RoleCreate) {
   const validated = RoleCreateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  const { company, ...contactFields } = validated.data;
+  const { company, ...roleFields } = validated.data;
 
   // Use type narrowing to ensure name is a string before building the nested DTO
   const isCreation = company?.isNew && typeof company.name === 'string';
 
-  // Aligning with the Event logic:
-  // Map to ContactCreateDto expected by .NET
   const dto: RoleCreateDto = {
-    ...contactFields,
+    ...roleFields,
     companyId: company && !company.isNew ? company.id : undefined,
     newCompany: isCreation ? { name: company.name as string } : undefined,
   };

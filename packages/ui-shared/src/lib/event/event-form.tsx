@@ -9,10 +9,10 @@ import { useRouter } from 'next/navigation';
 import {
   CompanyReadDto,
   ContactReadDto,
-  DirectionType,
+  DirectionTypeDto,
   EventTypeReadDto,
   RoleReadDto,
-  SourceType,
+  SourceTypeDto,
 } from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
 import ContactCombobox from '../contact/contact-combobox';
@@ -110,7 +110,7 @@ export function EventForm<TFieldValues extends FieldValues, TOutput = any>({
           <legend className="fieldset-legend">Direction</legend>
           <EnumSelector
             register={register('direction' as Path<TFieldValues>)}
-            enumObject={DirectionType}
+            enumObject={DirectionTypeDto}
             useButtons={true}
           />
           <ErrorMsg name={'direction' as Path<TFieldValues>} />
@@ -120,7 +120,7 @@ export function EventForm<TFieldValues extends FieldValues, TOutput = any>({
           <legend className="fieldset-legend">Source</legend>
           <EnumSelector
             register={register('source' as Path<TFieldValues>)}
-            enumObject={SourceType}
+            enumObject={SourceTypeDto}
           />
           <ErrorMsg name={'source' as Path<TFieldValues>} />
         </fieldset>

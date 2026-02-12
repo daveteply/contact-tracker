@@ -1,6 +1,6 @@
 'use client';
 
-import { DirectionType, EventReadDto } from '@contact-tracker/api-models';
+import { DirectionTypeDto, EventReadDto } from '@contact-tracker/api-models';
 import FormattedDate from '../common/formatted-date';
 import EventActionMenu from './event-action-menu';
 import Link from 'next/link';
@@ -48,7 +48,7 @@ export function EventInfoCard({ event, showControls = true }: EventInfoCardProps
           <div className="flex">
             <span className="badge badge-info text-xs truncate mr-1">{event.eventType?.name}</span>
             <span className="tooltip z-10" data-tip={event.direction}>
-              {event.direction === DirectionType.Inbound ? (
+              {event.direction === DirectionTypeDto.Inbound ? (
                 <ChevronDoubleRightIcon className="size-5" />
               ) : (
                 <ChevronDoubleLeftIcon className="size-5" />
@@ -86,7 +86,7 @@ export function EventInfoCard({ event, showControls = true }: EventInfoCardProps
           </span>
           {event.contact && (
             <span className="flex items-center gap-1">
-              <span>{event.direction === DirectionType.Inbound ? 'from' : 'to'}</span>
+              <span>{event.direction === DirectionTypeDto.Inbound ? 'from' : 'to'}</span>
               <span>
                 {event.contact?.firstName} {event.contact?.lastName}
               </span>

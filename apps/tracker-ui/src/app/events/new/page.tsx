@@ -3,14 +3,14 @@ import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
-import { DirectionType } from '@contact-tracker/api-models';
+import { DirectionTypeDto } from '@contact-tracker/api-models';
 import { EventForm } from '@contact-tracker/ui-shared';
 import { EventCreate, EventFormValues } from '@contact-tracker/validation';
 
 export default async function EventsNewPage() {
   const newEventDefaults: EventFormValues = {
     occurredAt: new Date().toISOString().split('T')[0],
-    direction: DirectionType.Outbound,
+    direction: DirectionTypeDto.Outbound,
     source: null,
 
     // Set these to null/undefined to bypass SelectionSchema refinements

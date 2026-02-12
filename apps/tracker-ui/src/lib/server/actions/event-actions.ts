@@ -12,9 +12,9 @@ import {
   ApiResult,
   EventCreateDto,
   EventReadDto,
-  EventTypeCategoryType,
+  EventTypeCategoryTypeDto,
   EventUpdateDto,
-  RoleLevelType,
+  RoleLevelTypeDto,
 } from '@contact-tracker/api-models';
 
 const EVENTS_PATH = '/events';
@@ -71,7 +71,7 @@ export async function createEventAction(data: EventCreate) {
 
     roleId: role && !role.isNew ? role.id : undefined,
     newRole: isRoleCreation
-      ? { title: role.title ?? '', level: RoleLevelType.ScrumMaster }
+      ? { title: role.title ?? '', level: RoleLevelTypeDto.DefaultRole }
       : undefined,
 
     // Resolve the 'number | null' issue by providing a fallback
@@ -82,7 +82,7 @@ export async function createEventAction(data: EventCreate) {
     newEventType: {
       id: 0,
       name: '',
-      category: EventTypeCategoryType.Application,
+      category: EventTypeCategoryTypeDto.Application,
       isSystemDefined: false,
     },
   };

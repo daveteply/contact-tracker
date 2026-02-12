@@ -1,9 +1,9 @@
-import { DirectionType, RoleLevelType, SourceType } from '@contact-tracker/api-models';
+import { DirectionTypeDto, RoleLevelTypeDto, SourceTypeDto } from '@contact-tracker/api-models';
 import { z } from 'zod';
 
-const directionSchema = z.enum(Object.values(DirectionType));
-const sourceSchema = z.enum(Object.values(SourceType));
-const roleLevelSchema = z.enum(Object.values(RoleLevelType));
+const directionSchema = z.enum(Object.values(DirectionTypeDto));
+const sourceSchema = z.enum(Object.values(SourceTypeDto));
+const roleLevelSchema = z.enum(Object.values(RoleLevelTypeDto));
 
 export const DirectionTypeSchema = z
   .enum(directionSchema.options)

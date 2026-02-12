@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RoleCreateSchema, RoleUpdateSchema } from '@contact-tracker/validation';
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
-import { CompanyReadDto, RoleLevelType } from '@contact-tracker/api-models';
+import { CompanyReadDto, RoleLevelTypeDto } from '@contact-tracker/api-models';
 import CompanyCombobox from '../company/company-combobox';
 import EnumSelector from '../common/enum-selector';
 
@@ -101,7 +101,7 @@ export function RoleForm<T extends FieldValues>({
         <legend className="fieldset-legend">Direction</legend>
         <EnumSelector
           register={register('level' as Path<T>)}
-          enumObject={RoleLevelType}
+          enumObject={RoleLevelTypeDto}
           useButtons={false}
         />
         <ErrorMsg name={'level' as Path<T>} />
