@@ -3,8 +3,9 @@ using TypeGen.Core.TypeAnnotations;
 namespace ContactTracker.SharedDTOs;
 
 [ExportTsEnum]
-public enum RoleLevelType
+public enum RoleLevelTypeDto
 {
+    DefaultRole,
     FrontendDeveloper,
     BackendDeveloper,
     FullStackDeveloper,
@@ -32,20 +33,24 @@ public enum RoleLevelType
 
 
 [ExportTsEnum]
-public enum SourceType
+public enum SourceTypeDto
 {
-    Email, LinkedIn, Website, Recruiter, Referral
+    Email, 
+    LinkedIn,
+    Website, 
+    Recruiter, 
+    Referral
 }
 
 [ExportTsEnum]
-public enum DirectionType
+public enum DirectionTypeDto
 {
     Inbound, // email or message from recruiter, etc.
     Outbound // applied to role, followed up with recruiter, etc.
 }
 
 [ExportTsEnum]
-public enum EventTypeCategoryType
+public enum EventTypeCategoryTypeDto
 {
     Discovery,      // Lead, Research
     Networking,     // Coffee Chat, Referral Request

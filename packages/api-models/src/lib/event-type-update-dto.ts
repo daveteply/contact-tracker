@@ -3,10 +3,10 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { EventTypeCategoryType } from "./event-type-category-type";
+import { EventTypeCategoryTypeDto } from "./event-type-category-type-dto";
 
 export interface EventTypeUpdateDto {
     name?: string;
-    category: EventTypeCategoryType;
+    category: EventTypeCategoryTypeDto;
     isSystemDefined?: boolean;
 }

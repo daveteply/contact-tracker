@@ -7,8 +7,8 @@ import { CompanyCreateDto } from "./company-create-dto";
 import { ContactCreateDto } from "./contact-create-dto";
 import { RoleCreateDto } from "./role-create-dto";
 import { EventTypeCreateDto } from "./event-type-create-dto";
-import { SourceType } from "./source-type";
-import { DirectionType } from "./direction-type";
+import { SourceTypeDto } from "./source-type-dto";
+import { DirectionTypeDto } from "./direction-type-dto";
 
 export interface EventCreateDto {
     companyId?: number;
@@ -22,6 +22,6 @@ export interface EventCreateDto {
     occurredAt: Date;
     summary?: string;
     details?: string;
-    source: SourceType;
-    direction: DirectionType;
+    source: SourceTypeDto;
+    direction: DirectionTypeDto;
 }

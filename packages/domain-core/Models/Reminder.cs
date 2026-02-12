@@ -1,4 +1,4 @@
-﻿namespace ContactTracker.TrackerAPI;
+﻿namespace ContactTracker.DomainCore;
 
 public class Reminder : BaseEntity
 {

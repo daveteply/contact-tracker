@@ -4,7 +4,7 @@
  */
 
 import { CompanyReadDto } from "./company-read-dto";
-import { RoleLevelType } from "./role-level-type";
+import { RoleLevelTypeDto } from "./role-level-type-dto";
 
 export interface RoleReadDto {
     id: number;
@@ -13,5 +13,5 @@ export interface RoleReadDto {
     title: string;
     jobPostingUrl?: string;
     location?: string;
-    level: RoleLevelType;
+    level: RoleLevelTypeDto;
 }

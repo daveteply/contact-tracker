@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
+using ContactTracker.DomainCore;
+using TrackerApi.Mappings;
 
 namespace ContactTracker.TrackerAPI.Services;
 
@@ -49,7 +51,7 @@ public class EventTypeService : IEventTypeService
         {
             Id = dto.Id,
             Name = dto.Name,
-            Category = dto.Category,
+            Category = EventTypeCategoryTypeMappings.ToDomain(dto.Category),
             IsSystemDefined = dto.IsSystemDefined
         };
 
@@ -80,7 +82,7 @@ public class EventTypeService : IEventTypeService
         if (dto.Name is not null)
             existingEventType.Name = dto.Name;
 
-        existingEventType.Category = dto.Category;
+        existingEventType.Category = EventTypeCategoryTypeMappings.ToDomain(dto.Category);
 
         // Note: We usually don't allow changing IsSystemDefined via API
         // But if you want to allow it, uncomment:
@@ -116,7 +118,7 @@ public class EventTypeService : IEventTypeService
         return new EventTypeReadDto(
             eventType.Id,
             eventType.Name,
-            eventType.Category,
+            EventTypeCategoryTypeMappings.ToDto(eventType.Category),
             eventType.IsSystemDefined
         );
     }

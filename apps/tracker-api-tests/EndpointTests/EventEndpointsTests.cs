@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
+using ContactTracker.DomainCore;
 
 namespace ContactTracker.TrackerAPI.Tests;
 
@@ -111,8 +112,8 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Existing Corp", null, null, null, null), // Matches existing name
             ContactId: null, NewContact: null, RoleId: null, NewRole: null,
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Test", Details: "Test",
-            NewEventType: new EventTypeCreateDto(eventType.Id, "Type1", EventTypeCategoryType.Application, true),
-            Source: SourceType.Email, Direction: DirectionType.Inbound
+            NewEventType: new EventTypeCreateDto(eventType.Id, "Type1", EventTypeCategoryTypeDto.Application, true),
+            Source: SourceTypeDto.Email, Direction: DirectionTypeDto.Inbound
         );
 
         // Act
@@ -150,10 +151,10 @@ public class EventEndpointsTests : IAsyncDisposable
             NewCompany: new CompanyCreateDto("Startup Inc", "https://startup.io", null, null, null),
             ContactId: null, NewContact: null,
             RoleId: null,
-            NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevelType.EngineeringManager),
+            NewRole: new RoleCreateDto(null, null, "Founding Engineer", null, "Remote", RoleLevelTypeDto.DefaultRole),
             EventTypeId: eventType.Id, OccurredAt: DateTime.UtcNow, Summary: "Founders Meeting", Details: "Initial chat",
-            NewEventType: new EventTypeCreateDto(1, "Type1", EventTypeCategoryType.Application, true),
-            Source: SourceType.LinkedIn, Direction: DirectionType.Inbound
+            NewEventType: new EventTypeCreateDto(1, "Type1", EventTypeCategoryTypeDto.Application, true),
+            Source: SourceTypeDto.LinkedIn, Direction: DirectionTypeDto.Inbound
         );
 
         // Act
@@ -318,7 +319,7 @@ public class EventEndpointsTests : IAsyncDisposable
             UpdateCompany: new CompanyUpdateDto("Brand New Startup", null, null, null, null),
             ContactId: null, UpdateContact: null,
             RoleId: null,
-            UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevelType.EngineeringManager),
+            UpdateRole: new RoleUpdateDto(null, company, "CTO", null, "Remote", RoleLevelTypeDto.EngineeringManager),
             EventTypeId: null, OccurredAt: null, Summary: null, Details: null,
             UpdateEventType: null,
             Source: null, Direction: null

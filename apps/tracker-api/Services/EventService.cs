@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
+using ContactTracker.DomainCore;
+using TrackerApi.Mappings;
 
 namespace ContactTracker.TrackerAPI.Services;
 
@@ -95,8 +97,8 @@ public class EventService : IEventService
             OccurredAt = dto.OccurredAt,
             Summary = dto.Summary,
             Details = dto.Details,
-            Source = dto.Source,
-            Direction = dto.Direction
+            Source = SourceTypeMappings.ToDomain(dto.Source),
+            Direction = DirectionTypeMappings.ToDomain(dto.Direction)
         };
 
         // Resolve entities: either link existing ID or process "New" DTOs
@@ -134,10 +136,10 @@ public class EventService : IEventService
             @event.Details = string.IsNullOrEmpty(dto.Details) ? null : dto.Details;
 
         if (dto.Source.HasValue)
-            @event.Source = dto.Source.Value;
+            @event.Source = SourceTypeMappings.ToDomain(dto.Source.Value);
 
         if (dto.Direction.HasValue)
-            @event.Direction = dto.Direction.Value;
+            @event.Direction = DirectionTypeMappings.ToDomain(dto.Direction.Value);
 
         // Company Logic
         if (dto.CompanyId == -1) // Removal Sentinel
@@ -261,23 +263,22 @@ public class EventService : IEventService
                 @event.Role.Title,
                 @event.Role.JobPostingUrl,
                 @event.Role.Location,
-                @event.Role.Level
+                RoleLevelTypeMappings.ToDto(@event.Role.Level)
             ) : null,
             @event.EventTypeId,
             @event.EventType is not null ? new EventTypeReadDto(
                 @event.EventType.Id,
                 @event.EventType.Name,
-                @event.EventType.Category,
+                EventTypeCategoryTypeMappings.ToDto(@event.EventType.Category),
                 @event.EventType.IsSystemDefined
             ) : null,
             @event.OccurredAt,
             @event.Summary,
             @event.Details,
-            @event.Source,
-            @event.Direction
+            SourceTypeMappings.ToDto(@event.Source),
+            DirectionTypeMappings.ToDto(@event.Direction)
         );
     }
-
 
     private async Task ResolveEntitiesAsync(EventCreateDto dto, Event @event)
     {
@@ -415,7 +416,7 @@ public class EventService : IEventService
             CompanyId = compId,
             Company = @event.Company,
             Location = updateDto.Location,
-            Level = updateDto.Level ?? RoleLevelType.EngineeringManager,
+            Level = RoleLevelTypeMappings.ToDomain(updateDto.Level ?? RoleLevelTypeDto.DefaultRole),
             JobPostingUrl = updateDto.JobPostingUrl
         };
         @event.RoleId = null; // Will be assigned by EF after insert

@@ -4,6 +4,7 @@ using ContactTracker.SharedDTOs;
 using ContactTracker.TrackerAPI.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ContactTracker.DomainCore;
 
 namespace ContactTracker.TrackerAPI.Tests;
 
@@ -48,7 +49,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Staff Engineer",
             JobPostingUrl: null,
             Location: "Remote",
-            Level: RoleLevelType.StaffEngineer
+            Level: RoleLevelTypeDto.StaffEngineer
         );
 
         // Act
@@ -82,7 +83,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Engineering Manager",
             JobPostingUrl: null,
             Location: "San Francisco",
-            Level: RoleLevelType.EngineeringManager
+            Level: RoleLevelTypeDto.EngineeringManager
         );
 
         // Act
@@ -128,7 +129,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "Senior Engineer",
             JobPostingUrl: null,
             Location: "New York",
-            Level: RoleLevelType.StaffEngineer
+            Level: RoleLevelTypeDto.StaffEngineer
         );
 
         // Act
@@ -244,7 +245,7 @@ public class RoleEndpointsTests : IAsyncDisposable
             Title: "",
             JobPostingUrl: null,
             Location: null,
-            Level: RoleLevelType.StaffEngineer
+            Level: RoleLevelTypeDto.StaffEngineer
         );
 
         // Act

@@ -1,6 +1,4 @@
-﻿using ContactTracker.SharedDTOs;
-
-namespace ContactTracker.TrackerAPI;
+﻿namespace ContactTracker.DomainCore;
 
 public class Event : BaseEntity
 {

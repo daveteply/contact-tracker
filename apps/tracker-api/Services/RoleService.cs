@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
+using ContactTracker.DomainCore;
+using TrackerApi.Mappings;
 
 namespace ContactTracker.TrackerAPI.Services;
 
@@ -53,7 +55,7 @@ public class RoleService : IRoleService
             Title = dto.Title,
             JobPostingUrl = dto.JobPostingUrl,
             Location = dto.Location,
-            Level = dto.Level
+            Level = RoleLevelTypeMappings.ToDomain(dto.Level)
         };
 
         await ResolveEntitiesAsync(dto, role);
@@ -125,7 +127,7 @@ public class RoleService : IRoleService
             existingRole.Location = string.IsNullOrEmpty(dto.Location) ? null : dto.Location;
 
         if (dto.Level.HasValue)
-            existingRole.Level = dto.Level.Value;
+            existingRole.Level = RoleLevelTypeMappings.ToDomain(dto.Level.Value);
 
         _context.Roles.Update(existingRole);
 
@@ -215,7 +217,7 @@ public class RoleService : IRoleService
             role.Title,
             role.JobPostingUrl,
             role.Location,
-            role.Level
+            RoleLevelTypeMappings.ToDto(role.Level)
         );
     }
 

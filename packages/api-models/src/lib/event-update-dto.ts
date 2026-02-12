@@ -7,8 +7,8 @@ import { CompanyUpdateDto } from "./company-update-dto";
 import { ContactUpdateDto } from "./contact-update-dto";
 import { RoleUpdateDto } from "./role-update-dto";
 import { EventTypeUpdateDto } from "./event-type-update-dto";
-import { SourceType } from "./source-type";
-import { DirectionType } from "./direction-type";
+import { SourceTypeDto } from "./source-type-dto";
+import { DirectionTypeDto } from "./direction-type-dto";
 
 export interface EventUpdateDto {
     companyId?: number;
@@ -22,6 +22,6 @@ export interface EventUpdateDto {
     occurredAt?: Date;
     summary?: string;
     details?: string;
-    source?: SourceType;
-    direction?: DirectionType;
+    source?: SourceTypeDto;
+    direction?: DirectionTypeDto;
 }

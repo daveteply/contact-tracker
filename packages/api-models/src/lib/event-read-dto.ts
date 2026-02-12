@@ -7,8 +7,8 @@ import { CompanyReadDto } from "./company-read-dto";
 import { ContactReadDto } from "./contact-read-dto";
 import { RoleReadDto } from "./role-read-dto";
 import { EventTypeReadDto } from "./event-type-read-dto";
-import { SourceType } from "./source-type";
-import { DirectionType } from "./direction-type";
+import { SourceTypeDto } from "./source-type-dto";
+import { DirectionTypeDto } from "./direction-type-dto";
 
 export interface EventReadDto {
     id: number;
@@ -23,6 +23,6 @@ export interface EventReadDto {
     occurredAt: Date;
     summary?: string;
     details?: string;
-    source: SourceType;
-    direction: DirectionType;
+    source: SourceTypeDto;
+    direction: DirectionTypeDto;
 }

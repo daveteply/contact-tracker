@@ -25,8 +25,8 @@ public record EventReadDto(
     DateTime OccurredAt,
     string? Summary,
     string? Details,
-    SourceType Source,
-    DirectionType Direction
+    SourceTypeDto Source,
+    DirectionTypeDto Direction
 );
 
 [ExportTsInterface]
@@ -51,8 +51,8 @@ public record EventCreateDto(
     [MaxLength(1024)]
     string? Details,
 
-    SourceType Source,
-    DirectionType Direction
+    SourceTypeDto Source,
+    DirectionTypeDto Direction
 );
 
 [ExportTsInterface]
@@ -77,8 +77,8 @@ public record EventUpdateDto(
     [MaxLength(1024)]
     string? Details,
 
-    SourceType? Source,
-    DirectionType? Direction
+    SourceTypeDto? Source,
+    DirectionTypeDto? Direction
 );
 
 // -----------------------------
@@ -88,7 +88,7 @@ public record EventUpdateDto(
 public record EventTypeReadDto(
     long Id,
     string Name,
-    EventTypeCategoryType Category,
+    EventTypeCategoryTypeDto Category,
     bool IsSystemDefined
 );
 
@@ -100,7 +100,7 @@ public record EventTypeCreateDto(
     [MaxLength(100)]
     string Name,
 
-    EventTypeCategoryType Category,
+    EventTypeCategoryTypeDto Category,
     bool IsSystemDefined
 );
 
@@ -109,6 +109,6 @@ public record EventTypeUpdateDto(
     [MaxLength(100)]
     string? Name,
 
-    EventTypeCategoryType Category,
+    EventTypeCategoryTypeDto Category,
     bool? IsSystemDefined
 );

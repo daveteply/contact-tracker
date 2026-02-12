@@ -1,9 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using ContactTracker.SharedDTOs;
-using ContactTracker.TrackerAPI;
+using ContactTracker.DomainCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Npgsql;
 
 public class ContactTrackerDbContext : DbContext
@@ -140,17 +136,3 @@ public class ContactTrackerDbContext : DbContext
     }
 }
 
-public interface IAuditableEntity
-{
-    DateTime CreatedAt { get; set; }
-    DateTime UpdatedAt { get; set; }
-}
-
-public abstract class BaseEntity : IAuditableEntity
-{
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-}

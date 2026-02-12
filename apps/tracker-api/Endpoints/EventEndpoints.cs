@@ -1,3 +1,4 @@
+using ContactTracker.DomainCore;
 using ContactTracker.SharedDTOs;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.TrackerAPI.Services;

@@ -14,7 +14,7 @@ public record RoleReadDto(
     string Title,
     string? JobPostingUrl,
     string? Location,
-    RoleLevelType Level
+    RoleLevelTypeDto Level
 );
 
 [ExportTsInterface]
@@ -33,7 +33,7 @@ public record RoleCreateDto(
     [MaxLength(100)]
     string? Location,
 
-    RoleLevelType Level
+    RoleLevelTypeDto Level
 );
 
 [ExportTsInterface]
@@ -51,5 +51,5 @@ public record RoleUpdateDto(
     [MaxLength(100)]
     string? Location,
 
-    RoleLevelType? Level
+    RoleLevelTypeDto? Level
 );

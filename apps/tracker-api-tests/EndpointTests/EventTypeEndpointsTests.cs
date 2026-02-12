@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using ContactTracker.TrackerAPI.Common;
-using ContactTracker.SharedDTOs;
+using ContactTracker.DomainCore;
 
 namespace ContactTracker.TrackerAPI.Tests;
 
