@@ -70,7 +70,7 @@ validation.**
 
 ### C# DTOs (Canonical Source of Truth)
 
-- Location: `shared-dtos/`
+- Location: `packages/shared-dtos/dto`
 - Referenced by API
 - Use `System.ComponentModel.DataAnnotations`
   - `[Required]`

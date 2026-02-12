@@ -32,6 +32,7 @@ public record CompanyCreateDto(
     [MaxLength(100)]
     string? SizeRange,
 
+    [MaxLength(2048)]
     string? Notes
 );
 
@@ -50,5 +51,6 @@ public record CompanyUpdateDto(
     [MaxLength(100)]
     string? SizeRange,
 
+    [MaxLength(2048)]
     string? Notes
 );

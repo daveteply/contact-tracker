@@ -51,6 +51,7 @@ public record ContactCreateDto(
 
     bool? IsPrimaryRecruiter,
 
+    [MaxLength(2048)]
     string? Notes
 );
 
@@ -82,5 +83,6 @@ public record ContactUpdateDto(
 
     bool? IsPrimaryRecruiter,
 
+    [MaxLength(2048)]
     string? Notes
 );
