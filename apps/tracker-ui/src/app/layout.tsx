@@ -1,4 +1,5 @@
 import { ToastProvider } from '@contact-tracker/ui-shared';
+import { DatabaseProvider } from '../lib/context/db-provider';
 import './global.css';
 
 export const metadata = {
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <DatabaseProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </DatabaseProvider>
       </body>
     </html>
   );

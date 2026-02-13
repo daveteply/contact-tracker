@@ -1,12 +1,11 @@
 'use client';
 
-import { ApiResult } from '@contact-tracker/api-models';
 import { useRouter } from 'next/navigation';
 import { useToast } from './toast-context';
 
 export interface EntityDeleteProps {
-  id: number;
-  onDeleteAction: (id: number) => Promise<ApiResult<void>>;
+  id: string;
+  onDeleteAction: (id: string) => Promise<void>;
   entityName: string;
   postActionRoute: string;
 }
@@ -20,13 +19,13 @@ export function EntityDelete({
   const router = useRouter();
   const { showToast } = useToast();
 
-  function handleDelete(id: number) {
+  function handleDelete(id: string) {
     return async () => {
-      const result = await onDeleteAction(id);
-      if (result.success) {
+      try {
+        await onDeleteAction(id);
         showToast(`${entityName} deleted successfully!`, 'success');
         router.push(postActionRoute);
-      } else {
+      } catch (error) {
         // TODO log this
         showToast(`Could not delete ${entityName}`, 'error');
       }

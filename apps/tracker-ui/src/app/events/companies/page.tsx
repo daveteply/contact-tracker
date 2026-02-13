@@ -1,10 +1,15 @@
-import { fetchCompanies } from '@/lib/server/clients/companies-client';
-import { CompanyList } from '@contact-tracker/ui-shared';
-import { PlusCircleIcon } from '@heroicons/react/24/solid';
-import Link from 'next/link';
+'use client';
 
-export default async function CompanyListPage() {
-  const companies = await fetchCompanies();
+import Link from 'next/link';
+import { PlusCircleIcon } from '@heroicons/react/24/solid';
+import { CompanyList } from '@contact-tracker/ui-shared';
+import { PageLoading } from '@contact-tracker/ui-shared';
+import { useCompanies } from '@/lib/hooks/companies-use';
+
+export default function CompanyListPage() {
+  const { companies, loading } = useCompanies();
+
+  if (loading) return <PageLoading entityName="companies" />;
 
   return (
     <>

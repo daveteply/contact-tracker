@@ -1,19 +1,27 @@
-import {
-  canDeleteCompany,
-  deleteCompany,
-  fetchCompanyById,
-} from '@/lib/server/clients/companies-client';
-import { EntityDelete, CompanyInfoCard } from '@contact-tracker/ui-shared';
+'use client';
+
 import Link from 'next/link';
+import { use } from 'react';
 
-export default async function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const companyId = parseInt(id);
+import { useDb } from '@/lib/context/db-provider';
+import { useCanDeleteCompany } from '@/lib/hooks/companies-can-delete';
+import { handleLocalCompanyDelete } from '@/lib/hooks/companies-delete';
+import { useCompany } from '@/lib/hooks/companies-use-single';
+import { EntityDelete, CompanyInfoCard, PageLoading } from '@contact-tracker/ui-shared';
 
-  const result = await fetchCompanyById(companyId);
-  const company = result.data;
+export default function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const db = useDb();
+  const { company, loading: companyLoading, error } = useCompany(id);
+  const { canDelete, blockers, loading: deleteCheckLoading } = useCanDeleteCompany(id);
 
-  const canDelete = await canDeleteCompany(companyId);
+  if (companyLoading || deleteCheckLoading) {
+    return <PageLoading entityName="company" />;
+  }
+
+  if (error || !company) {
+    return <div>Company not found</div>;
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -26,11 +34,14 @@ export default async function CompanyDeletePage({ params }: { params: Promise<{ 
               id={company.id}
               entityName="company"
               postActionRoute="/events/companies"
-              onDeleteAction={deleteCompany}
+              onDeleteAction={handleLocalCompanyDelete(db, id)}
             />
           ) : (
             <>
-              <p>This Company is associated with Events, Contacts or Roles and cannot be deleted</p>
+              <p>{`This Company is associated with
+                 ${blockers.events} Event(s), 
+                 ${blockers.contacts} Contact(s) or 
+                 ${blockers.roles} Role(s) and cannot be deleted`}</p>
               <Link className="btn" href="../">
                 Back to Companies
               </Link>

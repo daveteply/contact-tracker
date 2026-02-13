@@ -76,10 +76,13 @@
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "daisyui": "^5.5.14",
+    "dexie": "^4.3.0",
     "next": "^16.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.70.0",
+    "rxdb": "^16.21.1",
+    "rxjs": "^7.8.2",
     "zod": "^4.3.5"
   },
   "overrides": {
