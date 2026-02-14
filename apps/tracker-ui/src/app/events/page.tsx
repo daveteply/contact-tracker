@@ -1,4 +1,4 @@
-import { EventList } from '@contact-tracker/ui-shared';
+import { EventList } from '@contact-tracker/ui-components';
 import { fetchEvents } from '@/lib/server/clients/events-client';
 import Link from 'next/link';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';

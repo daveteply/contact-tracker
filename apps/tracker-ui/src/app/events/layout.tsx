@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@contact-tracker/ui-shared';
+import { Breadcrumbs } from '@contact-tracker/ui-components';
 
 export default function EventsLayout({ children }: { children: React.ReactNode }) {
   return (

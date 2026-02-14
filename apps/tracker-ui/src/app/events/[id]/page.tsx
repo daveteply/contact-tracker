@@ -5,7 +5,7 @@ import {
   EventTypeInfoCard,
   FormattedDate,
   RoleInfoCard,
-} from '@contact-tracker/ui-shared';
+} from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 import Link from 'next/link';

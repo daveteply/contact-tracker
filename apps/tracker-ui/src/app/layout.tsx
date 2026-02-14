@@ -1,4 +1,4 @@
-import { ToastProvider } from '@contact-tracker/ui-shared';
+import { ToastProvider } from '@contact-tracker/ui-components';
 import { DatabaseProvider } from '../lib/context/db-provider';
 import './global.css';
 

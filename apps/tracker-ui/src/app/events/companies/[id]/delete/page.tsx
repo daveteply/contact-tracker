@@ -7,7 +7,7 @@ import { useDb } from '@/lib/context/db-provider';
 import { useCanDeleteCompany } from '@/lib/hooks/companies-can-delete';
 import { handleLocalCompanyDelete } from '@/lib/hooks/companies-delete';
 import { useCompany } from '@/lib/hooks/companies-use-single';
-import { EntityDelete, CompanyInfoCard, PageLoading } from '@contact-tracker/ui-shared';
+import { EntityDelete, CompanyInfoCard, PageLoading } from '@contact-tracker/ui-components';
 
 export default function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

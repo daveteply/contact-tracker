@@ -1,5 +1,5 @@
 import { deleteEvent, fetchEventById } from '@/lib/server/clients/events-client';
-import { EntityDelete, EventInfoCard } from '@contact-tracker/ui-shared';
+import { EventInfoCard, EntityDelete } from '@contact-tracker/ui-components';
 
 export default async function DeleteEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

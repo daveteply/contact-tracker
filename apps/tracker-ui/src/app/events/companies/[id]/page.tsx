@@ -1,5 +1,5 @@
 import { fetchCompanyById } from '@/lib/server/clients/companies-client';
-import { CompanyInfoCard } from '@contact-tracker/ui-shared';
+import { CompanyInfoCard } from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 

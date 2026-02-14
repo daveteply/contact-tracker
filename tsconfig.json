@@ -16,7 +16,7 @@
       "path": "./packages/validation"
     },
     {
-      "path": "./packages/ui-shared"
+      "path": "./packages/ui-components"
     },
     {
       "path": "./packages/rxdb-schema"

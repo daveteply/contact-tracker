@@ -1,7 +1,7 @@
 import { updateRoleAction } from '@/lib/server/actions/role-actions';
 import { searchCompanies } from '@/lib/server/clients/companies-client';
 import { fetchRoleById } from '@/lib/server/clients/roles-client';
-import { RoleForm } from '@contact-tracker/ui-shared';
+import { RoleForm } from '@contact-tracker/ui-components';
 
 export default async function RoleUpdatePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

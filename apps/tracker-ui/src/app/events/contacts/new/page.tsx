@@ -1,6 +1,6 @@
 import { createContactAction } from '@/lib/server/actions/contact-actions';
 import { searchCompanies } from '@/lib/server/clients/companies-client';
-import { ContactForm } from '@contact-tracker/ui-shared';
+import { ContactForm } from '@contact-tracker/ui-components';
 
 export default async function CreateContactPage() {
   return (

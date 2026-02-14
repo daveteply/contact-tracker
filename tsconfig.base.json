@@ -4,7 +4,7 @@
     "paths": {
       "@contact-tracker/validation": ["packages/validation/src/index.ts"],
       "@contact-tracker/api-models": ["packages/api-models/src/index.ts"],
-      "@contact-tracker/ui-shared": ["packages/ui-shared/src/index.ts"]
+      "@contact-tracker/ui-components": ["packages/ui-components/src/index.ts"]
     },
     "composite": true,
     "declarationMap": true,

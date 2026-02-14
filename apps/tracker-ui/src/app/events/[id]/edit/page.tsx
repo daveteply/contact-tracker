@@ -5,7 +5,7 @@ import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { fetchEventById } from '@/lib/server/clients/events-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
 
-import { EventForm } from '@contact-tracker/ui-shared';
+import { EventForm } from '@contact-tracker/ui-components';
 import { EventFormValues, EventUpdate } from '@contact-tracker/validation';
 import { mapEventDtoToFormValues } from '@contact-tracker/validation';
 

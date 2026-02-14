@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: '@contact-tracker/ui-shared',
+  displayName: '@contact-tracker/ui-components',
   preset: '../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',

@@ -1,5 +1,5 @@
 import { fetchRoleById } from '@/lib/server/clients/roles-client';
-import { RoleInfoCard } from '@contact-tracker/ui-shared';
+import { RoleInfoCard } from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 

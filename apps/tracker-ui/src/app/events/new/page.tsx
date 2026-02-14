@@ -4,7 +4,7 @@ import { searchContacts } from '@/lib/server/clients/contacts-client';
 import { fetchEventTypes } from '@/lib/server/clients/event-types-client';
 import { searchRoles } from '@/lib/server/clients/roles-client';
 import { DirectionTypeDto } from '@contact-tracker/api-models';
-import { EventForm } from '@contact-tracker/ui-shared';
+import { EventForm } from '@contact-tracker/ui-components';
 import { EventCreate, EventFormValues } from '@contact-tracker/validation';
 
 export default async function EventsNewPage() {

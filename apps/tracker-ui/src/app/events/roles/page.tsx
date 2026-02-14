@@ -1,5 +1,5 @@
 import { fetchRoles } from '@/lib/server/clients/roles-client';
-import { RoleList } from '@contact-tracker/ui-shared';
+import { RoleList } from '@contact-tracker/ui-components';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 

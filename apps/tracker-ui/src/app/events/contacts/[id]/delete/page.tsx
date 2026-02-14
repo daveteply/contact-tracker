@@ -3,7 +3,7 @@ import {
   deleteContact,
   fetchContactById,
 } from '@/lib/server/clients/contacts-client';
-import { EntityDelete, ContactInfoCard } from '@contact-tracker/ui-shared';
+import { EntityDelete, ContactInfoCard } from '@contact-tracker/ui-components';
 import Link from 'next/link';
 
 export default async function ContactDeletePage({ params }: { params: Promise<{ id: string }> }) {

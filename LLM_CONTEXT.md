@@ -96,7 +96,7 @@ frontend and backend contracts
 
 ### Validation & UI Libraries
 
-- `packages/ui-shared`
+- `packages/ui-components`
 - `packages/validation`
 
 Validation details: - Zod schemas live in `packages/validation` - Used
@@ -183,7 +183,7 @@ Patterns:
 
 - C# DTOs: `shared-dtos`
 - TS API Models: `packages/api-models`
-- UI Shared Components: `packages/ui-shared`
+- UI Shared Components: `packages/ui-components`
 - Zod Validation: `packages/validation`
 
 ---

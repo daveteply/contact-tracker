@@ -51,7 +51,7 @@
   ],
   "references": [
     {
-      "path": "../../packages/ui-shared"
+      "path": "../../packages/ui-components"
     }
   ]
 }

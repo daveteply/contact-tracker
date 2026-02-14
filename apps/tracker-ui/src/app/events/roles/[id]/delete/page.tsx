@@ -1,5 +1,5 @@
 import { fetchRoleById, deleteRole, canDeleteRole } from '@/lib/server/clients/roles-client';
-import { EntityDelete, RoleInfoCard } from '@contact-tracker/ui-shared';
+import { EntityDelete, RoleInfoCard } from '@contact-tracker/ui-components';
 import Link from 'next/link';
 
 export default async function RoleDeletePage({ params }: { params: Promise<{ id: string }> }) {

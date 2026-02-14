@@ -13,7 +13,7 @@
   "include": ["src/**/*.ts"],
   "references": [
     { "path": "../api-models/tsconfig.lib.json" },
-    { "path": "../ui-shared/tsconfig.lib.json" }
+    { "path": "../ui-components/tsconfig.lib.json" }
   ],
   "exclude": ["jest.config.ts", "jest.config.cts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

@@ -13,7 +13,7 @@ import {
   RoleSchema,
 } from '@contact-tracker/rxdb-schema';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
-import { PageLoading } from '@contact-tracker/ui-shared';
+import { PageLoading } from '@contact-tracker/ui-components';
 
 // Add dev mode in development
 if (process.env.NODE_ENV === 'development') {

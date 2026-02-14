@@ -1,6 +1,6 @@
 'use client';
 
-import { CompanyForm } from '@contact-tracker/ui-shared';
+import { CompanyForm } from '@contact-tracker/ui-components';
 import { useDb } from '@/lib/context/db-provider';
 import { handleLocalCompanyCreate } from '@/lib/hooks/companies-insert';
 

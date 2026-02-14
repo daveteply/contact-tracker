@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
-import { CompanyList } from '@contact-tracker/ui-shared';
-import { PageLoading } from '@contact-tracker/ui-shared';
+import { CompanyList } from '@contact-tracker/ui-components';
+import { PageLoading } from '@contact-tracker/ui-components';
 import { useCompanies } from '@/lib/hooks/companies-use';
 
 export default function CompanyListPage() {

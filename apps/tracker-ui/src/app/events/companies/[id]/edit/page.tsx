@@ -1,6 +1,6 @@
 'use client';
 
-import { CompanyForm, PageLoading } from '@contact-tracker/ui-shared';
+import { CompanyForm, PageLoading } from '@contact-tracker/ui-components';
 import { use } from 'react';
 import { useDb } from '@/lib/context/db-provider';
 import { useCompany } from '@/lib/hooks/companies-use-single';
