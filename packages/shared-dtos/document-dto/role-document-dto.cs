@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using ContactTracker.SharedDTOs;
+using TypeGen.Core.TypeAnnotations;
 
+namespace ContactTracker.SharedDTOs;
+
+[ExportTsInterface]
 public class RoleDocumentDto : BaseDocumentDto
 {
     public Guid? CompanyId { get; set; }
@@ -16,5 +19,5 @@ public class RoleDocumentDto : BaseDocumentDto
     [MaxLength(100)]
     public string? Location { get; set; }
 
-    public RoleLevelTypeDto Level {get; set; }
+    public RoleLevelTypeDto Level { get; set; }
 }

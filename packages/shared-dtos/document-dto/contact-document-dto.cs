@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using ContactTracker.SharedDTOs;
+using TypeGen.Core.TypeAnnotations;
+namespace ContactTracker.SharedDTOs;
 
+[ExportTsInterface]
 public class ContactDocumentDto : BaseDocumentDto
 {
     public Guid? CompanyId { get; set; }
@@ -11,7 +13,7 @@ public class ContactDocumentDto : BaseDocumentDto
 
     [Required]
     [MaxLength(100)]
-    public string LastName { get; set; }  = default!;
+    public string LastName { get; set; } = default!;
 
     [MaxLength(100)]
     public string? Title { get; set; }

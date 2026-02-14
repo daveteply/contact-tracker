@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using TypeGen.Core.TypeAnnotations;
 
 namespace ContactTracker.SharedDTOs;
 
+[ExportTsInterface]
 public class EventDocumentDto : BaseDocumentDto
 {
     public Guid? CompanyId { get; set; }

@@ -1,4 +1,4 @@
-export * from './lib/api-result';
+export * from './lib/common/api-result';
 
 export * from './lib/paged-result';
 export * from './lib/pagination-metadata';
@@ -25,3 +25,11 @@ export * from './lib/role-read-dto';
 export * from './lib/role-update-dto';
 export * from './lib/source-type-dto';
 export * from './lib/event-type-category-type-dto';
+
+export * from './lib/base-document-dto';
+export * from './lib/company-document-dto';
+export * from './lib/contact-document-dto';
+export * from './lib/event-document-dto';
+export * from './lib/event-type-document-dto';
+export * from './lib/reminder-document-dto';
+export * from './lib/role-document-dto';
