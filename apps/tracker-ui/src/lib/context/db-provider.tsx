@@ -11,7 +11,7 @@ import {
   EventTypeSchema,
   ReminderSchema,
   RoleSchema,
-} from '@contact-tracker/rxdb-schema';
+} from '@contact-tracker/document-model';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { PageLoading } from '@contact-tracker/ui-components';
 

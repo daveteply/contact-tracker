@@ -9,5 +9,5 @@ echo "Cleaning cache..."
 rm -rf apps/tracker-ui/.next
 
 npx nx reset
-npx nx build rxdb-schema
+npx nx build document-model
 npx nx dev tracker-ui --skip-nx-cache -- --hostname 0.0.0.0

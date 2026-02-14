@@ -8,7 +8,7 @@ const swcJestConfig = JSON.parse(readFileSync(`${__dirname}/.spec.swcrc`, 'utf-8
 swcJestConfig.swcrc = false;
 
 module.exports = {
-  displayName: '@contact-tracker/rxdb-schema',
+  displayName: '@contact-tracker/document-model',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

@@ -19,7 +19,7 @@
       "path": "./packages/ui-components"
     },
     {
-      "path": "./packages/rxdb-schema"
+      "path": "./packages/document-model"
     }
   ]
 }

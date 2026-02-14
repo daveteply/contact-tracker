@@ -1,5 +1,5 @@
 {
-  "name": "@contact-tracker/rxdb-schema",
+  "name": "@contact-tracker/document-model",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     }
   },
   "nx": {
-    "sourceRoot": "packages/rxdb-schema/src",
+    "sourceRoot": "packages/document-model/src",
     "targets": {
       "build": {
         "executor": "@nx/js:swc",
@@ -24,9 +24,9 @@
           "{options.outputPath}"
         ],
         "options": {
-          "outputPath": "packages/rxdb-schema/dist",
-          "main": "packages/rxdb-schema/src/index.ts",
-          "tsConfig": "packages/rxdb-schema/tsconfig.lib.json",
+          "outputPath": "packages/document-model/dist",
+          "main": "packages/document-model/src/index.ts",
+          "tsConfig": "packages/document-model/tsconfig.lib.json",
           "skipTypeCheck": true,
           "stripLeadingPaths": true
         }
