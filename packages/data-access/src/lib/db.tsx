@@ -1,9 +1,10 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
-import { createRxDatabase, addRxPlugin } from 'rxdb';
+import { createRxDatabase, addRxPlugin, RxCollection, RxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import {
   CompanySchema,
   ContactSchema,
@@ -12,34 +13,44 @@ import {
   ReminderSchema,
   RoleSchema,
 } from '@contact-tracker/document-model';
-import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
-import { PageLoading } from '@contact-tracker/ui-components';
+
+export type TrackerCollections = {
+  companies: RxCollection;
+  contacts: RxCollection;
+  events: RxCollection;
+  eventTypes: RxCollection;
+  roles: RxCollection;
+  reminder: RxCollection;
+};
+
+export type TrackerDatabase = RxDatabase<TrackerCollections>;
 
 // Add dev mode in development
 if (process.env.NODE_ENV === 'development') {
   addRxPlugin(RxDBDevModePlugin);
 }
 
-const DatabaseContext = createContext<any>(null);
+const DatabaseContext = createContext<TrackerDatabase | null>(null);
 
 export const DatabaseProvider = ({ children }: { children: React.ReactNode }) => {
-  const [db, setDb] = useState<any>(null);
-  const initializingRef = React.useRef(false);
+  const [db, setDb] = useState<TrackerDatabase | null>(null);
+  const isInitializing = useRef(false);
 
   useEffect(() => {
     // Ensure this only runs in the browser
-    if (typeof window === 'undefined' || db || initializingRef.current) return;
+    if (typeof window === 'undefined' || db || isInitializing.current) return;
 
     // Logic to prevent double-initialization in React Strict Mode
     if (db) return;
 
     const initDB = async () => {
       try {
-        const _db = await createRxDatabase({
+        const _db = await createRxDatabase<TrackerCollections>({
           name: 'contact_tracker_db',
           storage: wrappedValidateAjvStorage({
             storage: getRxStorageDexie(),
           }),
+          ignoreDuplicate: true, // Useful for HMR in monorepos
         });
 
         await _db.addCollections({
@@ -53,15 +64,16 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
 
         setDb(_db);
       } catch (err) {
-        initializingRef.current = false;
+        console.error('Failed to initialize RxDB:', err);
+        isInitializing.current = false;
         console.error(err);
       }
     };
 
     initDB();
-  }, [db]);
+  }, []);
 
-  if (!db) return <PageLoading entityName="Initializing Local Database" />;
+  if (!db) return <div>Initializing Local Database...</div>;
 
   return <DatabaseContext.Provider value={db}>{children}</DatabaseContext.Provider>;
 };

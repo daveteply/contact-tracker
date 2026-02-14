@@ -1,6 +1,5 @@
-import { fetchRoleById, deleteRole, canDeleteRole } from '@/lib/server/clients/roles-client';
-import { EntityDelete, RoleInfoCard } from '@contact-tracker/ui-components';
-import Link from 'next/link';
+import { fetchRoleById } from '@/lib/server/clients/roles-client';
+import { RoleInfoCard } from '@contact-tracker/ui-components';
 
 export default async function RoleDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -9,7 +8,7 @@ export default async function RoleDeletePage({ params }: { params: Promise<{ id:
   const result = await fetchRoleById(roleId);
   const role = result.data;
 
-  const canDelete = await canDeleteRole(roleId);
+  // const canDelete = await canDeleteRole(roleId);
 
   return (
     <div className="flex flex-col gap-4">
@@ -17,7 +16,7 @@ export default async function RoleDeletePage({ params }: { params: Promise<{ id:
       {role ? (
         <>
           <RoleInfoCard role={role} showControls={false} />
-          {canDelete ? (
+          {/* {canDelete ? (
             <EntityDelete
               id={role.id}
               entityName="role"
@@ -34,7 +33,7 @@ export default async function RoleDeletePage({ params }: { params: Promise<{ id:
                 Back to Events
               </Link>
             </>
-          )}
+          )} */}
         </>
       ) : (
         <div>Role Not Found</div>

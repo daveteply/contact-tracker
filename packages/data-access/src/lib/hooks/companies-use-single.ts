@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDb } from '../context/db-provider';
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
+import { useDb } from '../db';
 
 export function useCompany(id: string) {
   const db = useDb();
-  const [company, setCompany] = useState<CompanyReadDto | null>(null);
+  const [company, setCompany] = useState<CompanyDocumentDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

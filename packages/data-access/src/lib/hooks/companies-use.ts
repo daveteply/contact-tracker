@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDb } from '../context/db-provider';
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { useDb } from '../db';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
 
 export function useCompanies() {
   const db = useDb();
-  const [companies, setCompanies] = useState<CompanyReadDto[]>([]);
+  const [companies, setCompanies] = useState<CompanyDocumentDto[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!db) return;
+
     // Create a query that finds all companies sorted by name
     const query = db.companies.find({
       selector: {},

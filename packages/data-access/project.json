@@ -1,0 +1,20 @@
+{
+  "name": "@contact-tracker/data-access",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/data-access/src",
+  "implicitDependencies": ["@contact-tracker/api-models", "@contact-tracker/validation"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/data-access",
+        "main": "packages/data-access/src/index.ts",
+        "tsConfig": "packages/data-access/tsconfig.lib.json",
+        "assets": [],
+        "spec": false
+      }
+    }
+  }
+}

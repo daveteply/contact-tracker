@@ -1,10 +1,5 @@
-import {
-  canDeleteContact,
-  deleteContact,
-  fetchContactById,
-} from '@/lib/server/clients/contacts-client';
-import { EntityDelete, ContactInfoCard } from '@contact-tracker/ui-components';
-import Link from 'next/link';
+import { fetchContactById } from '@/lib/server/clients/contacts-client';
+import { ContactInfoCard } from '@contact-tracker/ui-components';
 
 export default async function ContactDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -13,7 +8,7 @@ export default async function ContactDeletePage({ params }: { params: Promise<{ 
   const result = await fetchContactById(contactId);
   const contact = result.data;
 
-  const canDelete = await canDeleteContact(contactId);
+  // const canDelete = await canDeleteContact(contactId);
 
   return (
     <div className="flex flex-col gap-4">
@@ -21,7 +16,7 @@ export default async function ContactDeletePage({ params }: { params: Promise<{ 
       {contact ? (
         <>
           <ContactInfoCard contact={contact} showControls={false} />
-          {canDelete ? (
+          {/* {canDelete ? (
             <EntityDelete
               id={contact.id}
               entityName="contact"
@@ -38,7 +33,7 @@ export default async function ContactDeletePage({ params }: { params: Promise<{ 
                 Back to Events
               </Link>
             </>
-          )}
+          )} */}
         </>
       ) : (
         <div>Contact Not Found</div>

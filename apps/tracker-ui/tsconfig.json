@@ -51,7 +51,16 @@
   ],
   "references": [
     {
+      "path": "../../packages/data-access"
+    },
+    {
+      "path": "../../packages/validation"
+    },
+    {
       "path": "../../packages/ui-components"
+    },
+    {
+      "path": "../../packages/api-models"
     }
   ]
 }

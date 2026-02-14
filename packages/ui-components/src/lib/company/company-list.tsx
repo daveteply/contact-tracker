@@ -1,10 +1,10 @@
 'use client';
 
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
 import CompanyInfoCard from './company-info-card';
 
 export interface CompanyListProps {
-  companies: CompanyReadDto[];
+  companies: CompanyDocumentDto[];
 }
 
 export function CompanyList({ companies }: CompanyListProps) {
@@ -12,7 +12,7 @@ export function CompanyList({ companies }: CompanyListProps) {
     <div className="flex flex-col gap-3">
       {companies && companies.length ? (
         <>
-          {companies.map((company: CompanyReadDto) => (
+          {companies.map((company) => (
             <CompanyInfoCard key={company.id} company={company} />
           ))}
         </>

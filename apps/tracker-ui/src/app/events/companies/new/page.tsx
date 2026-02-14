@@ -1,8 +1,7 @@
 'use client';
 
+import { handleLocalCompanyCreate, useDb } from '@contact-tracker/data-access';
 import { CompanyForm } from '@contact-tracker/ui-components';
-import { useDb } from '@/lib/context/db-provider';
-import { handleLocalCompanyCreate } from '@/lib/hooks/companies-insert';
 
 export default function CreateCompanyPage() {
   const db = useDb();
@@ -12,7 +11,7 @@ export default function CreateCompanyPage() {
       <h1 className="text-xl mb-5">Companies - new Company</h1>
       <p className="mb-5 italic"></p>
 
-      <CompanyForm onSubmitAction={handleLocalCompanyCreate(db)}></CompanyForm>
+      {db && <CompanyForm onSubmitAction={handleLocalCompanyCreate(db)}></CompanyForm>}
     </>
   );
 }

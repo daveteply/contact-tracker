@@ -1,5 +1,6 @@
 import { ToastProvider } from '@contact-tracker/ui-components';
-import { DatabaseProvider } from '../lib/context/db-provider';
+import { DatabaseProvider } from '@contact-tracker/data-access';
+
 import './global.css';
 
 export const metadata = {

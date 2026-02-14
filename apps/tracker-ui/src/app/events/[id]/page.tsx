@@ -1,6 +1,5 @@
 import { fetchEventById } from '@/lib/server/clients/events-client';
 import {
-  CompanyInfoCard,
   ContactInfoCard,
   EventTypeInfoCard,
   FormattedDate,
@@ -49,7 +48,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
             {event.source}
           </p>
 
-          {event.company && <CompanyInfoCard company={event.company} />}
+          {/* {event.company && <CompanyInfoCard company={event.company} />} */}
           {event.contact && <ContactInfoCard contact={event.contact} />}
           {event.role && <RoleInfoCard role={event.role} />}
           {event.eventType && <EventTypeInfoCard eventType={event.eventType} />}

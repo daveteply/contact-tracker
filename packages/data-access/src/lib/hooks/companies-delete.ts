@@ -1,9 +1,9 @@
 'use client';
 
-import { RxDatabase } from 'rxdb';
+import { TrackerDatabase } from '../db';
 
 // Delete a company from RxDB
-export const handleLocalCompanyDelete = (db: RxDatabase, id: string) => async () => {
+export const handleLocalCompanyDelete = (db: TrackerDatabase, id: string) => async () => {
   try {
     // Find the document by ID
     const doc = await db.companies

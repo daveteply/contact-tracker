@@ -1,15 +1,20 @@
-import { fetchCompanyById } from '@/lib/server/clients/companies-client';
-import { CompanyInfoCard } from '@contact-tracker/ui-components';
+'use client';
+
+import { useCompany } from '@contact-tracker/data-access';
+import { CompanyInfoCard, PageLoading } from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
+import { use } from 'react';
 
 export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const companyId = parseInt(id);
-  const response = await fetchCompanyById(companyId);
-  const company = response.data;
+  const { id } = use(params);
+  const { company, loading, error } = useCompany(id);
 
-  if (!company) {
+  if (loading) {
+    return <PageLoading entityName="company" />;
+  }
+
+  if (error || !company) {
     return <div>Company not found</div>;
   }
 
@@ -19,14 +24,14 @@ export default async function CompanyDetailsPage({ params }: { params: Promise<{
         <h1 className="text-xl pr-2">Company Details</h1>
         <Link
           className="btn btn-circle btn-sm text-primary"
-          href={`${companyId}/edit`}
+          href={`${id}/edit`}
           title="Edit Company"
         >
           <PencilIcon className="size-5" />
         </Link>
         <Link
           className="btn btn-circle btn-sm text-error"
-          href={`${companyId}/delete`}
+          href={`${id}/delete`}
           title="Delete Company"
         >
           <TrashIcon className="size-5" />

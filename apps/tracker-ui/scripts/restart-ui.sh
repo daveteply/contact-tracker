@@ -10,4 +10,5 @@ rm -rf apps/tracker-ui/.next
 
 npx nx reset
 npx nx build document-model
+npx nx build data-access
 npx nx dev tracker-ui --skip-nx-cache -- --hostname 0.0.0.0

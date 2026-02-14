@@ -1,0 +1,23 @@
+{
+  "name": "@contact-tracker/data-access",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.esm.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.esm.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@contact-tracker/source": "./src/index.ts",
+      "types": "./dist/index.esm.d.ts",
+      "import": "./dist/index.esm.js",
+      "default": "./dist/index.esm.js"
+    }
+  },
+  "dependencies": {
+    "@contact-tracker/document-model": "*",
+    "@contact-tracker/api-models": "*",
+    "react": "^19.0.0",
+    "rxdb": "^16.21.1"
+  }
+}

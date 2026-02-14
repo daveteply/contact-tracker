@@ -5,7 +5,7 @@ import { useToast } from './toast-context';
 
 export interface EntityDeleteProps {
   id: string;
-  onDeleteAction: (id: string) => Promise<void>;
+  onDeleteAction: (id: string) => Promise<{ success: boolean; message: string }>;
   entityName: string;
   postActionRoute: string;
 }

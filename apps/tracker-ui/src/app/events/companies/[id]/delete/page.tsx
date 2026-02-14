@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { use } from 'react';
 
-import { useDb } from '@/lib/context/db-provider';
-import { useCanDeleteCompany } from '@/lib/hooks/companies-can-delete';
-import { handleLocalCompanyDelete } from '@/lib/hooks/companies-delete';
-import { useCompany } from '@/lib/hooks/companies-use-single';
 import { EntityDelete, CompanyInfoCard, PageLoading } from '@contact-tracker/ui-components';
+import {
+  handleLocalCompanyDelete,
+  useCanDeleteCompany,
+  useCompany,
+  useDb,
+} from '@contact-tracker/data-access';
 
 export default function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -29,7 +31,7 @@ export default function CompanyDeletePage({ params }: { params: Promise<{ id: st
       {company ? (
         <>
           <CompanyInfoCard company={company} showControls={false} />
-          {canDelete ? (
+          {canDelete && db ? (
             <EntityDelete
               id={company.id}
               entityName="company"

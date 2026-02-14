@@ -1,12 +1,12 @@
 'use client';
 
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
 import ExternalLink from '../common/external-link';
 import Link from 'next/link';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 export interface CompanyCardProps {
-  company: CompanyReadDto;
+  company: CompanyDocumentDto;
   showFull?: boolean;
   showControls?: boolean;
 }

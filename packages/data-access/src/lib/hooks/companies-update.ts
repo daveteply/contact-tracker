@@ -1,10 +1,10 @@
 'use client';
 
-import { CompanyUpdateDto } from '@contact-tracker/api-models';
-import { RxDatabase } from 'rxdb';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
+import { TrackerDatabase } from '../db';
 
 export const handleLocalCompanyUpdate =
-  (db: RxDatabase, id: string) => async (data: CompanyUpdateDto) => {
+  (db: TrackerDatabase, id: string) => async (data: CompanyDocumentDto) => {
     try {
       const doc = await db.companies
         .findOne({

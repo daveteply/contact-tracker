@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDb } from '../context/db-provider';
+import { useDb } from '../db';
 
 export interface DeletionBlockers {
   events: number;
