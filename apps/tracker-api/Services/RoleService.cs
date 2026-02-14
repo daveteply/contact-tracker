@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 using TrackerApi.Mappings;
 
 namespace ContactTracker.TrackerAPI.Services;
@@ -105,7 +105,7 @@ public class RoleService : IRoleService
         }
 
         // Company
-        if (dto.CompanyId == -1) 
+        if (dto.CompanyId == -1)
         {
             existingRole.CompanyId = null;
             existingRole.Company = null;

@@ -5,5 +5,6 @@
   </Folder>
   <Folder Name="/packages/">
     <Project Path="packages/shared-dtos/shared-dtos.csproj" />
+    <Project Path="packages/server-domain/server-domain.csproj" />
   </Folder>
 </Solution>

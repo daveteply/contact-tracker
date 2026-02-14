@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 using TrackerApi.Mappings;
 
 namespace ContactTracker.TrackerAPI.Services;

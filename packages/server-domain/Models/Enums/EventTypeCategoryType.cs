@@ -1,4 +1,4 @@
-namespace ContactTracker.DomainCore;
+namespace ContactTracker.ServerDomain;
 
 public enum EventTypeCategoryType
 {

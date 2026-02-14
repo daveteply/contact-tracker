@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using ContactTracker.TrackerAPI.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 
 namespace ContactTracker.TrackerAPI.Tests;
 

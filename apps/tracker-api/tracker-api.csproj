@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\packages\shared-dtos\shared-dtos.csproj" />
-    <ProjectReference Include="..\..\packages\domain-core\domain-core.csproj" />
+    <ProjectReference Include="..\..\packages\server-domain\server-domain.csproj" />
   </ItemGroup>
 
 </Project>

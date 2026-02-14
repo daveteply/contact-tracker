@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 
 namespace ContactTracker.TrackerAPI.Services;
 
@@ -107,7 +107,7 @@ public class ContactService : IContactService
         }
 
         // Company
-        if (dto.CompanyId == -1) 
+        if (dto.CompanyId == -1)
         {
             existingContact.CompanyId = null;
             existingContact.Company = null;
@@ -115,7 +115,7 @@ public class ContactService : IContactService
         else if (dto.CompanyId.HasValue)
         {
             existingContact.CompanyId = dto.CompanyId;
-            existingContact.Company = null; 
+            existingContact.Company = null;
         }
         else if (dto.UpdateCompany is not null)
         {

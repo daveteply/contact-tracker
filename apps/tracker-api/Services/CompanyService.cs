@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ContactTracker.TrackerAPI.Common;
 using ContactTracker.SharedDTOs;
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 
 namespace ContactTracker.TrackerAPI.Services;
 
@@ -146,9 +146,9 @@ public class CompanyService : ICompanyService
                 })
                 .FirstOrDefaultAsync();
 
-            // If validation is null, the company itself doesn't exist.
-            // If not null, return true only if all counts are false.
-            return validation != null && !validation.HasEvents && !validation.HasContacts && !validation.HasRoles;
+        // If validation is null, the company itself doesn't exist.
+        // If not null, return true only if all counts are false.
+        return validation != null && !validation.HasEvents && !validation.HasContacts && !validation.HasRoles;
     }
 
     public async Task<List<CompanyReadDto>> SearchCompaniesAsync(string q)

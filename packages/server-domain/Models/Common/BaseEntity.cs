@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ContactTracker.DomainCore;
+namespace ContactTracker.ServerDomain;
 
 
 public interface IAuditableEntity

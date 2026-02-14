@@ -1,4 +1,4 @@
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 

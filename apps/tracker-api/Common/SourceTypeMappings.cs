@@ -1,4 +1,4 @@
-using ContactTracker.DomainCore;
+using ContactTracker.ServerDomain;
 using ContactTracker.SharedDTOs;
 
 namespace TrackerApi.Mappings;

@@ -1,4 +1,4 @@
-﻿namespace ContactTracker.DomainCore;
+﻿namespace ContactTracker.ServerDomain;
 
 public class Company : BaseEntity
 {
