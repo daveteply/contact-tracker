@@ -6,7 +6,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { use } from 'react';
 
-export default async function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+export default function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { company, loading, error } = useCompany(id);
 

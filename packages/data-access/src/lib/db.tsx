@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
-import { createRxDatabase, addRxPlugin, RxCollection, RxDatabase } from 'rxdb';
+import { createRxDatabase, addRxPlugin } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import {
@@ -13,17 +13,7 @@ import {
   ReminderSchema,
   RoleSchema,
 } from '@contact-tracker/document-model';
-
-export type TrackerCollections = {
-  companies: RxCollection;
-  contacts: RxCollection;
-  events: RxCollection;
-  eventTypes: RxCollection;
-  roles: RxCollection;
-  reminder: RxCollection;
-};
-
-export type TrackerDatabase = RxDatabase<TrackerCollections>;
+import { TrackerCollections, TrackerDatabase } from './repositories/types/common';
 
 // Add dev mode in development
 if (process.env.NODE_ENV === 'development') {
@@ -37,11 +27,12 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
   const isInitializing = useRef(false);
 
   useEffect(() => {
-    // Ensure this only runs in the browser
-    if (typeof window === 'undefined' || db || isInitializing.current) return;
+    // Ensure this only runs in the browser and hasn't been initialized
+    if (typeof window === 'undefined' || db || isInitializing.current) {
+      return;
+    }
 
-    // Logic to prevent double-initialization in React Strict Mode
-    if (db) return;
+    isInitializing.current = true;
 
     const initDB = async () => {
       try {
@@ -66,16 +57,20 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
       } catch (err) {
         console.error('Failed to initialize RxDB:', err);
         isInitializing.current = false;
-        console.error(err);
       }
     };
 
     initDB();
-  }, []);
+  }, [db]);
 
-  if (!db) return <div>Initializing Local Database...</div>;
+  if (!db) {
+    return <div>Initializing Local Database...</div>;
+  }
 
   return <DatabaseContext.Provider value={db}>{children}</DatabaseContext.Provider>;
 };
 
-export const useDb = () => useContext(DatabaseContext);
+export const useDb = () => {
+  const context = useContext(DatabaseContext);
+  return context;
+};
