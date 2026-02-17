@@ -1,35 +1,35 @@
-import { CompanyDocumentDto } from '@contact-tracker/api-models';
+import { RoleDocumentDto, RoleLevelTypeDto } from '@contact-tracker/api-models';
 import { DeletionBlockers, OperationResult, TrackerDatabase } from './types/common';
-import { CompanyDocument, CompanyRxDocument } from './types/company-types';
+import { RoleDocument, RoleRxDocument } from './types/role-types';
 
-export class CompanyRepository {
+export class RoleRepository {
   constructor(private db: TrackerDatabase) {}
 
-  // Find a single Company by ID
-  async findById(id: string): Promise<CompanyRxDocument | null> {
-    return this.db.companies
+  // Find a single Role by ID
+  async findById(id: string): Promise<RoleRxDocument | null> {
+    return this.db.roles
       .findOne({
         selector: { id },
       })
       .exec();
   }
 
-  // Find all Companies sorted by name
+  // Find all Roles sorted by name
   findAll() {
-    return this.db.companies.find({
+    return this.db.roles.find({
       selector: {},
       sort: [{ name: 'asc' }],
     });
   }
 
-  // Search Companies by name
-  async search(query: string): Promise<CompanyRxDocument[]> {
-    // If query is empty, you might want to return nothing or the first few companies
+  // Search Roles by name
+  async search(query: string): Promise<RoleRxDocument[]> {
+    // If query is empty, you might want to return nothing or the first few Roles
     if (!query.trim()) {
       return [];
     }
 
-    return this.db.companies
+    return this.db.roles
       .find({
         selector: {
           name: {
@@ -43,9 +43,9 @@ export class CompanyRepository {
       .exec();
   }
 
-  // Subscribe to a single Company by ID
-  subscribeToCompany(id: string, callback: (doc: CompanyRxDocument | null) => void) {
-    const query = this.db.companies.findOne({
+  // Subscribe to a single Role by ID
+  subscribeToRole(id: string, callback: (doc: RoleRxDocument | null) => void) {
+    const query = this.db.roles.findOne({
       selector: { id },
     });
 
@@ -53,39 +53,39 @@ export class CompanyRepository {
     return () => subscription.unsubscribe();
   }
 
-  // Subscribe to all Companies
-  subscribeToAll(callback: (docs: CompanyRxDocument[]) => void) {
+  // Subscribe to all Roles
+  subscribeToAll(callback: (docs: RoleRxDocument[]) => void) {
     const query = this.findAll();
     const subscription = query.$.subscribe(callback);
     return () => subscription.unsubscribe();
   }
 
-  // Create a new Company
-  async create(data: CompanyDocumentDto): Promise<OperationResult> {
+  // Create a new Role
+  async create(data: RoleDocumentDto): Promise<OperationResult> {
     try {
       const documentData = dtoToDocument(data);
 
-      await this.db.companies.insert({
+      await this.db.roles.insert({
         id: crypto.randomUUID(),
         serverId: null,
         ...documentData,
         updatedAt: new Date().toISOString(),
       });
 
-      return { success: true, message: 'Company created locally!' };
+      return { success: true, message: 'Role created locally!' };
     } catch (error) {
       console.error('Local Insert Error:', error);
       return { success: false, message: 'Failed to save to local database' };
     }
   }
 
-  // Update an existing Company
-  async update(id: string, data: CompanyDocumentDto): Promise<OperationResult> {
+  // Update an existing Role
+  async update(id: string, data: RoleDocumentDto): Promise<OperationResult> {
     try {
       const doc = await this.findById(id);
 
       if (!doc) {
-        return { success: false, message: 'Company not found' };
+        return { success: false, message: 'Role not found' };
       }
 
       const documentData = dtoToDocument(data);
@@ -95,37 +95,37 @@ export class CompanyRepository {
         updatedAt: new Date().toISOString(),
       });
 
-      return { success: true, message: 'Company updated locally!' };
+      return { success: true, message: 'Role updated locally!' };
     } catch (error) {
       console.error('Local Update Error:', error);
       return { success: false, message: 'Failed to update in local database' };
     }
   }
 
-  // Delete a Company
+  // Delete a Role
   async delete(id: string): Promise<OperationResult> {
     try {
       const doc = await this.findById(id);
 
       if (!doc) {
-        return { success: false, message: 'Company not found' };
+        return { success: false, message: 'Role not found' };
       }
 
       await doc.remove();
 
-      return { success: true, message: 'Company deleted locally!' };
+      return { success: true, message: 'Role deleted locally!' };
     } catch (error) {
       console.error('Local Delete Error:', error);
       return { success: false, message: 'Failed to delete from local database' };
     }
   }
 
-  // Check if a Company can be deleted (no related records)
-  async checkDeletionBlockers(companyId: string): Promise<DeletionBlockers> {
+  // Check if a Role can be deleted (no related records)
+  async checkDeletionBlockers(roleId: string): Promise<DeletionBlockers> {
     const [eventsCount, contactsCount, rolesCount] = await Promise.all([
-      this.db.events.count({ selector: { companyId } }).exec(),
-      this.db.contacts.count({ selector: { companyId } }).exec(),
-      this.db.roles.count({ selector: { companyId } }).exec(),
+      this.db.events.count({ selector: { roleId } }).exec(),
+      this.db.contacts.count({ selector: { roleId } }).exec(),
+      this.db.roles.count({ selector: { roleId } }).exec(),
     ]);
 
     return {
@@ -135,22 +135,22 @@ export class CompanyRepository {
     };
   }
 
-  // Subscribe to deletion check for a Company
+  // Subscribe to deletion check for a Role
   subscribeToDeletionCheck(
-    companyId: string,
+    roleId: string,
     callback: (blockers: DeletionBlockers, canDelete: boolean) => void,
   ) {
-    const companyQuery = this.db.companies.findOne({
-      selector: { id: companyId },
+    const RoleQuery = this.db.roles.findOne({
+      selector: { id: roleId },
     });
 
-    const subscription = companyQuery.$.subscribe(async (company: CompanyRxDocument | null) => {
-      if (!company) {
+    const subscription = RoleQuery.$.subscribe(async (role: RoleRxDocument | null) => {
+      if (!role) {
         callback({ events: 0, contacts: 0, roles: 0 }, false);
         return;
       }
 
-      const blockers = await this.checkDeletionBlockers(companyId);
+      const blockers = await this.checkDeletionBlockers(roleId);
       const canDelete = blockers.events === 0 && blockers.contacts === 0 && blockers.roles === 0;
 
       callback(blockers, canDelete);
@@ -161,14 +161,11 @@ export class CompanyRepository {
 }
 
 // Utility methods
-function dtoToDocument(
-  data: CompanyDocumentDto,
-): Omit<CompanyDocument, 'id' | 'serverId' | 'updatedAt'> {
+function dtoToDocument(data: RoleDocumentDto): Omit<RoleDocument, 'id' | 'serverId' | 'updatedAt'> {
   return {
-    name: data.name,
-    website: data.website ?? null,
-    industry: data.industry ?? null,
-    sizeRange: data.sizeRange ?? null,
-    notes: data.notes ?? null,
+    title: data.title,
+    jobPostingUrl: data.jobPostingUrl ?? null,
+    location: data.location ?? null,
+    level: RoleLevelTypeDto,
   };
 }

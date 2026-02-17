@@ -7,7 +7,7 @@ import { RoleCreateSchema, RoleUpdateSchema } from '@contact-tracker/validation'
 import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 import { CompanyReadDto, RoleLevelTypeDto } from '@contact-tracker/api-models';
-import CompanyCombobox from '../company/company-combobox';
+// import CompanyCombobox from '../company/company-combobox';
 import EnumSelector from '../common/enum-selector';
 
 interface RoleFormProps<T extends FieldValues> {
@@ -31,7 +31,7 @@ export function RoleForm<T extends FieldValues>({
     register,
     handleSubmit,
     reset,
-    control,
+    // control,
     formState: { errors, isSubmitting },
   } = useForm<T>({
     resolver: zodResolver(schema as any),
@@ -81,7 +81,7 @@ export function RoleForm<T extends FieldValues>({
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Company</legend>
-        <CompanyCombobox control={control} name={'company' as Path<T>} onSearch={onSearchCompany} />
+        {/* <CompanyCombobox control={control} name={'company' as Path<T>} onSearch={onSearchCompany} /> */}
         <ErrorMsg name={'company' as Path<T>} />
       </fieldset>
 

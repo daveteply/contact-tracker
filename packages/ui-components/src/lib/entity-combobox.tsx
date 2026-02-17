@@ -35,7 +35,7 @@ interface EntityComboboxProps<TEntity, T extends FieldValues, TFormValue> {
   required?: boolean;
 }
 
-export function EntityCombobox<TEntity extends { id: number }, T extends FieldValues, TFormValue>({
+export function EntityCombobox<TEntity extends { id: string }, T extends FieldValues, TFormValue>({
   control,
   name,
   onSearch,

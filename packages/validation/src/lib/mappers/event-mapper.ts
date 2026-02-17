@@ -19,32 +19,32 @@ export function mapEventDtoToFormValues(dto: EventReadDto): EventFormValues {
 
     // 3. Child Entity Normalization
     // Passing null if they don't exist prevents SelectionSchema refinements from firing
-    company: dto.company
-      ? {
-          id: dto.company.id,
-          name: dto.company.name,
-          isNew: false,
-          displayValue: dto.company.name,
-        }
-      : null,
+    // company: dto.company
+    //   ? {
+    //       id: dto.company.id,
+    //       name: dto.company.name,
+    //       isNew: false,
+    //       displayValue: dto.company.name,
+    //     }
+    //   : null,
 
-    contact: dto.contact
-      ? {
-          id: dto.contact.id,
-          firstName: dto.contact.firstName,
-          lastName: dto.contact.lastName,
-          isNew: false,
-          displayValue: `${dto.contact.firstName} ${dto.contact.lastName}`,
-        }
-      : null,
+    // contact: dto.contact
+    //   ? {
+    //       id: dto.contact.id,
+    //       firstName: dto.contact.firstName,
+    //       lastName: dto.contact.lastName,
+    //       isNew: false,
+    //       displayValue: `${dto.contact.firstName} ${dto.contact.lastName}`,
+    //     }
+    //   : null,
 
-    role: dto.role
-      ? {
-          id: dto.role.id,
-          title: dto.role.title,
-          isNew: false,
-          displayValue: dto.role.title,
-        }
-      : null,
+    // role: dto.role
+    //   ? {
+    //       id: dto.role.id,
+    //       title: dto.role.title,
+    //       isNew: false,
+    //       displayValue: dto.role.title,
+    //     }
+    //   : null,
   };
 }

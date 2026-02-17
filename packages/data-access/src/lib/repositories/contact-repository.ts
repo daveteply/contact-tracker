@@ -22,6 +22,28 @@ export class ContactRepository {
     });
   }
 
+  // Search Contacts by name
+  // TODO: this might not work as is
+  async search(firstName: string, lastName: string): Promise<ContactRxDocument[]> {
+    // If query is empty, you might want to return nothing or the first few companies
+    if (!firstName.trim() || !lastName.trim()) {
+      return [];
+    }
+
+    return this.db.contacts
+      .find({
+        selector: {
+          name: {
+            $regex: firstName + lastName,
+            $options: 'i',
+          },
+        },
+        sort: [{ name: 'asc' }],
+        limit: 10,
+      })
+      .exec();
+  }
+
   // Subscribe to a single Contact by ID
   subscribeToContact(id: string, callback: (doc: ContactRxDocument | null) => void) {
     const query = this.db.contacts.findOne({

@@ -10,7 +10,7 @@ export interface ContactDocument extends BaseRxDocument {
   email: string | null;
   phoneNumber: string | null;
   linkedInUrl: string | null;
-  isPrimaryContact: boolean;
+  isPrimaryContact?: boolean;
   notes: string | null;
 }
 

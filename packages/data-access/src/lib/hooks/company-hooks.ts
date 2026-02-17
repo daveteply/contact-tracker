@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDb } from '../db';
 import { CompanyRepository } from '../repositories/company-repository';
 import { toCompanyDto } from '../repositories/types/company-types';
@@ -36,6 +36,26 @@ export function useCompanies() {
   }, [repository]);
 
   return { companies, loading };
+}
+
+export function useCompanySearch() {
+  const repository = useCompanyRepository();
+
+  // We use useCallback so the function reference stays stable
+  const search = useCallback(
+    async (query: string) => {
+      if (!repository) return [];
+
+      // Fetch from RxDB
+      const docs = await repository.search(query);
+
+      // MUST RETURN the mapped results to satisfy the Promise<CompanyDocumentDto[]> type
+      return docs.map(toCompanyDto);
+    },
+    [repository],
+  );
+
+  return { search };
 }
 
 // Hook to fetch a single Company by ID with real-time updates

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ContactRepository } from '../repositories/contact-repository';
 import { useDb } from '../db';
 import { toContactDto } from '../repositories/types/contact-types';
@@ -36,6 +36,26 @@ export function useContacts() {
   }, [repository]);
 
   return { contacts, loading };
+}
+
+export function useContactSearch() {
+  const repository = useContactRepository();
+
+  // We use useCallback so the function reference stays stable
+  const search = useCallback(
+    async (firstName: string, lastName: string) => {
+      if (!repository) return [];
+
+      // Fetch from RxDB
+      const docs = await repository.search(firstName, lastName);
+
+      // MUST RETURN the mapped results to satisfy the Promise<ContactDocumentDto[]> type
+      return docs.map(toContactDto);
+    },
+    [repository],
+  );
+
+  return { search };
 }
 
 // Hook to fetch a single Contact by ID with real-time updates

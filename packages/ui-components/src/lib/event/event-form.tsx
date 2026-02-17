@@ -14,7 +14,7 @@ import {
   RoleReadDto,
   SourceTypeDto,
 } from '@contact-tracker/api-models';
-import CompanyCombobox from '../company/company-combobox';
+// import CompanyCombobox from '../company/company-combobox';
 import ContactCombobox from '../contact/contact-combobox';
 import RoleCombobox from '../role/role-combobox';
 import { EventTypeSelect } from './event-type-select';
@@ -127,11 +127,11 @@ export function EventForm<TFieldValues extends FieldValues, TOutput = any>({
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Company</legend>
-          <CompanyCombobox
+          {/* <CompanyCombobox
             control={control}
             name={'company' as Path<TFieldValues>}
             onSearch={onSearchCompany}
-          />
+          /> */}
           <ErrorMsg name={'company' as Path<TFieldValues>} />
         </fieldset>
 

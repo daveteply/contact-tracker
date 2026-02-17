@@ -23,6 +23,9 @@
     },
     {
       "path": "./packages/data-access"
+    },
+    {
+      "path": "./packages/app-logic"
     }
   ]
 }

@@ -7,10 +7,16 @@ namespace ContactTracker.SharedDTOs;
 public class EventDocumentDto : BaseDocumentDto
 {
     public Guid? CompanyId { get; set; }
+    public CompanyDocumentDto? NewCompany;
+    public CompanyDocumentDto? UpdateCompany;
 
     public Guid? ContactId { get; set; }
+    public ContactDocumentDto? NewContact;
+    public ContactDocumentDto? UpdateContact;
 
     public Guid? RoleId { get; set; }
+    public RoleDocumentDto? NewRole;
+    public RoleDocumentDto? UpdateRole;
 
     public Guid? EventTypeId { get; set; }
 

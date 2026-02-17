@@ -6,7 +6,7 @@ import {
   RoleUpdate,
   RoleUpdateSchema,
 } from '@contact-tracker/validation';
-import { createRole, updateRole, deleteRole } from '../clients/roles-client';
+import { createRole, deleteRole } from '../clients/roles-client';
 import { revalidatePath } from 'next/cache';
 import { ApiResult, RoleCreateDto, RoleReadDto } from '@contact-tracker/api-models';
 
@@ -45,7 +45,7 @@ export async function createRoleAction(data: RoleCreate) {
 
   const dto: RoleCreateDto = {
     ...roleFields,
-    companyId: company && !company.isNew ? company.id : undefined,
+    //companyId: company && !company.isNew ? company.id : undefined,
     newCompany: isCreation ? { name: company.name as string } : undefined,
   };
 
@@ -56,17 +56,17 @@ export async function updateRoleAction(id: number, data: RoleUpdate) {
   const validated = RoleUpdateSchema.safeParse(data);
   if (!validated.success) return { success: false, message: 'Invalid data' };
 
-  const { company, ...updateFields } = validated.data;
+  //const { company, ...updateFields } = validated.data;
 
-  const dto = {
-    ...updateFields,
-    // Explicitly mapping the selection object to the DTO
-    companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
-    // Note: If your backend supports updating/replacing company info via Contact Patch:
-    updateCompany: company?.isNew ? { name: company.name } : undefined,
-  };
+  // const dto = {
+  //   ...updateFields,
+  //   // Explicitly mapping the selection object to the DTO
+  //   companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
+  //   // Note: If your backend supports updating/replacing company info via Contact Patch:
+  //   updateCompany: company?.isNew ? { name: company.name } : undefined,
+  // };
 
-  return handleActionResult(updateRole(id, dto), 'Role updated!');
+  return null; // handleActionResult(updateRole(id, dto), 'Role updated!');
 }
 
 export async function deleteRoleAction(id: number) {

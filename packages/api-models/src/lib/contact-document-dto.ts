@@ -4,8 +4,11 @@
  */
 
 import { BaseDocumentDto } from "./base-document-dto";
+import { CompanyDocumentDto } from "./company-document-dto";
 
 export interface ContactDocumentDto extends BaseDocumentDto {
+    newCompany?: CompanyDocumentDto;
+    updateCompany?: CompanyDocumentDto;
     companyId?: string;
     firstName: string;
     lastName: string;

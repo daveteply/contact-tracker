@@ -2,8 +2,8 @@
 
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { ContactReadDto } from '@contact-tracker/api-models';
-import EntityCombobox from '../entity-combobox';
-import { contactComboboxConfig } from '../entity-combobox-config';
+// import EntityCombobox from '../entity-combobox';
+// import { contactComboboxConfig } from '../entity-combobox-config';
 
 interface ContactComboboxProps<T extends FieldValues> {
   control: Control<T>;
@@ -19,13 +19,14 @@ export function ContactCombobox<T extends FieldValues>({
   required = false,
 }: ContactComboboxProps<T>) {
   return (
-    <EntityCombobox
-      control={control}
-      name={name}
-      onSearch={onSearch}
-      config={contactComboboxConfig}
-      required={required}
-    />
+    <div>TODO</div>
+    // <EntityCombobox
+    //   control={control}
+    //   name={name}
+    //   onSearch={onSearch}
+    //   config={contactComboboxConfig}
+    //   required={required}
+    // />
   );
 }
 

@@ -7,6 +7,8 @@ namespace ContactTracker.SharedDTOs;
 public class RoleDocumentDto : BaseDocumentDto
 {
     public Guid? CompanyId { get; set; }
+    public CompanyDocumentDto? NewCompany;
+    public CompanyDocumentDto? UpdateCompany;
 
     [Required]
     [MaxLength(100)]

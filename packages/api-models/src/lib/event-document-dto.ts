@@ -4,9 +4,18 @@
  */
 
 import { BaseDocumentDto } from "./base-document-dto";
+import { CompanyDocumentDto } from "./company-document-dto";
+import { ContactDocumentDto } from "./contact-document-dto";
+import { RoleDocumentDto } from "./role-document-dto";
 import { DirectionTypeDto } from "./direction-type-dto";
 
 export interface EventDocumentDto extends BaseDocumentDto {
+    newCompany?: CompanyDocumentDto;
+    updateCompany?: CompanyDocumentDto;
+    newContact?: ContactDocumentDto;
+    updateContact?: ContactDocumentDto;
+    newRole?: RoleDocumentDto;
+    updateRole?: RoleDocumentDto;
     companyId?: string;
     contactId?: string;
     roleId?: string;

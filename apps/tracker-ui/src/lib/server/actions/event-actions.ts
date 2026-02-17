@@ -61,15 +61,15 @@ export async function createEventAction(data: EventCreate) {
     direction,
 
     // Mapping IDs: Ensure we fallback to null/undefined instead of non-null assertion
-    companyId: company && !company.isNew ? company.id : undefined,
+    //companyId: company && !company.isNew ? company.id : undefined,
     newCompany: isCompanyCreation ? { name: company.name ?? '' } : undefined,
 
-    contactId: contact && !contact.isNew ? contact.id : undefined,
+    //contactId: contact && !contact.isNew ? contact.id : undefined,
     newContact: isContactCreation
       ? { firstName: contact.firstName ?? '', lastName: contact.lastName ?? '' }
       : undefined,
 
-    roleId: role && !role.isNew ? role.id : undefined,
+    //roleId: role && !role.isNew ? role.id : undefined,
     newRole: isRoleCreation
       ? { title: role.title ?? '', level: RoleLevelTypeDto.DefaultRole }
       : undefined,
@@ -101,11 +101,11 @@ export async function updateEventAction(id: number, data: EventUpdate) {
     eventTypeId: eventTypeId ?? 0,
 
     // Company Relation
-    companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
+    // companyId: company?.shouldRemove ? -1 : company?.isNew ? undefined : company?.id,
     updateCompany: company?.isNew ? { name: company.name } : undefined,
 
     // Contact Relation
-    contactId: contact?.shouldRemove ? -1 : contact?.isNew ? undefined : contact?.id,
+    // contactId: contact?.shouldRemove ? -1 : contact?.isNew ? undefined : contact?.id,
     updateContact: contact?.isNew
       ? {
           firstName: contact.firstName,
@@ -114,7 +114,7 @@ export async function updateEventAction(id: number, data: EventUpdate) {
       : undefined,
 
     // Role Relation
-    roleId: role?.shouldRemove ? -1 : role?.isNew ? undefined : role?.id,
+    // roleId: role?.shouldRemove ? -1 : role?.isNew ? undefined : role?.id,
     updateRole: role?.isNew ? { title: role.title } : undefined,
   };
 

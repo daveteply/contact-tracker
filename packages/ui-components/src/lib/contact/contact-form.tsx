@@ -7,11 +7,11 @@ import { useToast } from '../common/toast-context';
 import { useRouter } from 'next/navigation';
 import { ContactCreateSchema, ContactUpdateSchema } from '@contact-tracker/validation';
 import CompanyCombobox from '../company/company-combobox';
-import { CompanyReadDto } from '@contact-tracker/api-models';
+import { CompanyDocumentDto } from '@contact-tracker/api-models';
 
 interface ContactFormProps<T extends FieldValues> {
   onSubmitAction: (data: T) => Promise<{ success: boolean; message: string }>;
-  onSearchCompany: (query: string) => Promise<CompanyReadDto[]>;
+  onSearchCompany: (query: string) => Promise<CompanyDocumentDto[]>;
   initialData?: DefaultValues<T>;
   isEdit?: boolean;
 }
@@ -43,6 +43,7 @@ export function ContactForm<T extends FieldValues>({
   }, [initialData, reset]);
 
   const onSubmit = async (data: T) => {
+    console.log('CONTACT FORM', data);
     try {
       const result = await onSubmitAction(data);
       if (result.success) {
