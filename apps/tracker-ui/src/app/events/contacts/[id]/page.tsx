@@ -1,5 +1,4 @@
 import { fetchContactById } from '@/lib/server/clients/contacts-client';
-import { ContactInfoCard } from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
@@ -33,7 +32,7 @@ export default async function ContactDetailsPage({ params }: { params: Promise<{
         </Link>
       </div>
 
-      <ContactInfoCard contact={contact} showControls={false} />
+      {/* <ContactInfoCard contact={contact} showControls={false} /> */}
 
       <div className="mt-5">
         <Link className="btn mr-3" href="./">

@@ -1,12 +1,12 @@
 'use client';
 
-import { ContactReadDto } from '@contact-tracker/api-models';
+import { ContactDocumentDto } from '@contact-tracker/api-models';
 import ExternalLink, { ExternalLinkType } from '../common/external-link';
 import Link from 'next/link';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 export interface ContactCardProps {
-  contact: ContactReadDto;
+  contact: ContactDocumentDto;
   renderFull?: boolean;
   showControls?: boolean;
 }
@@ -41,7 +41,7 @@ export function ContactInfoCard({
             </div>
             <h2>{contact.title}</h2>
             <ul>
-              <li className="truncate">{contact.company?.name}</li>
+              {/* <li className="truncate">{contact.company?.name}</li> */}
               <li>
                 <ExternalLink url={contact.email} linkType={ExternalLinkType.Email} />
               </li>

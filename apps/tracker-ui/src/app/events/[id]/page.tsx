@@ -1,10 +1,5 @@
 import { fetchEventById } from '@/lib/server/clients/events-client';
-import {
-  ContactInfoCard,
-  EventTypeInfoCard,
-  FormattedDate,
-  RoleInfoCard,
-} from '@contact-tracker/ui-components';
+import { EventTypeInfoCard, FormattedDate, RoleInfoCard } from '@contact-tracker/ui-components';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 import Link from 'next/link';
@@ -49,7 +44,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
           </p>
 
           {/* {event.company && <CompanyInfoCard company={event.company} />} */}
-          {event.contact && <ContactInfoCard contact={event.contact} />}
+          {/* {event.contact && <ContactInfoCard contact={event.contact} />} */}
           {event.role && <RoleInfoCard role={event.role} />}
           {event.eventType && <EventTypeInfoCard eventType={event.eventType} />}
           <ul>

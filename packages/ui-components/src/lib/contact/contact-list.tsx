@@ -1,10 +1,10 @@
 'use client';
 
-import { ContactReadDto } from '@contact-tracker/api-models';
+import { ContactDocumentDto } from '@contact-tracker/api-models';
 import ContactInfoCard from './contact-info-card';
 
 export interface ContactListProps {
-  contacts: ContactReadDto[];
+  contacts: ContactDocumentDto[];
 }
 
 export function ContactList({ contacts }: ContactListProps) {
@@ -12,8 +12,8 @@ export function ContactList({ contacts }: ContactListProps) {
     <div className="flex flex-col gap-3">
       {contacts && contacts.length ? (
         <>
-          {contacts.map((Contact: ContactReadDto) => (
-            <ContactInfoCard key={Contact.id} contact={Contact} />
+          {contacts.map((contact) => (
+            <ContactInfoCard key={contact.id} contact={contact} />
           ))}
         </>
       ) : (

@@ -1,5 +1,4 @@
 import { fetchContactById } from '@/lib/server/clients/contacts-client';
-import { ContactInfoCard } from '@contact-tracker/ui-components';
 
 export default async function ContactDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -15,7 +14,7 @@ export default async function ContactDeletePage({ params }: { params: Promise<{ 
       <h1 className="text-xl pr-1">Contact - Delete</h1>
       {contact ? (
         <>
-          <ContactInfoCard contact={contact} showControls={false} />
+          {/* <ContactInfoCard contact={contact} showControls={false} /> */}
           {/* {canDelete ? (
             <EntityDelete
               id={contact.id}

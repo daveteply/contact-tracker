@@ -1,10 +1,14 @@
-import { fetchContacts } from '@/lib/server/clients/contacts-client';
-import { ContactList } from '@contact-tracker/ui-components';
+'use client';
+
+import { useContacts } from '@contact-tracker/data-access';
+import { ContactList, PageLoading } from '@contact-tracker/ui-components';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
-export default async function Index() {
-  const contacts = await fetchContacts();
+export default function Index() {
+  const { contacts, loading } = useContacts();
+
+  if (loading) return <PageLoading entityName="contacts" />;
 
   return (
     <>

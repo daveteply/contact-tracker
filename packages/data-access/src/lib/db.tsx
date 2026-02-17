@@ -64,6 +64,7 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
   }, [db]);
 
   if (!db) {
+    // TODO: explore using consistent loading component
     return <div>Initializing Local Database...</div>;
   }
 
