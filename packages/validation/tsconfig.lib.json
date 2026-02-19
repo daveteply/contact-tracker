@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
     "baseUrl": ".",
+    "paths": {
+      "@contact-tracker/api-models": ["../../packages/api-models/src/index.ts"]
+    },
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],

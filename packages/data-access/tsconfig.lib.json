@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
     "baseUrl": ".",
+    "paths": {
+      "@contact-tracker/api-models": ["../../packages/api-models/src/index.ts"],
+      "@contact-tracker/validation": ["../../packages/validation/src/index.ts"],
+      "@contact-tracker/document-model": ["../../packages/document-model/src/index.ts"]
+    },
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["node", "@nx/react/typings/cssmodule.d.ts", "@nx/react/typings/image.d.ts"]

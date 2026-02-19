@@ -1,0 +1,14 @@
+{
+  "name": "@contact-tracker/app-logic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/app-logic/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest"
+    }
+  }
+}
