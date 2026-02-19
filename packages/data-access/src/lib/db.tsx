@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
+import { disableWarnings, RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { createRxDatabase, addRxPlugin } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
@@ -14,6 +14,8 @@ import {
   RoleSchema,
 } from '@contact-tracker/document-model';
 import { TrackerCollections, TrackerDatabase } from './repositories/types/common';
+
+disableWarnings();
 
 // Add dev mode in development
 if (process.env.NODE_ENV === 'development') {

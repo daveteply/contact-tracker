@@ -1,1 +1,1 @@
-export * from './lib/app-logic.js';
+export * from './lib/contact-service';

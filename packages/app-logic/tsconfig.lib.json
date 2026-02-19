@@ -3,6 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@contact-tracker/data-access": ["../../packages/data-access/src/index.ts"],
+      "@contact-tracker/api-models": ["../../packages/api-models/src/index.ts"],
       "@contact-tracker/validation": ["../../packages/validation/src/index.ts"]
     },
     "types": ["node"]

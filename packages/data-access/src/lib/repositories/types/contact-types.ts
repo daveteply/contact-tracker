@@ -6,6 +6,7 @@ import { RxCollection, RxDocument } from 'rxdb';
 export interface ContactDocument extends BaseRxDocument {
   firstName: string;
   lastName: string;
+  companyId: string;
   title: string | null;
   email: string | null;
   phoneNumber: string | null;
