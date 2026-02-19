@@ -164,6 +164,7 @@ function dtoToDocument(
   data: ContactDocumentDto,
 ): Omit<ContactDocument, 'id' | 'serverId' | 'updatedAt'> {
   return {
+    companyId: '',
     firstName: data.firstName,
     lastName: data.lastName,
     title: data.title ?? null,

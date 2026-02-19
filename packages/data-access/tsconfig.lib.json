@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@contact-tracker/api-models": ["../../packages/api-models/src/index.ts"],
-      "@contact-tracker/app-logic": ["../../packages/app-logic/src/index.ts"]
+      "@contact-tracker/app-logic": ["../../packages/app-logic/src/index.ts"],
+      "@contact-tracker/document-model": ["../../packages/document-model/src/index.ts"]
     },
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
