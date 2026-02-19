@@ -1,19 +1,14 @@
 {
   "name": "@contact-tracker/api-models",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "library",
   "sourceRoot": "packages/api-models/src",
+  "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nx/js:swc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/api-models",
-        "main": "packages/api-models/src/index.ts",
-        "tsConfig": "packages/api-models/tsconfig.lib.json",
-        "assets": [],
-        "spec": false
-      }
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest"
     }
   }
 }

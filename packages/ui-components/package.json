@@ -1,21 +1,6 @@
 {
   "name": "@contact-tracker/ui-components",
   "version": "0.0.1",
-  "type": "module",
-  "main": "./dist/index.esm.js",
-  "module": "./dist/index.esm.js",
-  "types": "./dist/index.esm.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "@contact-tracker/source": "./src/index.ts",
-      "types": "./dist/index.esm.d.ts",
-      "import": "./dist/index.esm.js",
-      "default": "./dist/index.esm.js"
-    }
-  },
-  "dependencies": {
-    "@contact-tracker/api-models": "*",
-    "@contact-tracker/validation": "*"
-  }
+  "private": true,
+  "type": "module"
 }

@@ -1,36 +1,19 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
-    "types": ["node", "@nx/react/typings/cssmodule.d.ts", "@nx/react/typings/image.d.ts"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "forceConsistentCasingInFileNames": true,
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["node", "@nx/react/typings/cssmodule.d.ts", "@nx/react/typings/image.d.ts"]
   },
-  "references": [
-    { "path": "../api-models/tsconfig.lib.json" },
-    { "path": "../validation/tsconfig.lib.json" }
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
-    "out-tsc",
-    "dist",
-    "jest.config.ts",
-    "jest.config.cts",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.tsx",
     "src/**/*.test.tsx",
-    "src/**/*.spec.js",
-    "src/**/*.test.js",
-    "src/**/*.spec.jsx",
-    "src/**/*.test.jsx",
-    "eslint.config.js",
-    "eslint.config.cjs",
-    "eslint.config.mjs"
-  ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
+    "jest.config.ts",
+    "jest.config.cts"
+  ]
 }

@@ -2,30 +2,5 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": [
-    {
-      "path": "./apps/tracker-ui-e2e"
-    },
-    {
-      "path": "./apps/tracker-ui"
-    },
-    {
-      "path": "./packages/api-models"
-    },
-    {
-      "path": "./packages/validation"
-    },
-    {
-      "path": "./packages/ui-components"
-    },
-    {
-      "path": "./packages/document-model"
-    },
-    {
-      "path": "./packages/data-access"
-    },
-    {
-      "path": "./packages/app-logic"
-    }
-  ]
+  "references": []
 }

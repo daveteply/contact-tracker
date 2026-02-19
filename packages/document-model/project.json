@@ -1,7 +1,7 @@
 {
-  "name": "@contact-tracker/data-access",
+  "name": "@contact-tracker/document-model",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/data-access/src",
+  "sourceRoot": "packages/document-model/src",
   "projectType": "library",
   "targets": {
     "lint": {

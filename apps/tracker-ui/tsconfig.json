@@ -20,12 +20,15 @@
       }
     ],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@contact-tracker/api-models": ["../../packages/api-models/src/index.ts"],
+      "@contact-tracker/document-model": ["../../packages/document-model/src/index.ts"],
+      "@contact-tracker/data-access": ["../../packages/data-access/src/index.ts"],
+      "@contact-tracker/app-logic": ["../../packages/app-logic/src/index.ts"],
+      "@contact-tracker/validation": ["../../packages/validation/src/index.ts"],
+      "@contact-tracker/ui-components": ["../../packages/ui-components/src/index.ts"]
     },
-    "types": ["jest", "node"],
-    "outDir": "dist",
-    "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*.ts",
@@ -49,18 +52,5 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "references": [
-    {
-      "path": "../../packages/data-access"
-    },
-    {
-      "path": "../../packages/validation"
-    },
-    {
-      "path": "../../packages/ui-components"
-    },
-    {
-      "path": "../../packages/api-models"
-    }
-  ]
+  "references": []
 }
