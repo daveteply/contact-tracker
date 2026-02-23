@@ -66,8 +66,14 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
   }, [db]);
 
   if (!db) {
-    // TODO: explore using consistent loading component
-    return <div>Initializing Local Database...</div>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-base-100/50 backdrop-blur-none z-50">
+        <div>
+          <span className="mr-2 capitalize">Loading Database...</span>
+          <span className="loading loading-bars loading-xs text-primary"></span>
+        </div>
+      </div>
+    );
   }
 
   return <DatabaseContext.Provider value={db}>{children}</DatabaseContext.Provider>;
