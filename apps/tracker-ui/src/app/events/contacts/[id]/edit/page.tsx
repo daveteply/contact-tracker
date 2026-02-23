@@ -1,4 +1,4 @@
-import { useCompanySearch, useContact, useContactMutations } from '@contact-tracker/data-access';
+import { useCompanySearch, useContact, useContactMutations } from '@contact-tracker/app-logic';
 import { ContactForm, PageLoading } from '@contact-tracker/ui-components';
 import Link from 'next/link';
 import { use } from 'react';

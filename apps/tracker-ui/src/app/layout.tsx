@@ -1,5 +1,6 @@
 import { ToastProvider } from '@contact-tracker/ui-components';
 import { DatabaseProvider } from '@contact-tracker/data-access';
+import { ServiceProvider } from '@contact-tracker/app-logic';
 
 import './global.css';
 
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <DatabaseProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <ServiceProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </ServiceProvider>
         </DatabaseProvider>
       </body>
     </html>

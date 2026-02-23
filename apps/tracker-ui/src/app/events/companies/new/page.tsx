@@ -1,6 +1,6 @@
 'use client';
 
-import { useCompanyMutations } from '@contact-tracker/data-access';
+import { useCompanyMutations } from '@contact-tracker/app-logic';
 import { CompanyForm } from '@contact-tracker/ui-components';
 
 export default function CreateCompanyPage() {

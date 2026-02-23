@@ -1,58 +1,52 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDb } from '../context/db';
-import { CompanyRepository } from '../repositories/company-repository';
+import { useCallback, useEffect, useState } from 'react';
 import { CompanyDocumentDto } from '@contact-tracker/api-models';
-import { DeletionCheck } from '../types/common';
-import { toCompanyDto } from '../types/company-types';
+import { toCompanyDto, DeletionCheck } from '@contact-tracker/data-access';
+import { useServices } from '../context/service-context';
 
-// Hook to get the Company repository instance
-export function useCompanyRepository() {
-  const db = useDb();
-
-  return useMemo(() => {
-    if (!db) return null;
-    return new CompanyRepository(db);
-  }, [db]);
+// Hook to get the Company service instance
+export function useCompanyService() {
+  const { companyService } = useServices();
+  return companyService;
 }
 
 // Hook to fetch all Companies with real-time updates
 export function useCompanies() {
-  const repository = useCompanyRepository();
+  const service = useCompanyService();
   const [companies, setCompanies] = useState<CompanyDocumentDto[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!repository) return;
+    if (!service) return;
 
-    const unsubscribe = repository.subscribeToAll((docs) => {
+    const unsubscribe = service.subscribeToAll((docs) => {
       const mapped = docs.map(toCompanyDto);
       setCompanies(mapped);
       setLoading(false);
     });
 
     return unsubscribe;
-  }, [repository]);
+  }, [service]);
 
   return { companies, loading };
 }
 
 export function useCompanySearch() {
-  const repository = useCompanyRepository();
+  const service = useCompanyService();
 
   // We use useCallback so the function reference stays stable
   const search = useCallback(
     async (query: string) => {
-      if (!repository) return [];
+      if (!service) return [];
 
       // Fetch from RxDB
-      const docs = await repository.search(query);
+      const docs = await service.search(query);
 
       // MUST RETURN the mapped results to satisfy the Promise<CompanyDocumentDto[]> type
       return docs.map(toCompanyDto);
     },
-    [repository],
+    [service],
   );
 
   return { search };
@@ -60,15 +54,15 @@ export function useCompanySearch() {
 
 // Hook to fetch a single Company by ID with real-time updates
 export function useCompany(id: string) {
-  const repository = useCompanyRepository();
+  const service = useCompanyService();
   const [company, setCompany] = useState<CompanyDocumentDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id || !repository) return;
+    if (!id || !service) return;
 
-    const unsubscribe = repository.subscribeToCompany(id, (doc) => {
+    const unsubscribe = service.subscribeToCompany(id, (doc) => {
       if (doc) {
         setCompany(toCompanyDto(doc));
         setError(null);
@@ -80,14 +74,14 @@ export function useCompany(id: string) {
     });
 
     return unsubscribe;
-  }, [repository, id]);
+  }, [service, id]);
 
   return { company, loading, error };
 }
 
 // Hook to check if a Company can be deleted (checks for related records)
 export function useCanDeleteCompany(companyId: string): DeletionCheck {
-  const repository = useCompanyRepository();
+  const service = useCompanyService();
   const [canDelete, setCanDelete] = useState(false);
   const [blockers, setBlockers] = useState({
     events: 0,
@@ -97,9 +91,9 @@ export function useCanDeleteCompany(companyId: string): DeletionCheck {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!companyId || !repository) return;
+    if (!companyId || !service) return;
 
-    const unsubscribe = repository.subscribeToDeletionCheck(
+    const unsubscribe = service.subscribeToDeletionCheck(
       companyId,
       (newBlockers, canDeleteValue) => {
         setBlockers(newBlockers);
@@ -109,7 +103,7 @@ export function useCanDeleteCompany(companyId: string): DeletionCheck {
     );
 
     return unsubscribe;
-  }, [repository, companyId]);
+  }, [service, companyId]);
 
   return { canDelete, blockers, loading };
 }
@@ -117,27 +111,27 @@ export function useCanDeleteCompany(companyId: string): DeletionCheck {
 // Hook to get Company mutation functions
 // Returns functions for create, update, and delete operations
 export function useCompanyMutations() {
-  const repository = useCompanyRepository();
+  const service = useCompanyService();
 
   const create = async (data: CompanyDocumentDto) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.create(data);
+    return service.create(data);
   };
 
   const update = async (id: string, data: CompanyDocumentDto) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.update(id, data);
+    return service.update(id, data);
   };
 
   const deleteCompany = async (id: string) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.delete(id);
+    return service.delete(id);
   };
 
   return {

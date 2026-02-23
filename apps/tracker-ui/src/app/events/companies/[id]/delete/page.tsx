@@ -3,7 +3,7 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { CompanyInfoCard, EntityDelete, PageLoading } from '@contact-tracker/ui-components';
-import { useCanDeleteCompany, useCompany, useCompanyMutations } from '@contact-tracker/data-access';
+import { useCanDeleteCompany, useCompany, useCompanyMutations } from '@contact-tracker/app-logic';
 
 export default function CompanyDeletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

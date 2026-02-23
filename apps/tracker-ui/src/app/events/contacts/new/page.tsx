@@ -1,6 +1,6 @@
 'use client';
 
-import { useCompanySearch, useContactMutations } from '@contact-tracker/data-access';
+import { useCompanySearch, useContactMutations } from '@contact-tracker/app-logic';
 import { ContactForm } from '@contact-tracker/ui-components';
 
 export default function CreateContactPage() {

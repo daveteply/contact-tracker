@@ -1,6 +1,6 @@
 'use client';
 
-import { useCompany, useCompanyMutations } from '@contact-tracker/data-access';
+import { useCompany, useCompanyMutations } from '@contact-tracker/app-logic';
 import { CompanyForm, PageLoading } from '@contact-tracker/ui-components';
 import Link from 'next/link';
 import { use } from 'react';

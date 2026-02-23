@@ -1,10 +1,10 @@
 'use client';
 
-import { useCompany } from '@contact-tracker/data-access';
-import { CompanyInfoCard, PageLoading } from '@contact-tracker/ui-components';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { use } from 'react';
+import { useCompany } from '@contact-tracker/app-logic';
+import { CompanyInfoCard, PageLoading } from '@contact-tracker/ui-components';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 export default function CompanyDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

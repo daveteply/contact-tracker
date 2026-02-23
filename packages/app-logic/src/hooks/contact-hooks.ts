@@ -1,58 +1,52 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ContactRepository } from '../repositories/contact-repository';
-import { useDb } from '../context/db';
+import { useCallback, useEffect, useState } from 'react';
 import { ContactDocumentDto } from '@contact-tracker/api-models';
-import { DeletionCheck } from '..//types/common';
-import { toContactDto } from '../types/contact-types';
+import { toContactDto, DeletionCheck } from '@contact-tracker/data-access';
+import { useServices } from '../context/service-context';
 
-// Hook to get the Contact repository instance
-export function useContactRepository() {
-  const db = useDb();
-
-  return useMemo(() => {
-    if (!db) return null;
-    return new ContactRepository(db);
-  }, [db]);
+// Hook to get the Contact service instance
+export function useContactService() {
+  const { contactService } = useServices();
+  return contactService;
 }
 
 // Hook to fetch all Contacts with real-time updates
 export function useContacts() {
-  const repository = useContactRepository();
+  const service = useContactService();
   const [contacts, setContacts] = useState<ContactDocumentDto[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!repository) return;
+    if (!service) return;
 
-    const unsubscribe = repository.subscribeToAll((docs) => {
+    const unsubscribe = service.subscribeToAll((docs) => {
       const mapped = docs.map(toContactDto);
       setContacts(mapped);
       setLoading(false);
     });
 
     return unsubscribe;
-  }, [repository]);
+  }, [service]);
 
   return { contacts, loading };
 }
 
 export function useContactSearch() {
-  const repository = useContactRepository();
+  const service = useContactService();
 
   // We use useCallback so the function reference stays stable
   const search = useCallback(
     async (firstName: string, lastName: string) => {
-      if (!repository) return [];
+      if (!service) return [];
 
       // Fetch from RxDB
-      const docs = await repository.search(firstName, lastName);
+      const docs = await service.search(firstName, lastName);
 
       // MUST RETURN the mapped results to satisfy the Promise<ContactDocumentDto[]> type
       return docs.map(toContactDto);
     },
-    [repository],
+    [service],
   );
 
   return { search };
@@ -60,15 +54,15 @@ export function useContactSearch() {
 
 // Hook to fetch a single Contact by ID with real-time updates
 export function useContact(id: string) {
-  const repository = useContactRepository();
+  const service = useContactService();
   const [contact, setContact] = useState<ContactDocumentDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id || !repository) return;
+    if (!id || !service) return;
 
-    const unsubscribe = repository.subscribeToContact(id, (doc) => {
+    const unsubscribe = service.subscribeToContact(id, (doc) => {
       if (doc) {
         setContact(toContactDto(doc));
         setError(null);
@@ -80,14 +74,14 @@ export function useContact(id: string) {
     });
 
     return unsubscribe;
-  }, [repository, id]);
+  }, [service, id]);
 
   return { contact, loading, error };
 }
 
 // Hook to check if a Contact can be deleted (checks for related records)
 export function useCanDeleteContact(contactId: string): DeletionCheck {
-  const repository = useContactRepository();
+  const service = useContactService();
   const [canDelete, setCanDelete] = useState(false);
   const [blockers, setBlockers] = useState({
     events: 0,
@@ -97,9 +91,9 @@ export function useCanDeleteContact(contactId: string): DeletionCheck {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!contactId || !repository) return;
+    if (!contactId || !service) return;
 
-    const unsubscribe = repository.subscribeToDeletionCheck(
+    const unsubscribe = service.subscribeToDeletionCheck(
       contactId,
       (newBlockers, canDeleteValue) => {
         setBlockers(newBlockers);
@@ -109,7 +103,7 @@ export function useCanDeleteContact(contactId: string): DeletionCheck {
     );
 
     return unsubscribe;
-  }, [repository, contactId]);
+  }, [service, contactId]);
 
   return { canDelete, blockers, loading };
 }
@@ -117,27 +111,27 @@ export function useCanDeleteContact(contactId: string): DeletionCheck {
 // Hook to get Contact mutation functions
 // Returns functions for create, update, and delete operations
 export function useContactMutations() {
-  const repository = useContactRepository();
+  const service = useContactService();
 
   const create = async (data: ContactDocumentDto) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.create(data);
+    return service.create(data);
   };
 
   const update = async (id: string, data: ContactDocumentDto) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.update(id, data);
+    return service.update(id, data);
   };
 
   const deleteContact = async (id: string) => {
-    if (!repository) {
+    if (!service) {
       return { success: false, message: 'Database not initialized' };
     }
-    return repository.delete(id);
+    return service.delete(id);
   };
 
   return {

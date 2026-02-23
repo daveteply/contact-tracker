@@ -1,6 +1,6 @@
 'use client';
 
-import { useContacts } from '@contact-tracker/data-access';
+import { useContacts } from '@contact-tracker/app-logic';
 import { ContactList, PageLoading } from '@contact-tracker/ui-components';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';

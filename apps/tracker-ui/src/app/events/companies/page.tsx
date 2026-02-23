@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import { CompanyList } from '@contact-tracker/ui-components';
 import { PageLoading } from '@contact-tracker/ui-components';
-import { useCompanies } from '@contact-tracker/data-access';
+import { useCompanies } from '@contact-tracker/app-logic';
 
 export default function CompanyListPage() {
   const { companies, loading } = useCompanies();

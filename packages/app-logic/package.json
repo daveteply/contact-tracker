@@ -2,5 +2,9 @@
   "name": "@contact-tracker/app-logic",
   "version": "0.0.1",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@contact-tracker/data-access": "0.0.1",
+    "@contact-tracker/api-models": "0.0.1"
+  }
 }
