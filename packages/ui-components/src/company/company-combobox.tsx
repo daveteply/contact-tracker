@@ -1,8 +1,8 @@
 'use client';
 
 import { Control, FieldValues, Path } from 'react-hook-form';
-import EntityCombobox from '../entity-combobox';
-import { companyComboboxConfig } from '../entity-combobox-config';
+import EntityCombobox from '../common/entity-combobox/entity-combobox';
+import { companyComboboxConfig } from '../common/entity-combobox/entity-combobox-config';
 import { CompanyDocumentDto } from '@contact-tracker/api-models';
 
 interface CompanyComboboxProps<T extends FieldValues> {
