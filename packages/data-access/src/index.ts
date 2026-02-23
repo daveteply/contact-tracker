@@ -1,7 +1,12 @@
-export * from './lib/db';
+export * from './context/db';
+export * from './types/common';
+export * from './types/company-types';
+export * from './types/contact-types';
+export * from './types/role-types';
 
-export * from './lib/hooks/company-hooks';
-export * from './lib/hooks/contact-hooks';
+export * from './hooks/company-hooks';
+export * from './hooks/contact-hooks';
 
-export * from './lib/repositories/types/common';
-export * from './lib/repositories/contact-repository';
+export * from './repositories/company-repository';
+export * from './repositories/contact-repository';
+export * from './repositories/role-repository';

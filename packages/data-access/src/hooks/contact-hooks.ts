@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ContactRepository } from '../repositories/contact-repository';
-import { useDb } from '../db';
-import { toContactDto } from '../repositories/types/contact-types';
+import { useDb } from '../context/db';
 import { ContactDocumentDto } from '@contact-tracker/api-models';
-import { DeletionCheck } from '../repositories/types/common';
+import { DeletionCheck } from '..//types/common';
+import { toContactDto } from '../types/contact-types';
 
 // Hook to get the Contact repository instance
 export function useContactRepository() {

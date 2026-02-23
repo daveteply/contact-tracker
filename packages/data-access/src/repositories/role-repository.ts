@@ -1,6 +1,6 @@
-import { RoleDocumentDto, RoleLevelTypeDto } from '@contact-tracker/api-models';
-import { DeletionBlockers, OperationResult, TrackerDatabase } from './types/common';
-import { RoleDocument, RoleRxDocument } from './types/role-types';
+import { RoleDocumentDto } from '@contact-tracker/api-models';
+import { DeletionBlockers, OperationResult, TrackerDatabase } from '../types/common';
+import { RoleDocument, RoleRxDocument } from '../types/role-types';
 
 export class RoleRepository {
   constructor(private db: TrackerDatabase) {}
@@ -166,6 +166,6 @@ function dtoToDocument(data: RoleDocumentDto): Omit<RoleDocument, 'id' | 'server
     title: data.title,
     jobPostingUrl: data.jobPostingUrl ?? null,
     location: data.location ?? null,
-    level: RoleLevelTypeDto,
+    level: data.level,
   };
 }

@@ -1,1 +1,2 @@
-export * from './lib/contact-service';
+export * from './services/company-service';
+export * from './services/contact-service';

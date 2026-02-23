@@ -1,6 +1,6 @@
 import { ContactDocumentDto } from '@contact-tracker/api-models';
-import { DeletionBlockers, OperationResult, TrackerDatabase } from './types/common';
-import { ContactDocument, ContactRxDocument } from './types/contact-types';
+import { DeletionBlockers, OperationResult, TrackerDatabase } from '../types/common';
+import { ContactDocument, ContactRxDocument } from '../types/contact-types';
 
 export class ContactRepository {
   constructor(private db: TrackerDatabase) {}

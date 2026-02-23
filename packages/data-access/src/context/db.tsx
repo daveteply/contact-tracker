@@ -13,7 +13,7 @@ import {
   ReminderSchema,
   RoleSchema,
 } from '@contact-tracker/document-model';
-import { TrackerCollections, TrackerDatabase } from './repositories/types/common';
+import { TrackerCollections, TrackerDatabase } from '../types/common';
 
 disableWarnings();
 

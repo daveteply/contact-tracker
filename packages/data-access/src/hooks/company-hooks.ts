@@ -1,11 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDb } from '../db';
+import { useDb } from '../context/db';
 import { CompanyRepository } from '../repositories/company-repository';
-import { toCompanyDto } from '../repositories/types/company-types';
 import { CompanyDocumentDto } from '@contact-tracker/api-models';
-import { DeletionCheck } from '../repositories/types/common';
+import { DeletionCheck } from '../types/common';
+import { toCompanyDto } from '../types/company-types';
 
 // Hook to get the Company repository instance
 export function useCompanyRepository() {

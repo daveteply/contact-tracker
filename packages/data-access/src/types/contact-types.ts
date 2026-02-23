@@ -1,6 +1,6 @@
 import { ContactDocumentDto } from '@contact-tracker/api-models';
-import { BaseRxDocument } from './common';
 import { RxCollection, RxDocument } from 'rxdb';
+import { BaseRxDocument } from './common';
 
 // Contact document as stored in RxDB (based on schema)
 export interface ContactDocument extends BaseRxDocument {
